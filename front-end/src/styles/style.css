@@ -1,0 +1,55 @@
+*, *::after, *::before {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  font-family: "Open Sans", sans-serif;
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+  margin-bottom: 0;
+}
+
+.login__container .login__card {
+  width: 500px;
+  height: 400px;
+}
+
+.navigation__container {
+  z-index: 998;
+}
+
+.sidemenu__container {
+  width: 15%;
+  z-index: 999;
+}
+.sidemenu__container .sidemenu__content p {
+  font-size: 12px;
+}
+.sidemenu__container .sidemenu__content .sidemenu__dashboard li .sidemenu__link, .sidemenu__container .sidemenu__content .sidemenu__dashboard li button, .sidemenu__container .sidemenu__content .sidemenu__dashboard li .sidemenu__cert, .sidemenu__container .sidemenu__content .sidemenu__dashboard li .sidemenu__manage, .sidemenu__container .sidemenu__content .sidemenu__certificate li .sidemenu__link, .sidemenu__container .sidemenu__content .sidemenu__certificate li button, .sidemenu__container .sidemenu__content .sidemenu__certificate li .sidemenu__cert, .sidemenu__container .sidemenu__content .sidemenu__certificate li .sidemenu__manage {
+  display: grid;
+  grid-template-columns: 30px 1fr;
+  grid-template-rows: auto;
+  align-items: center;
+}
+.sidemenu__container .sidemenu__content .sidemenu__dashboard li .sidemenu_subcontent li, .sidemenu__container .sidemenu__content .sidemenu__certificate li .sidemenu_subcontent li {
+  display: grid;
+  grid-template-columns: 20px 1fr;
+  grid-template-rows: auto;
+  align-items: center;
+  font-size: 14px;
+}
+
+.dashboard__container .dashboard__main .dashboard__resident {
+  height: 100px;
+}
+.dashboard__container .dashboard__main .dashboard__resident .dashboard__image {
+  width: 100px;
+}
+
+.main-padding {
+  padding-top: 67px;
+  padding-left: 15%;
+}/*# sourceMappingURL=style.css.map */

@@ -1,0 +1,30 @@
+.sidemenu__container{
+    width: 15%;
+    z-index: 999;
+
+    .sidemenu__content{
+        p{
+            font-size: 12px;
+        }
+
+        .sidemenu__dashboard, .sidemenu__certificate{
+            li{
+                .sidemenu__link, button, .sidemenu__cert, .sidemenu__manage{
+                    display: grid;
+                    grid-template-columns: 30px 1fr;
+                    grid-template-rows: auto;
+                    align-items: center;
+                }
+                .sidemenu_subcontent{
+                    li{
+                        display: grid;
+                        grid-template-columns: 20px 1fr;
+                        grid-template-rows: auto;
+                        align-items: center;
+                        font-size: 14px;
+                    }
+                }
+            }
+        }
+    }
+}
