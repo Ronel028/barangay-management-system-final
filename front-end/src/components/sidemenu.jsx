@@ -49,17 +49,17 @@ function Sidemenu(){
                 </div>
 
                 {/* dashboard part */}
-                <ul className='sidemenu__dashboard list-unstyled d-flex flex-column gap-2'>
+                <ul className='sidemenu__dashboard list-unstyled d-flex flex-column gap-3'>
                     <p className='text-white fw-bolder'>MAIN</p>
                     <li>
-                        <Link className='sidemenu__link text-decoration-none text-white fw-normal' to='/dashboard'>
+                        <Link className='sidemenu__link text-decoration-none text-white fs-7 fw-normal' to='/'>
                             <FontAwesomeIcon icon={faTableColumns}/>
                             Dashboard
                         </Link>
                     </li>
                     <li>
                         <button 
-                            className='bg-transparent border-0 text-white fw-normal'
+                            className='bg-transparent border-0 text-white fw-normal fs-7'
                             name='official'
                             onClick={handleClick}
                         >
@@ -82,7 +82,7 @@ function Sidemenu(){
                     </li>
                     <li>
                         <button 
-                            className='bg-transparent border-0 text-white fw-normal'
+                            className='bg-transparent border-0 text-white fw-normal fs-7'
                             name='resident'
                             onClick={handleClick}
                         >
@@ -105,7 +105,7 @@ function Sidemenu(){
                     </li>
                     <li>
                         <button 
-                            className='bg-transparent border-0 text-white fw-normal'
+                            className='bg-transparent border-0 text-white fw-normal fs-7 '
                             name='blotter'
                             onClick={handleClick}
                         >
@@ -129,16 +129,16 @@ function Sidemenu(){
                 </ul>
 
                 {/* certificate */}
-                <ul className='sidemenu__certificate list-unstyled d-flex flex-column gap-2'>
+                <ul className='sidemenu__certificate list-unstyled d-flex flex-column gap-3'>
                     <p className='text-white fw-bolder'>CERTIFICATE</p>
                     <li>
-                        <Link className='sidemenu__cert text-decoration-none text-white fw-normal' to='/certificate'>
+                        <Link className='sidemenu__cert text-decoration-none text-white fw-normal fs-7' to='/certificate'>
                             <FontAwesomeIcon icon={faCertificate}/>
                             Certificate
                         </Link>
                     </li>
                     <li>
-                        <Link className='sidemenu__manage text-decoration-none text-white fw-normal' to='/manage-certificate'>
+                        <Link className='sidemenu__manage text-decoration-none text-white fw-normal fs-7' to='/manage-certificate'>
                             <FontAwesomeIcon icon={faBarsProgress}/>
                             Manage Certificate
                         </Link>
