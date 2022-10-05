@@ -5,7 +5,6 @@ import Navigation from "../../components/navigation"
 import Sidemenu from "../../components/sidemenu"
 import Search from '../../components/search'
 import OfficialListTable from './official-list-table'
-import AddPersonIcon from '../../Images/add-person-icon.svg'
 
 function OfficialsList(){
 
@@ -60,10 +59,10 @@ function OfficialsList(){
                         <div className="modal-dialog">
                             <div className="modal-content">
                                 <div className="modal-header">
-                                    <h5 className="modal-title d-flex align-items-center">
-                                        <img className='me-2' src={AddPersonIcon} alt="add person" />
+                                    <h1 className="modal-title fs-6 d-flex align-items-center">
+                                        <FontAwesomeIcon className='me-2' icon={faUserPlus}/>
                                         Add new officials
-                                    </h5>
+                                    </h1>
                                     <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <form className="modal-body">

@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleInfo } from '@fortawesome/free-solid-svg-icons'
 
-function ResidentListTable(){
+function ResidentListTable(props){
     return (
         <table className="table table-hover table-bordered">
             <thead>
@@ -26,7 +26,11 @@ function ResidentListTable(){
                     <td>20</td>
                     <td>Male</td>
                     <td>
-                        <button className="btn text-white text-bg-info d-flex align-items-center fs-7">
+                        <button 
+                            className="btn text-white text-bg-info d-flex align-items-center fs-7"
+                            data-bs-toggle="modal" 
+                            data-bs-target="#resident-data"
+                        >
                             <FontAwesomeIcon className='me-1' icon={faCircleInfo}/>
                             More
                         </button>

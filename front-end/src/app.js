@@ -10,6 +10,7 @@ import OfficialManage from './pages/officials/official-manage';
 
 //resident
 import ResidentList from './pages/resident/resident-list';
+import ResidentManage from './pages/resident/resident-manage';
 
 function App(){
     return (
@@ -21,6 +22,7 @@ function App(){
                     <Route path="/officials-list" element={<OfficialList />} />
                     <Route path='/officials-manage' element={<OfficialManage />}/>
                     <Route path='/resident-list' element={<ResidentList />}/>
+                    <Route path='/resident-manage' element={<ResidentManage />}/>
                 </Routes>
             </BrowserRouter>
         </>

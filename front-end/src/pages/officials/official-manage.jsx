@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faEdit, faTrash, faPenToSquare } from '@fortawesome/free-solid-svg-icons'
 import Navigation from "../../components/navigation"
 import Sidemenu from "../../components/sidemenu"
 import Search from '../../components/search'
@@ -70,10 +70,10 @@ function OfficialManage(){
                         <div className="modal-dialog">
                             <div className="modal-content">
                                 <div className="modal-header">
-                                    <h5 className="modal-title d-flex align-items-center">
-                                        <img className='me-2' src={updateIcon} alt="update" />
+                                    <h1 className="modal-title fs-6 d-flex align-items-center">
+                                        <FontAwesomeIcon className='me-2' icon={faPenToSquare}/>
                                         Update officials
-                                    </h5>
+                                    </h1>
                                     <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <form className="modal-body">

@@ -4,8 +4,49 @@ import Navigation from "../../components/navigation"
 import Sidemenu from "../../components/sidemenu"
 import Search from "../../components/search"
 import ResidentListTable from './resident-list-table'
+import DataModal from '../../components/data-modal'
+import { useState } from 'react'
 
 function ResidentList(){
+
+    const [resident, setResident] = useState({
+        lname: '',
+        fname: '',
+        mname: '',
+        bdate: '',
+        bplace: '',
+        age: '',
+        gender: '',
+        purok: '',
+        totalHouseold: '',
+        pwd: '',
+        relationToHead: '',
+        cstatus: '',
+        btype: '',
+        occupation: '',
+        income: '',
+        lenghtOfStay: '',
+        religion: '',
+        nationality: '',
+        education: '',
+        houseOwnerShip: '',
+        formerAddress: '',
+        photo: null
+    })
+
+    const handleChange = (event) =>{
+        const { name, value, files } = event.target
+        setResident({
+            ...resident,
+            [name]: name === 'photo' ? files[0] : value
+        })
+    }
+
+    const saveResident = (event) =>{
+        event.preventDefault();
+        console.log(resident)
+    }
+
     return (
         <>
             {/* navigation */}
@@ -40,7 +81,7 @@ function ResidentList(){
                     <div className="modal-dialog">
                         <div className="modal-content">
                             <div className="modal-header">
-                                <h1 className="modal-title fs-5 d-flex align-items-center" id="exampleModalLabel">
+                                <h1 className="modal-title fs-6 d-flex align-items-center" id="exampleModalLabel">
                                     <FontAwesomeIcon className='me-2' icon={faUserPlus}/>
                                     New Resident
                                 </h1>
@@ -57,18 +98,21 @@ function ResidentList(){
                                                     className='form-control-1' 
                                                     placeholder='Last name'
                                                     name='lname'
+                                                    onChange={handleChange}
                                                 />
                                                 <input 
                                                     type="text" 
                                                     className='form-control-1' 
                                                     placeholder='First name'
                                                     name='fname'
+                                                    onChange={handleChange}
                                                 />
                                                 <input 
                                                     type="text" 
                                                     className='form-control-1' 
                                                     placeholder='Middle name'
                                                     name='mname'
+                                                    onChange={handleChange}
                                                 />
                                             </div>
                                         </div>
@@ -79,6 +123,7 @@ function ResidentList(){
                                                 className='form-control-1' 
                                                 id='bdate' 
                                                 name='bdate'
+                                                onChange={handleChange}
                                             />
                                         </div>
                                         <div className='resident__bplace mb-3'>
@@ -88,6 +133,7 @@ function ResidentList(){
                                                 className='form-control-1' 
                                                 id='bplace' 
                                                 name='bplace'
+                                                onChange={handleChange}
                                             />
                                         </div>
                                         <div className='resident__age mb-3'>
@@ -97,6 +143,7 @@ function ResidentList(){
                                                 className='form-control-1' 
                                                 id='age' 
                                                 name='age'
+                                                onChange={handleChange}
                                             />
                                         </div>
                                         <div className='resident__gender mb-3'>
@@ -106,6 +153,7 @@ function ResidentList(){
                                                 id="gender"
                                                 name="gender" 
                                                 defaultValue=''
+                                                onChange={handleChange}
                                             >
                                                 <option value='' disabled>-- select gender --</option>
                                                 <option>Male</option>
@@ -119,15 +167,17 @@ function ResidentList(){
                                                 className='form-control-1' 
                                                 id='purok' 
                                                 name='purok'
+                                                onChange={handleChange}
                                             />
                                         </div>
-                                        <div className='resident__totalhousehold mb-3'>
+                                        <div className='resident__totalhousehOld mb-3'>
                                             <label htmlFor="totalhousehold" className='fs-7'>Total Household</label>
                                             <input 
                                                 type="number" 
                                                 className='form-control-1' 
-                                                id='totalhousehold' 
-                                                name='totalhousehold'
+                                                id='totalHousehOld' 
+                                                name='totalHouseold'
+                                                onChange={handleChange}
                                             />
                                         </div>
                                         <div className='resident__pwd mb-3'>
@@ -137,15 +187,17 @@ function ResidentList(){
                                                 className='form-control-1' 
                                                 id='pwd' 
                                                 name='pwd'
+                                                onChange={handleChange}
                                             />
                                         </div>
-                                        <div className='resident__relationtohead mb-3'>
-                                            <label htmlFor="relationtohead" className='fs-7'>Relation to Head</label>
+                                        <div className='resident__relationToHead mb-3'>
+                                            <label htmlFor="relationToHead" className='fs-7'>Relation to Head</label>
                                             <input 
                                                 type="text" 
                                                 className='form-control-1' 
-                                                id='relationtohead' 
-                                                name='relationtohead'
+                                                id='relationToHead' 
+                                                name='relationToHead'
+                                                onChange={handleChange}
                                             />
                                         </div>
                                         <div className='resident__cstatus'>
@@ -155,6 +207,7 @@ function ResidentList(){
                                                 className='form-control-1' 
                                                 id='cstatus' 
                                                 name='cstatus'
+                                                onChange={handleChange}
                                             />
                                         </div>
                                     </div>
@@ -167,6 +220,7 @@ function ResidentList(){
                                                 className='form-control-1' 
                                                 id='btype' 
                                                 name='btype'
+                                                onChange={handleChange}
                                             />
                                         </div>
                                         <div className='resident__occupation mb-3'>
@@ -176,6 +230,7 @@ function ResidentList(){
                                                 className='form-control-1' 
                                                 id='occupation' 
                                                 name='occupation'
+                                                onChange={handleChange}
                                             />
                                         </div>
                                         <div className='resident__income mb-3'>
@@ -185,15 +240,17 @@ function ResidentList(){
                                                 className='form-control-1' 
                                                 id='income' 
                                                 name='income'
+                                                onChange={handleChange}
                                             />
                                         </div>
-                                        <div className='resident__lenghtofstay mb-3'>
-                                            <label htmlFor="lenghtofstay" className='fs-7'>Length of Stay <small><em>(months)</em></small></label>
+                                        <div className='resident__lenghtOfStay mb-3'>
+                                            <label htmlFor="lenghtOfStay" className='fs-7'>Length of Stay <small><em>(months)</em></small></label>
                                             <input 
                                                 type="number" 
                                                 className='form-control-1' 
-                                                id='lenghtofstay' 
-                                                name='lenghtofstay'
+                                                id='lenghtOfStay' 
+                                                name='lenghtOfStay'
+                                                onChange={handleChange}
                                             />
                                         </div>
                                         <div className='resident__religion mb-3'>
@@ -203,6 +260,7 @@ function ResidentList(){
                                                 id="religion"
                                                 defaultValue=''
                                                 name="religion"
+                                                onChange={handleChange}
                                             >
                                                 <option value='' disabled>--- Select Religion ---</option>
                                                 <option>Roman Catholic</option>
@@ -219,6 +277,7 @@ function ResidentList(){
                                                 className='form-control-1' 
                                                 id='nationality' 
                                                 name='nationality'
+                                                onChange={handleChange}
                                             />
                                         </div>
                                         <div className='resident__education mb-3'>
@@ -228,10 +287,11 @@ function ResidentList(){
                                                 id="education"
                                                 defaultValue=''
                                                 name="education"
+                                                onChange={handleChange}
                                             >
                                                 <option value='' disabled>--- Select ---</option>
                                                 <option>No Schooling Completed</option>
-                                                <option>Elementary (undergrad)</option>
+                                                <option>Elementary (Undergrad)</option>
                                                 <option>Elementary (Graduate)</option>
                                                 <option>High School (Undergrad)</option>
                                                 <option>Hight School (Graduate)</option>
@@ -242,13 +302,14 @@ function ResidentList(){
                                                 <option>Doctorate Degree</option>
                                             </select>
                                         </div>
-                                        <div className='resident__houseownershipn mb-3'>
-                                            <label htmlFor="houseownership" className='fs-7'>House Ownership</label>
+                                        <div className='resident__houseOwnerShip mb-3'>
+                                            <label htmlFor="houseOwnerShip" className='fs-7'>House Ownership</label>
                                             <select 
                                                 className='form-control-1'
-                                                id="houseownership"
+                                                id="houseOwnerShip"
                                                 defaultValue=''
-                                                name="houseownership"
+                                                name="houseOwnerShip"
+                                                onChange={handleChange}
                                             >
                                                 <option value='' disabled>--- Select ---</option>
                                                 <option>Own Home</option>
@@ -256,13 +317,14 @@ function ResidentList(){
                                                 <option>Live with Parents/Relatives</option>
                                             </select>
                                         </div>
-                                        <div className='resident__formeraddress mb-3'>
-                                            <label htmlFor="formeraddress" className='fs-7'>Former Address</label>
+                                        <div className='resident__formerAddress mb-3'>
+                                            <label htmlFor="formerAddress" className='fs-7'>Former Address</label>
                                             <input 
                                                 type="text" 
                                                 className='form-control-1' 
-                                                id='formeraddress' 
-                                                name='formeraddress'
+                                                id='formerAddress' 
+                                                name='formerAddress'
+                                                onChange={handleChange}
                                             />
                                         </div>
                                         <div className='resident__photo'>
@@ -272,6 +334,7 @@ function ResidentList(){
                                                 className='form-control-1' 
                                                 id='photo' 
                                                 name='photo'
+                                                onChange={handleChange}
                                             />
                                         </div>
                                     </div>
@@ -280,6 +343,7 @@ function ResidentList(){
                                     <button 
                                         type="button" 
                                         className="btn text-bg-primary fs-7 fw-semibold"
+                                        onClick={saveResident}
                                     >
                                         Add Resident
                                     </button>
@@ -288,6 +352,10 @@ function ResidentList(){
                         </div>
                     </div>
                 </div>
+
+                {/* view resident data modal */}
+                <DataModal />
+
             </section>
         </>
     )
