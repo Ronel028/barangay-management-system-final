@@ -3,7 +3,7 @@ import { faEdit, faTrash, faPenToSquare } from '@fortawesome/free-solid-svg-icon
 import Navigation from "../../components/navigation"
 import Sidemenu from "../../components/sidemenu"
 import Search from '../../components/search'
-import updateIcon from '../../Images/edit-dark.svg'
+
 function ResidentManage(){
 
     const handleChange = (event) =>{
@@ -18,7 +18,7 @@ function ResidentManage(){
         <>
             {/* navigation */}
             <Navigation 
-                title="manage officials"
+                title="manage resident"
             />
 
             {/* side menu */}

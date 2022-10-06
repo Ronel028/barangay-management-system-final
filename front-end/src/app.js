@@ -16,6 +16,9 @@ import ResidentManage from './pages/resident/resident-manage';
 import BlotterList from './pages/blotter/blotter-list';
 import BlotterManage from './pages/blotter/blotter-manage';
 
+// certificate
+import Certificate from './pages/certificate/certificate';
+
 function App(){
     return (
         <>
@@ -29,6 +32,7 @@ function App(){
                     <Route path='/resident-manage' element={<ResidentManage />}/>
                     <Route path='/blotter-list' element={<BlotterList />}/>
                     <Route path='/manage-blotter' element={<BlotterManage />}/>
+                    <Route path='/certificate' element={<Certificate />}/>
                 </Routes>
             </BrowserRouter>
         </>
