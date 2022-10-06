@@ -122,7 +122,7 @@ function Sidemenu(){
                             </li>
                             <li className='text-white'>
                                 <FontAwesomeIcon icon={faCircle}/>
-                                <Link className='text-decoration-none text-white fw-normal' to='/add-blotter'>Add new</Link>
+                                <Link className='text-decoration-none text-white fw-normal' to='/manage-blotter'>Manage Blotter</Link>
                             </li>
                         </ul>
                     </li>

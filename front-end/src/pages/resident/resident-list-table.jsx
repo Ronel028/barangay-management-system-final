@@ -27,7 +27,7 @@ function ResidentListTable(props){
                     <td>Male</td>
                     <td>
                         <button 
-                            className="btn text-white text-bg-info d-flex align-items-center fs-7"
+                            className="btn text-bg-warning fw-semibold d-flex align-items-center fs-7"
                             data-bs-toggle="modal" 
                             data-bs-target="#resident-data"
                         >

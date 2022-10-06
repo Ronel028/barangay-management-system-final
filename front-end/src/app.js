@@ -12,6 +12,10 @@ import OfficialManage from './pages/officials/official-manage';
 import ResidentList from './pages/resident/resident-list';
 import ResidentManage from './pages/resident/resident-manage';
 
+// blotter
+import BlotterList from './pages/blotter/blotter-list';
+import BlotterManage from './pages/blotter/blotter-manage';
+
 function App(){
     return (
         <>
@@ -23,6 +27,8 @@ function App(){
                     <Route path='/officials-manage' element={<OfficialManage />}/>
                     <Route path='/resident-list' element={<ResidentList />}/>
                     <Route path='/resident-manage' element={<ResidentManage />}/>
+                    <Route path='/blotter-list' element={<BlotterList />}/>
+                    <Route path='/manage-blotter' element={<BlotterManage />}/>
                 </Routes>
             </BrowserRouter>
         </>
