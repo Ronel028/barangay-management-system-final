@@ -18,6 +18,10 @@ import BlotterManage from './pages/blotter/blotter-manage';
 
 // certificate
 import Certificate from './pages/certificate/certificate';
+import ClearanceManage from './pages/certificate/Clearance/manage-clearance';
+import IndigencyManage from './pages/certificate/Indigency/manage-indigency';
+import PermitManage from './pages/certificate/permit/manage-permit';
+import ResidencyManage from './pages/certificate/Residency/manage-residency';
 
 function App(){
     return (
@@ -33,6 +37,10 @@ function App(){
                     <Route path='/blotter-list' element={<BlotterList />}/>
                     <Route path='/manage-blotter' element={<BlotterManage />}/>
                     <Route path='/certificate' element={<Certificate />}/>
+                    <Route path='/certificate/manage-clearance' element={<ClearanceManage />} />
+                    <Route path='/certificate/manage-indigency' element={<IndigencyManage />} />
+                    <Route path='/certificate/manage-permit' element={<PermitManage />} />
+                    <Route path='/certificate/manage-residency' element={<ResidencyManage />} />
                 </Routes>
             </BrowserRouter>
         </>

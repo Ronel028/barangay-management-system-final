@@ -9,16 +9,18 @@ function Sidemenu(){
     const [openMenu, setOpenMenu] = useState({
         official: false,
         resident: false,
-        blotter: false
+        blotter: false,
+        manage__certificate: false
     })
 
     //function to change the state by clicking the click event in official, resident and blotter
-    const changeMenuState = (official, resident, blotter) =>{
+    const changeMenuState = (official, resident, blotter, certificate) =>{
         setOpenMenu({
             ...openMenu,
             official: official,
             resident: resident,
-            blotter: blotter
+            blotter: blotter,
+            manage__certificate: certificate
         })
     }
 
@@ -27,16 +29,19 @@ function Sidemenu(){
         const { name } = event.target
         switch(name){
             case 'official':
-                changeMenuState(true, false, false)
+                changeMenuState(true, false, false, false)
                 break
             case 'resident':
-                changeMenuState(false, true, false)
+                changeMenuState(false, true, false, false)
                 break
             case 'blotter': 
-                changeMenuState(false, false, true)
+                changeMenuState(false, false, true, false)
+                break
+            case 'manage__certificate':
+                changeMenuState(false, false, false, true)
                 break
             default: 
-                changeMenuState(false, false, false)
+                changeMenuState(false, false, false, false)
         }
     }
 
@@ -71,11 +76,11 @@ function Sidemenu(){
                             style={{display: openMenu.official ? 'flex' : 'none'}}
                         >
                             <li className='text-white'>
-                                <FontAwesomeIcon icon={faCircle}/>
+                                <FontAwesomeIcon className='fs-8' icon={faCircle}/>
                                 <Link className='text-decoration-none text-white fw-normal' to='/officials-list'>Officials List</Link>
                             </li>
                             <li className='text-white'>
-                                <FontAwesomeIcon icon={faCircle}/>
+                                <FontAwesomeIcon className='fs-8' icon={faCircle}/>
                                 <Link className='text-decoration-none text-white fw-normal' to='/officials-manage'>Manage Official</Link>
                             </li>
                         </ul>
@@ -94,11 +99,11 @@ function Sidemenu(){
                             style={{display: openMenu.resident ? 'flex' : 'none'}}
                         >
                             <li className='text-white'>
-                                <FontAwesomeIcon icon={faCircle}/>
+                                <FontAwesomeIcon className='fs-8' icon={faCircle}/>
                                 <Link className='text-decoration-none text-white fw-normal' to='/resident-list'>Resident List</Link>
                             </li>
                             <li className='text-white'>
-                                <FontAwesomeIcon icon={faCircle}/>
+                                <FontAwesomeIcon className='fs-8' icon={faCircle}/>
                                 <Link className='text-decoration-none text-white fw-normal' to='/resident-manage'>Manage Resident</Link>
                             </li>
                         </ul>
@@ -117,11 +122,11 @@ function Sidemenu(){
                             style={{display: openMenu.blotter ? 'flex' : 'none'}}
                         >
                             <li className='text-white'>
-                                <FontAwesomeIcon icon={faCircle}/>
+                                <FontAwesomeIcon className='fs-8' icon={faCircle}/>
                                 <Link className='text-decoration-none text-white fw-normal' to='/blotter-list'>Blotter List</Link>
                             </li>
                             <li className='text-white'>
-                                <FontAwesomeIcon icon={faCircle}/>
+                                <FontAwesomeIcon className='fs-8' icon={faCircle}/>
                                 <Link className='text-decoration-none text-white fw-normal' to='/manage-blotter'>Manage Blotter</Link>
                             </li>
                         </ul>
@@ -138,10 +143,37 @@ function Sidemenu(){
                         </Link>
                     </li>
                     <li>
-                        <Link className='sidemenu__manage text-decoration-none text-white fw-normal fs-7' to='/manage-certificate'>
+                        <button 
+                            className='bg-transparent border-0 text-white fw-normal fs-7 '
+                            name='manage__certificate'
+                            onClick={handleClick}
+                        >
                             <FontAwesomeIcon icon={faBarsProgress}/>
                             Manage Certificate
-                        </Link>
+                        </button>
+
+                        <ul 
+                            className='sidemenu_subcontent list-unstyled ms-4 mt-2 flex-column gap-2'
+                            style={{display: openMenu.manage__certificate ? 'flex' : 'none'}}
+                        >
+                            <li className='text-white'>
+                                <FontAwesomeIcon className='fs-8' icon={faCircle}/>
+                                <Link className='text-decoration-none text-white fw-normal' to='/certificate/manage-clearance'>Clearance</Link>
+                            </li>
+                            <li className='text-white'>
+                                <FontAwesomeIcon className='fs-8' icon={faCircle}/>
+                                <Link className='text-decoration-none text-white fw-normal' to='/certificate/manage-indigency'>Indigency</Link>
+                            </li>
+                            <li className='text-white'>
+                                <FontAwesomeIcon className='fs-8' icon={faCircle}/>
+                                <Link className='text-decoration-none text-white fw-normal' to='/certificate/manage-permit'>Business Permit</Link>
+                            </li>
+                            <li className='text-white'>
+                                <FontAwesomeIcon className='fs-8' icon={faCircle}/>
+                                <Link className='text-decoration-none text-white fw-normal' to='/certificate/manage-residency'>Residency</Link>
+                            </li>
+                        </ul>
+
                     </li>
                 </ul>
             </div>

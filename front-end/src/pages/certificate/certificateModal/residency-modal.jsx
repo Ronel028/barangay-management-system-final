@@ -16,7 +16,7 @@ function ResidencyModal(){
                 <form>
                     <div className="modal-body">
                         <div>
-                            <div className='residency__name mb-3'>
+                            <div className='mb-3'>
                                 <label className='fs-7 fw-semibold' htmlFor="residency__name">Name</label>
                                 <input 
                                     type="text" 
@@ -25,7 +25,7 @@ function ResidencyModal(){
                                     name='residency__name' 
                                 />
                             </div>
-                            <div className="residency__age mb-3">
+                            <div className="mb-3">
                                 <label className='fs-7 fw-semibold' htmlFor="residency__age">Age</label>
                                 <input 
                                     type="number" 
@@ -33,7 +33,7 @@ function ResidencyModal(){
                                     name='residency__age'
                                 />
                             </div>
-                            <div className="residency__gender mb-3">
+                            <div className="mb-3">
                                 <label className='fs-7 fw-semibold' htmlFor="residency__gender">Gender</label>
                                 <input 
                                     type="text" 
@@ -42,8 +42,8 @@ function ResidencyModal(){
                                     name='residency__gender' 
                                 />
                             </div>
-                            <div className='resident_clearance__bottom row'>
-                                <div className='residency__ornumber col'>
+                            <div className='row'>
+                                <div className='col'>
                                     <label className='fs-7 fw-semibold' htmlFor="residency__ornumber">OR-Number</label>
                                     <input 
                                         type="number" 
@@ -52,7 +52,7 @@ function ResidencyModal(){
                                         name='residency__ornumber'
                                     />
                                 </div>
-                                <div className='residency__amount col'>
+                                <div className='col'>
                                     <label className='fs-7 fw-semibold' htmlFor="residency__amount">Amount</label>
                                     <input 
                                         type="number" 

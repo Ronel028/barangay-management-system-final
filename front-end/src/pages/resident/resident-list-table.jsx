@@ -5,7 +5,7 @@ function ResidentListTable(props){
     return (
         <table className="table table-hover table-bordered">
             <thead>
-                <tr className="text-bg-dark">
+                <tr className="text-bg-dark fs-7">
                     <th scope="col">Photo</th>
                     <th scope="col">Name</th>
                     <th scope="col">Contact</th>
@@ -15,7 +15,7 @@ function ResidentListTable(props){
                 </tr>
             </thead>
             <tbody>
-                <tr className='align-middle'>
+                <tr className='align-middle fs-7'>
                     <td>
                         <div className='table__image__container border rounded border-secondary p-1'>
                             <img className='w-100 h-100' src="" alt="..." />

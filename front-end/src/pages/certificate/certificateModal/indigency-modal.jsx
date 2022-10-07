@@ -16,7 +16,7 @@ function IndigencyModal(){
                 <form>
                     <div className="modal-body">
                         <div>
-                            <div className='resident__name mb-3'>
+                            <div className='mb-3'>
                                 <label className='fs-7 fw-semibold' htmlFor="indigency__name">Name</label>
                                 <input 
                                     type="text" 
@@ -25,7 +25,7 @@ function IndigencyModal(){
                                     name='indigency__name' 
                                 />
                             </div>
-                            <div className="indigency__age mb-3">
+                            <div className="mb-3">
                                 <label className='fs-7 fw-semibold' htmlFor="indigency__age">Age</label>
                                 <input 
                                     type="number" 
@@ -33,7 +33,7 @@ function IndigencyModal(){
                                     name='indigency__age'
                                 />
                             </div>
-                            <div className="indigency__gender mb-3">
+                            <div className="mb-3">
                                 <label className='fs-7 fw-semibold' htmlFor="indigency__gender">Gender</label>
                                 <input 
                                     type="text" 
@@ -42,8 +42,8 @@ function IndigencyModal(){
                                     name='indigency__gender' 
                                 />
                             </div>
-                            <div className='resident_clearance__bottom row'>
-                                <div className='indigency__ornumber col'>
+                            <div className='row'>
+                                <div className='col'>
                                     <label className='fs-7 fw-semibold' htmlFor="indigency__ornumber">OR-Number</label>
                                     <input 
                                         type="number" 
@@ -52,7 +52,7 @@ function IndigencyModal(){
                                         name='indigency__ornumber'
                                     />
                                 </div>
-                                <div className='indigency__amount col'>
+                                <div className='col'>
                                     <label className='fs-7 fw-semibold' htmlFor="indigency__amount">Amount</label>
                                     <input 
                                         type="number" 

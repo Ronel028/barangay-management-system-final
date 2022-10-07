@@ -1,15 +1,15 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faFile } from '@fortawesome/free-solid-svg-icons'
+import { faEdit } from '@fortawesome/free-solid-svg-icons'
 
-function ClearanceModal(){
+function ClearanceUpdateModal(){
     return (
-        <div className="modal fade" id="clearance" data-bs-backdrop="static" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div className="modal fade" id="update-clearance" data-bs-backdrop="static" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div className="modal-dialog">
             <div className="modal-content">
                 <div className="modal-header">
                     <h1 className="modal-title fs-6 d-flex align-items-center" id="exampleModalLabel">
-                        <FontAwesomeIcon className='me-2' icon={faFile}/>
-                        Clearance
+                        <FontAwesomeIcon className='me-2' icon={faEdit}/>
+                        Update Clearance
                     </h1>
                     <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -69,7 +69,7 @@ function ClearanceModal(){
                             type="button" 
                             className="btn text-bg-primary fs-7 fw-semibold"
                         >
-                            Save Clearance
+                            Update Clearance
                         </button>
                     </div>
                 </form>
@@ -79,4 +79,4 @@ function ClearanceModal(){
     )
 }
 
-export default ClearanceModal
+export default ClearanceUpdateModal

@@ -25,7 +25,7 @@ function BlotterManage(){
                     {/* table */}
                     <table className="table table-hover table-bordered">
                         <thead>
-                            <tr className="text-bg-dark">
+                            <tr className="text-bg-dark fs-7">
                             <th scope="col">Complainant</th>
                             <th scope="col">Complainee</th>
                             <th scope="col">Complaint</th>
@@ -35,7 +35,7 @@ function BlotterManage(){
                             </tr>
                         </thead>
                         <tbody>
-                            <tr className='align-middle'>
+                            <tr className='align-middle fs-7'>
                                 <td>Buknoy</td>
                                 <td>Tuknoy</td>
                                 <td>Nagnakaw ng Pato</td>

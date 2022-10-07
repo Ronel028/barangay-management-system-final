@@ -1,15 +1,15 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faFile } from '@fortawesome/free-solid-svg-icons'
+import { faEdit } from '@fortawesome/free-solid-svg-icons'
 
-function ClearanceModal(){
+function ResidencyUpdateModal(){
     return (
-        <div className="modal fade" id="clearance" data-bs-backdrop="static" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div className="modal fade" id="update-residency" data-bs-backdrop="static" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div className="modal-dialog">
             <div className="modal-content">
                 <div className="modal-header">
                     <h1 className="modal-title fs-6 d-flex align-items-center" id="exampleModalLabel">
-                        <FontAwesomeIcon className='me-2' icon={faFile}/>
-                        Clearance
+                        <FontAwesomeIcon className='me-2' icon={faEdit}/>
+                        Update Residency
                     </h1>
                     <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -17,48 +17,48 @@ function ClearanceModal(){
                     <div className="modal-body">
                         <div>
                             <div className='mb-3'>
-                                <label className='fs-7 fw-semibold' htmlFor="clearance__name">Name</label>
+                                <label className='fs-7 fw-semibold' htmlFor="residency__name">Name</label>
                                 <input 
                                     type="text" 
                                     className='form-control-1' 
-                                    id='clearance__name' 
-                                    name='clearance_name' 
+                                    id='residency__name' 
+                                    name='residency__name' 
                                 />
                             </div>
                             <div className="mb-3">
-                                <label className='fs-7 fw-semibold' htmlFor="clearance__age">Age</label>
+                                <label className='fs-7 fw-semibold' htmlFor="residency__age">Age</label>
                                 <input 
                                     type="number" 
                                     className='form-control-1' 
-                                    name='clearance__age'
+                                    name='residency__age'
                                 />
                             </div>
                             <div className="mb-3">
-                                <label className='fs-7 fw-semibold' htmlFor="clearance__gender">Gender</label>
+                                <label className='fs-7 fw-semibold' htmlFor="residency__gender">Gender</label>
                                 <input 
                                     type="text" 
                                     className='form-control-1' 
-                                    id='clearance__gender' 
-                                    name='clearance__gender' 
+                                    id='residency__gender' 
+                                    name='residency__gender' 
                                 />
                             </div>
                             <div className='row'>
                                 <div className='col'>
-                                    <label className='fs-7 fw-semibold' htmlFor="clearance__ornumber">OR-Number</label>
+                                    <label className='fs-7 fw-semibold' htmlFor="residency__ornumber">OR-Number</label>
                                     <input 
                                         type="number" 
                                         className='form-control-1' 
-                                        id='clearance__ornumber' 
-                                        name='clearance__ornumber'
+                                        id='residency__ornumber' 
+                                        name='residency__ornumber'
                                     />
                                 </div>
                                 <div className='col'>
-                                    <label className='fs-7 fw-semibold' htmlFor="clearance__amount">Amount</label>
+                                    <label className='fs-7 fw-semibold' htmlFor="residency__amount">Amount</label>
                                     <input 
                                         type="number" 
                                         className='form-control-1' 
-                                        id='clearance__amount' 
-                                        name='clearance__amount'
+                                        id='residency__amount' 
+                                        name='residency__amount'
                                     />
                                 </div>
                             </div>
@@ -69,7 +69,7 @@ function ClearanceModal(){
                             type="button" 
                             className="btn text-bg-primary fs-7 fw-semibold"
                         >
-                            Save Clearance
+                            Update Residency
                         </button>
                     </div>
                 </form>
@@ -79,4 +79,4 @@ function ClearanceModal(){
     )
 }
 
-export default ClearanceModal
+export default ResidencyUpdateModal

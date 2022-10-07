@@ -5,6 +5,7 @@ import CertificateTable from './certificate-table'
 import ClearanceModal from './certificateModal/clearance-modal'
 import IndigencyModal from './certificateModal/indigency-modal'
 import ResidencyModal from './certificateModal/residency-modal'
+import PermitModal from './certificateModal/permit-modal'
 
 function Certificate(){
     return (
@@ -33,6 +34,9 @@ function Certificate(){
 
                 {/* indigenct modal */}
                 <IndigencyModal />
+
+                {/* permit modal */}
+                <PermitModal />
 
                 {/* residency */}
                 <ResidencyModal />
