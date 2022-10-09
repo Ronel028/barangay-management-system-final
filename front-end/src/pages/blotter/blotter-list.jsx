@@ -1,3 +1,4 @@
+import { useState, useRef } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUserPlus } from '@fortawesome/free-solid-svg-icons'
 import Search from '../../components/search'
@@ -6,6 +7,40 @@ import BlotterTable from './blotter-list-table'
 import BlotterData from './blotter-data-modal'
 
 function BlotterList(){
+
+    let  searchFocus = useRef()
+    const [active, setActive] = useState(false)
+    const [complainant, setComplainant] = useState({
+        complainant: ''
+    })
+
+    const dropdown = (event) =>{
+        event.preventDefault()
+        searchFocus.current.focus()
+        setActive((currentState) =>{
+            if(currentState === false){
+                return true
+            }else{
+                return false
+            }
+        })
+    }
+
+    const getComplainant = (event)=>{
+        const { name, checked, value } = event.target
+        if(checked){
+            setComplainant({
+                [name]: value
+            })
+            setActive(false)
+        }
+    }
+    
+    const saveBlotter = (event) =>{
+        event.preventDefault()
+        console.log(complainant)
+    }
+
     return (
         <>
             <section className="blotter__container main-padding">
@@ -49,16 +84,60 @@ function BlotterList(){
                                     <div className="blotter__left col">
                                         <div className="complainant mb-3">
                                             <label className='fs-7 fw-bold' htmlFor="complainant">Complainant</label>
-                                            <select 
-                                                id="complainant"
-                                                className='form-control-1'
-                                                name="complainant" 
-                                                defaultValue=''
-                                            >
-                                                <option value='' disabled>--- select name ---</option>
-                                                <option>Buknoy</option>
-                                                <option>Burnok</option>
-                                            </select>
+                                            <div className='position-relative'>
+                                                <button 
+                                                    className='form-control-1 text-start'
+                                                    name="complainant"
+                                                    onClick={dropdown}
+                                                >
+                                                    {complainant.complainant === '' ? '--- Select name ---' : complainant.complainant}
+                                                </button>
+                                                <div 
+                                                    className='position-absolute bg-white border w-100'
+                                                    style={{display: active ? 'block': 'none'}}
+                                                >
+                                                    
+                                                        <input 
+                                                            type="text" 
+                                                            className='form-control-1' 
+                                                            placeholder='search...'
+                                                            ref={searchFocus}
+                                                        />
+                                                    <div className='test-1 w-100 px-2 hover'>
+                                                        <input 
+                                                            type="radio"
+                                                            className='d-none'
+                                                            id="Ronel Florida" 
+                                                            name="complainant"
+                                                            value="Ronel Florida" 
+                                                            onChange={getComplainant}
+                                                        />
+                                                        <label className='fs-7' htmlFor="Ronel Florida">Ronel Florida</label>
+                                                    </div>
+                                                    <div className='test-2 w-100 px-2 hover'>
+                                                        <input 
+                                                            type="radio" 
+                                                            className='d-none'
+                                                            id="john doe"
+                                                            name="complainant" 
+                                                            value="John Doe"
+                                                            onChange={getComplainant}
+                                                        />
+                                                        <label className='fs-7' htmlFor="john doe">John Doe</label>
+                                                    </div>
+                                                    <div className='test-3 w-100 px-2 hover'>
+                                                        <input 
+                                                            type="radio" 
+                                                            className='d-none'
+                                                            id="jane doe" 
+                                                            name="complainant" 
+                                                            value="Jane Doe"
+                                                            onChange={getComplainant}
+                                                        />
+                                                        <label className='fs-7' htmlFor="jane doe">Jane Doe</label>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div className="complainant__age mb-3">
                                             <label className='fs-7 fw-bold' htmlFor="complainant__age">Age</label>
@@ -178,8 +257,9 @@ function BlotterList(){
                                 </div>
                                 <div className="d-flex align-items-center justify-content-end p-3">
                                     <button 
-                                    type="button" 
-                                    className="btn text-bg-primary fs-7 fw-semibold"
+                                        type="button" 
+                                        className="btn text-bg-primary fs-7 fw-semibold"
+                                        onClick={saveBlotter}
                                     >
                                         Save Blotter
                                     </button>
