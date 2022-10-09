@@ -4,12 +4,12 @@ import { useReactToPrint } from 'react-to-print'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPrint, faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 
-function PrintClearance(){
+function PrintPermit(){
 
     const printDocument = useRef()
     const handlePrint = useReactToPrint({
         content: () => printDocument.current,
-        documentTitle: 'Clearance'
+        documentTitle: 'Business Permit'
     })
 
     const handleClick = () =>{
@@ -30,26 +30,44 @@ function PrintClearance(){
                 </div>
 
                 {/* title */}
-                <div className="text-center mb-6">
+                <div className="text-center mb-5">
                     <h3 className="text-uppercase fs-5 fw-semibold mb-2">Office of the barangay captain</h3>
-                    <h1 className="text-uppercase fs-1 fw-bold">Barangay Clearance</h1>
+                    <h1 className="text-uppercase fs-1 fw-bold">Barangay business permit</h1>
                 </div> 
+
+                <div className='mb-5'>
+                    <div className="row mb-1">
+                        <p className="col-3 fw-semibold">Nature of Business:</p>
+                        <p className="col">Sari-sari Store</p>
+                    </div>
+                    <div className="row mb-1">
+                        <p className="col-3 fw-semibold">Owner:</p>
+                        <p className="col">Ronel Florida</p>
+                    </div>
+                    <div className="row mb-1">
+                        <p className="col-3 fw-semibold">Business Location:</p>
+                        <p className="col">Purok 2</p>
+                    </div>
+                    <div className="row mb-1">
+                        <p className="col-3 fw-semibold">Amount Paid:</p>
+                        <p className="col">20000</p>
+                    </div>
+                </div>
 
                 {/* body */}
                 <div className="mb-6">
-                    <h3 className="text-uppercase fs-6 fw-bold mb-3">to whom in may concern</h3>
                     <p className="mb-2 fs-6">
-                        <span className="ms-5">This</span> is to certify that <span>Ronel Florida</span>, <span>22</span> years old, <span>Male</span> and resident of
-                        Barangay Sto nino, Rizal Occidental Mindoro is known to be a good moral character and
-                        a law-binding citizen in the community.
+                        <span className="ms-5">This</span> Permit is being issued subject to existing rules and regulation,
+                        provided however, that the necessary fees are paid to the treasurer of the Barangay assessed.
                     </p>
                     <p className="mb-2">
-                        <span className='ms-5'>To</span> certify further, that he/she has no derogatory or criminal records filed in this barangay.
+                        <span className='ms-5'>This</span> is none-transferable and shall be deemed null and void upon
+                        failure by the owner to follow the said rules and regulations set forth by the local government
+                        Unit of Rizal
                     </p>
                     <p>
-                        <span className="ms-5 fw-bold">Issued</span> this <span>18<sup>th</sup></span> day of <span>September</span>, 2022 at barangay
-                        Sto Nino, Rizal Occidental Mindoro upon request of the interested party for whatever legal
-                        purpose it may serve.
+                        <span className="ms-5 fw-bold">Issued</span> this <span>18<sup>th</sup></span> day of 
+                        <span> September</span>, 2022 at barangay Sto Nino, Rizal Occidental Mindoro 
                     </p>
                 </div>
 
@@ -72,6 +90,10 @@ function PrintClearance(){
                         <p className="col-2 fw-semibold">Date Issue:</p>
                         <p className="col">September 18, 2022</p>
                     </div>
+                    <div className="row mb-1">
+                        <p className="col-2 fw-semibold">Valid Until:</p>
+                        <p className="col">September 18, 2024</p>
+                    </div>
                     <div className="row">
                         <p className="col-2 fw-semibold">Doc. Stamp:</p>
                         <p className="col">Paid</p>
@@ -81,7 +103,7 @@ function PrintClearance(){
 
             <div className='position-absolute top-0 start-0 ms-4 mt-4'>
                 <Link 
-                    to='/certificate/manage-clearance' 
+                    to='/certificate/manage-permit' 
                     className='btn text-bg-primary fs-7 fw-semibold me-2 shadow'
                 >
                     <FontAwesomeIcon icon={faArrowLeft}/>
@@ -97,4 +119,4 @@ function PrintClearance(){
     )
 }
 
-export default PrintClearance
+export default PrintPermit

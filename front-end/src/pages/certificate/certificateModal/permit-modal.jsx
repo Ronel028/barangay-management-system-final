@@ -16,7 +16,7 @@ function PermitModal(){
                     <form>
                         <div className="modal-body">
                             <div className='mb-3'>
-                                <label className='fs-7 fw-bold' htmlFor="permit__name">Resident</label>
+                                <label className='fs-7 fw-bold' htmlFor="permit__name">Owner/Resident</label>
                                 <input 
                                     type="text" 
                                     id='permit__name' 
@@ -25,7 +25,7 @@ function PermitModal(){
                                 />
                             </div>
                             <div className='mb-3'>
-                                <label className='fs-7 fw-bold' htmlFor="business__name">Business Name</label>
+                                <label className='fs-7 fw-bold' htmlFor="business__name">Nature of Business</label>
                                 <input 
                                     type="text" 
                                     id='business__name' 

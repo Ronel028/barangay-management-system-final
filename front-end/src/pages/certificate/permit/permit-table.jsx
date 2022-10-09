@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit, faTrash, faPrint } from '@fortawesome/free-solid-svg-icons'
 
@@ -45,12 +46,13 @@ function PermitTable(){
                                     <FontAwesomeIcon className='me-1' icon={faTrash}/>
                                     Remove
                                 </button>
-                                <button 
-                                    className="dropdown-item fw-semibold d-flex align-items-center fs-7"
+                                <Link 
+                                    to='/certificate/permit/print' 
+                                    className='dropdown-item fw-semibold d-flex align-items-center fs-7'
                                 >
                                     <FontAwesomeIcon className='me-1' icon={faPrint}/>
                                     Print
-                                </button>
+                                </Link>
                             </ul>
                         </div>
                     </td>

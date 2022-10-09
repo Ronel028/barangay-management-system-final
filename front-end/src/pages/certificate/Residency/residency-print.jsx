@@ -4,12 +4,12 @@ import { useReactToPrint } from 'react-to-print'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPrint, faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 
-function PrintClearance(){
+function PrintResidency(){
 
     const printDocument = useRef()
     const handlePrint = useReactToPrint({
         content: () => printDocument.current,
-        documentTitle: 'Clearance'
+        documentTitle: 'Residency'
     })
 
     const handleClick = () =>{
@@ -32,19 +32,19 @@ function PrintClearance(){
                 {/* title */}
                 <div className="text-center mb-6">
                     <h3 className="text-uppercase fs-5 fw-semibold mb-2">Office of the barangay captain</h3>
-                    <h1 className="text-uppercase fs-1 fw-bold">Barangay Clearance</h1>
+                    <h1 className="text-uppercase fs-1 fw-bold">Certificate of residency</h1>
                 </div> 
 
                 {/* body */}
                 <div className="mb-6">
                     <h3 className="text-uppercase fs-6 fw-bold mb-3">to whom in may concern</h3>
                     <p className="mb-2 fs-6">
-                        <span className="ms-5">This</span> is to certify that <span>Ronel Florida</span>, <span>22</span> years old, <span>Male</span> and resident of
-                        Barangay Sto nino, Rizal Occidental Mindoro is known to be a good moral character and
-                        a law-binding citizen in the community.
+                        <span className="ms-5">This</span> is to certify that <span>Ronel Florida</span> <span>22</span> years old, <span>Male</span> is a 
+                        <span className='fw-bold text-uppercase'> permanent resident</span> of Barangay Sto nino, Rizal Occidental Mindoro.
                     </p>
                     <p className="mb-2">
-                        <span className='ms-5'>To</span> certify further, that he/she has no derogatory or criminal records filed in this barangay.
+                        <span className='ms-5'>Based</span> on records of this office, she has been residing at Barangay Sto nino, Rizal 
+                        Occidental Mindoro
                     </p>
                     <p>
                         <span className="ms-5 fw-bold">Issued</span> this <span>18<sup>th</sup></span> day of <span>September</span>, 2022 at barangay
@@ -81,7 +81,7 @@ function PrintClearance(){
 
             <div className='position-absolute top-0 start-0 ms-4 mt-4'>
                 <Link 
-                    to='/certificate/manage-clearance' 
+                    to='/certificate/manage-residency' 
                     className='btn text-bg-primary fs-7 fw-semibold me-2 shadow'
                 >
                     <FontAwesomeIcon icon={faArrowLeft}/>
@@ -97,4 +97,4 @@ function PrintClearance(){
     )
 }
 
-export default PrintClearance
+export default PrintResidency

@@ -25,6 +25,9 @@ import ResidencyManage from './pages/certificate/Residency/manage-residency';
 
 // print certificate
 import PrintClearance from './pages/certificate/Clearance/clearance-print';
+import IndigencyPrint from './pages/certificate/Indigency/indigency-print';
+import ResidentPrint from './pages/certificate/Residency/residency-print';
+import PermitPrint from './pages/certificate/permit/permit-print';
 
 function App(){
     return (
@@ -41,10 +44,13 @@ function App(){
                     <Route path='/manage-blotter' element={<BlotterManage />}/>
                     <Route path='/certificate' element={<Certificate />}/>
                     <Route path='/certificate/manage-clearance' element={<ClearanceManage />} />
-                    <Route path='/certificate/clearance/print' element={<PrintClearance />} />
+                    <Route path='/certificate/clearance/print' element={<PrintClearance />} /> {/* route for printing clearance */}
                     <Route path='/certificate/manage-indigency' element={<IndigencyManage />} />
+                    <Route path='/certificate/indigency/print' element={<IndigencyPrint />} /> {/* route for printing indigency */}
                     <Route path='/certificate/manage-permit' element={<PermitManage />} />
+                    <Route path='/certificate/permit/print' element={<PermitPrint />} /> {/* route for printing business permit */}
                     <Route path='/certificate/manage-residency' element={<ResidencyManage />} />
+                    <Route path='/certificate/residency/print' element={<ResidentPrint />} /> {/* route for printing residency */}
                 </Routes>
             </BrowserRouter>
         </>

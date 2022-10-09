@@ -4,12 +4,12 @@ import { useReactToPrint } from 'react-to-print'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPrint, faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 
-function PrintClearance(){
+function PrintIndigency(){
 
     const printDocument = useRef()
     const handlePrint = useReactToPrint({
         content: () => printDocument.current,
-        documentTitle: 'Clearance'
+        documentTitle: 'Indigency'
     })
 
     const handleClick = () =>{
@@ -32,16 +32,15 @@ function PrintClearance(){
                 {/* title */}
                 <div className="text-center mb-6">
                     <h3 className="text-uppercase fs-5 fw-semibold mb-2">Office of the barangay captain</h3>
-                    <h1 className="text-uppercase fs-1 fw-bold">Barangay Clearance</h1>
+                    <h1 className="text-uppercase fs-1 fw-bold">Certificate of Indigency</h1>
                 </div> 
 
                 {/* body */}
                 <div className="mb-6">
                     <h3 className="text-uppercase fs-6 fw-bold mb-3">to whom in may concern</h3>
                     <p className="mb-2 fs-6">
-                        <span className="ms-5">This</span> is to certify that <span>Ronel Florida</span>, <span>22</span> years old, <span>Male</span> and resident of
-                        Barangay Sto nino, Rizal Occidental Mindoro is known to be a good moral character and
-                        a law-binding citizen in the community.
+                        <span className="ms-5">This</span> is to certify that <span>Ronel Florida</span>, <span>22</span> years old, <span>Male</span> is a 
+                        resident of Barangay Sto nino, Rizal Occidental Mindoro is one the indigents in this barangay.
                     </p>
                     <p className="mb-2">
                         <span className='ms-5'>To</span> certify further, that he/she has no derogatory or criminal records filed in this barangay.
@@ -81,7 +80,7 @@ function PrintClearance(){
 
             <div className='position-absolute top-0 start-0 ms-4 mt-4'>
                 <Link 
-                    to='/certificate/manage-clearance' 
+                    to='/certificate/manage-indigency' 
                     className='btn text-bg-primary fs-7 fw-semibold me-2 shadow'
                 >
                     <FontAwesomeIcon icon={faArrowLeft}/>
@@ -97,4 +96,4 @@ function PrintClearance(){
     )
 }
 
-export default PrintClearance
+export default PrintIndigency

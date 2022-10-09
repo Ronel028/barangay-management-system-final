@@ -281,7 +281,7 @@ function ResidentList(){
                                             />
                                         </div>
                                         <div className='resident__education mb-3'>
-                                            <label htmlFor="education" className='fs-7'>Highest Educational Attainment</label>
+                                            <label htmlFor="education" className='fs-7'>Educational Attainment</label>
                                             <select 
                                                 className='form-control-1'
                                                 id="education"
