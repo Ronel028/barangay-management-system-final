@@ -1,6 +1,5 @@
-import Navigation from '../../components/navigation'
-import Sidemenu from '../../components/sidemenu'
 import Search from '../../components/search'
+import TitleCard from '../../components/title'
 import CertificateTable from './certificate-table'
 import ClearanceModal from './certificateModal/clearance-modal'
 import IndigencyModal from './certificateModal/indigency-modal'
@@ -10,16 +9,12 @@ import PermitModal from './certificateModal/permit-modal'
 function Certificate(){
     return (
         <>
-            {/* navigation */}
-            <Navigation 
-                title="certificate"
-            />
-
-            {/* side menu */}
-            <Sidemenu />
-
-            {/* main section*/}
             <section className='certificate__container main-padding'>
+
+                <TitleCard 
+                    title="certificate"
+                />
+
                 {/* main */}
                 <main className="blotter_list__main p-2 mt-3">
                     <div className="d-flex justify-content-end align-items-center mb-4"> 

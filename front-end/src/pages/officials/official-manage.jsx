@@ -1,21 +1,15 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit, faTrash, faPenToSquare } from '@fortawesome/free-solid-svg-icons'
-import Navigation from "../../components/navigation"
-import Sidemenu from "../../components/sidemenu"
 import Search from '../../components/search'
+import TitleCard from '../../components/title'
 
 function OfficialManage(){
     return(
         <>
-            {/* navigation */}
-            <Navigation 
-                title="manage officials"
-            />
-
-            {/* side menu */}
-            <Sidemenu />
-
             <section className="officials__manage__container main-padding">
+
+                <TitleCard title="manage officials"/>
+
                 {/* main */}
                 <main className="officials__manage__main p-2 mt-3">
                     <div className='d-flex justify-content-end align-items-center mb-4'>

@@ -1,5 +1,4 @@
-import Navigation from "../../components/navigation"
-import Sidemenu from "../../components/sidemenu"
+import TitleCard from "../../components/title"
 import ResidentImage from '../../Images/people-fill.svg'
 import BlotterIcon from '../../Images/blotter-icon.svg'
 import CertificateIcon from '../../Images/open-folder.svg'
@@ -7,17 +6,12 @@ import OfficialIcon from '../../Images/buildings.svg'
 function Dashboard(){
     return (
         <>
-            {/* navigation */}
-            <Navigation 
-                title="dashboard"
-            />
-
-            {/* side menu */}
-            <Sidemenu />
             <section className="dashboard__container main-padding">
 
+                <TitleCard 
+                    title="dashboard"
+                />
                 <main className="dashboard__main p-2 mt-3">
-
                     <div className="dashboard__card d-flex px-0 shadow mb-3 rounded">
                         <div className="dashboard__image bg-primary rounded-start d-flex align-items-center justify-content-center">
                             <div className="w-50 h-50 m-auto">

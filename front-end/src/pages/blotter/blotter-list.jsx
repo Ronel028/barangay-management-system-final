@@ -1,24 +1,18 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUserPlus } from '@fortawesome/free-solid-svg-icons'
-import Navigation from "../../components/navigation"
-import Sidemenu from "../../components/sidemenu"
 import Search from '../../components/search'
+import TitleCard from '../../components/title'
 import BlotterTable from './blotter-list-table'
 import BlotterData from './blotter-data-modal'
 
 function BlotterList(){
     return (
         <>
-            {/* navigation */}
-            <Navigation 
-                title="Blotter List"
-            />
-
-            {/* side menu */}
-            <Sidemenu />
-
-            {/* main section */}
             <section className="blotter__container main-padding">
+
+                <TitleCard 
+                    title="blotter list"
+                />
                 
                 {/* main */}
                 <main className="blotter_list__main p-2 mt-3">

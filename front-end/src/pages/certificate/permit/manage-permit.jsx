@@ -1,22 +1,16 @@
-import Navigation from "../../../components/navigation";
-import Sidemenu from "../../../components/sidemenu";
 import Search from "../../../components/search";
+import TitleCard from "../../../components/title";
 import PermitTable from "./permit-table";
 import PermitUpdateModal from "./permit-update-modal";
 
 function PermitManage(){
     return (
         <>
-            {/* navigation */}
-            <Navigation 
-                title="manage Permit"
-            />
-
-            {/* side menu */}
-            <Sidemenu />
-
-            {/* main */}
             <section className="main-padding">
+
+                <TitleCard 
+                    title="business permit"
+                />
 
                 {/* main */}
                 <main className="p-2 mt-3">

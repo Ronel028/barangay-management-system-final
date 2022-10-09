@@ -1,11 +1,10 @@
+import { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUserPlus } from '@fortawesome/free-solid-svg-icons'
-import Navigation from "../../components/navigation"
-import Sidemenu from "../../components/sidemenu"
 import Search from "../../components/search"
+import TitleCard from '../../components/title'
 import ResidentListTable from './resident-list-table'
 import DataModal from '../../components/data-modal'
-import { useState } from 'react'
 
 function ResidentList(){
 
@@ -49,15 +48,11 @@ function ResidentList(){
 
     return (
         <>
-            {/* navigation */}
-            <Navigation 
-                title="resident list"
-            />
-
-            {/* side menu */}
-            <Sidemenu />
-
             <section className="resident__list main-padding">
+
+                <TitleCard 
+                    title="resident list"
+                />
 
                 {/* main */}
                 <main className="resident_list__main p-2 mt-3">

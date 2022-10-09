@@ -1,8 +1,7 @@
 import { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUserPlus } from '@fortawesome/free-solid-svg-icons'
-import Navigation from "../../components/navigation"
-import Sidemenu from "../../components/sidemenu"
+import TitleCard from '../../components/title'
 import Search from '../../components/search'
 import OfficialListTable from './official-list-table'
 
@@ -32,16 +31,12 @@ function OfficialsList(){
 
     return (
         <>
-            {/* navigation */}
-            <Navigation 
-            title="Officials list"
-            />
-
-            {/* side menu */}
-            <Sidemenu />
-
             {/* main section */}
             <section className="officials__container main-padding">
+
+                <TitleCard 
+                    title="Official list"
+                />
 
                 <main className="officials__main p-2 mt-3">
                     <div className='d-flex justify-content-between align-items-center align-middle mb-4'>

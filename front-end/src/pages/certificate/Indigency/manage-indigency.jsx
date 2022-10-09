@@ -1,22 +1,16 @@
-import Navigation from "../../../components/navigation";
-import Sidemenu from "../../../components/sidemenu";
 import Search from "../../../components/search";
+import TitleCard from "../../../components/title";
 import IndigencyTable from "./indigency-table";
 import IndigencyUpdateModal from "./indigency-update-modal";
 
 function IndigencyManage(){
     return (
         <>
-            {/* navigation */}
-            <Navigation 
-                title="manage indigency"
-            />
-
-            {/* side menu */}
-            <Sidemenu />
-
-            {/* main */}
             <section className="main-padding">
+
+                <TitleCard 
+                    title="indigency"
+                />
 
                 {/* main */}
                 <main className="p-2 mt-3">

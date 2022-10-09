@@ -1,22 +1,16 @@
-import Navigation from "../../../components/navigation";
-import Sidemenu from "../../../components/sidemenu";
 import Search from "../../../components/search";
+import TitleCard from "../../../components/title";
 import ClearanceTable from "./clearance-table";
 import ClearanceUpdateModal from "./clearance-update-modal";
 
 function ClearanceManage(){
     return (
         <>
-            {/* navigation */}
-            <Navigation 
-                title="manage clearance"
-            />
-
-            {/* side menu */}
-            <Sidemenu />
-
-            {/* main */}
             <section className="main-padding">
+
+                <TitleCard 
+                    title="Clearance"
+                />
 
                 {/* main */}
                 <main className="p-2 mt-3">

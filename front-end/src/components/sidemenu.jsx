@@ -46,7 +46,7 @@ function Sidemenu(){
     }
 
     return (
-        <aside className="sidemenu__container py-4 bg-dark h-auto min-vh-100 position-fixed">
+        <aside className="sidemenu__container py-4 bg-dark h-auto min-vh-100 position-fixed top-0">
             <div className="sidemenu__content px-2 d-flex flex-column gap-3">
                 {/* barangay image container */}
                 <div className="logo__container w-75 h-70 rounded-circle border border-white border-opacity-25 p-1 align-self-center mb-4">
