@@ -1,9 +1,68 @@
+import { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
 import Search from "../../components/search"
 import TitleCard from '../../components/title'
 
 function BlotterManage(){
+
+    const [complainantActive, setComplainantActive] = useState(false)
+    const [complaineeActive, setComplaineeActive] = useState(false)
+    const [updateBlotter, setUpdateBlotter] = useState({
+        complainant__name: '',
+        complainant__age: 0,
+        complainant__gender: '',
+        complainant__address: '',
+        complainee__name: '',
+        complainee__age: 0,
+        complainee__gender: '',
+        complainee__address: '',
+        complaint: '',
+        locationOfIncident: '',
+        status: ''
+    })
+
+    // function for setting a update dropdown button both complainant name and complainee name
+    const complainantDropdownButton = (event) =>{
+        event.preventDefault()
+        setComplainantActive((currentState) =>{
+            if(currentState === false){
+                return true
+            }else{
+                return false
+            }
+        })
+    }
+    const complaineeDropdownButton = (event) =>{
+        event.preventDefault()
+        setComplaineeActive((currentState) =>{
+            if(currentState === false){
+                return true
+            }else{
+                return false
+            }
+        })
+    }
+    //---end function-------------------------------------------
+
+    // function for getting input value
+    const handleChange = (event) =>{
+        const { name, value } = event.target
+        setUpdateBlotter({
+            ...updateBlotter,
+            [name] : value
+        })
+        setComplainantActive(false)
+        setComplaineeActive(false)
+    }
+    // --end function----------------------------------
+
+    // function for saving update blotter in database
+    const saveUpdateBlotter = ()=>{
+        console.log(updateBlotter)
+    }
+    // --end function---------------------------
+
     return (
         <>
             <section className="blotter__manage__container main-padding">
@@ -74,16 +133,37 @@ function BlotterManage(){
                                     <div className="blotter__left col">
                                         <div className="complainant mb-3">
                                             <label className='fs-7 fw-bold' htmlFor="complainant">Complainant</label>
-                                            <select 
-                                                id="complainant"
-                                                className='form-control-1'
-                                                name="complainant" 
-                                                defaultValue=''
-                                            >
-                                                <option value='' disabled>--- select name ---</option>
-                                                <option>Buknoy</option>
-                                                <option>Burnok</option>
-                                            </select>
+                                            <div className='position-relative'>
+                                                <button 
+                                                    className='form-control-1 text-start'
+                                                    name="complainant__name"
+                                                    onClick={complainantDropdownButton}
+                                                >
+                                                    {updateBlotter.complainant__name === '' ? '---select name---' : updateBlotter.complainant__name}
+                                                </button>
+                                                <div 
+                                                    className='position-absolute bg-white border w-100'
+                                                    style={{display: complainantActive ? 'block': 'none'}}
+                                                >
+                                                    
+                                                    <input 
+                                                        type="text" 
+                                                        className='form-control-1' 
+                                                        placeholder='search...'
+                                                    />
+                                                    <div className='test-1 w-100 px-2 hover'>
+                                                        <input 
+                                                            type="radio"
+                                                            className='d-none'
+                                                            id="Ronel Florida" 
+                                                            name="complainant__name"
+                                                            value="Ronel Florida"
+                                                            onChange={handleChange}
+                                                        />
+                                                        <label className='fs-7' htmlFor="Ronel Florida">Ronel Florida</label>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div className="complainant__age mb-3">
                                             <label className='fs-7 fw-bold' htmlFor="complainant__age">Age</label>
@@ -92,6 +172,7 @@ function BlotterManage(){
                                                 placeholder='complainant age' 
                                                 className='form-control-1'
                                                 name='complainant__age'
+                                                onChange={handleChange}
                                             />
                                         </div>
                                         <div className="complainant__gender mb-3">
@@ -101,6 +182,7 @@ function BlotterManage(){
                                                 className='form-control-1'
                                                 name="complainant__gender" 
                                                 defaultValue=''
+                                                onChange={handleChange}
                                             >
                                                 <option value='' disabled>--- complainant gender ---</option>
                                                 <option>Male</option>
@@ -114,6 +196,7 @@ function BlotterManage(){
                                                 placeholder='complainant address' 
                                                 className='form-control-1'
                                                 name='complainant__address'
+                                                onChange={handleChange}
                                             />
                                         </div>
                                     </div>
@@ -122,16 +205,37 @@ function BlotterManage(){
                                     <div className="blotter__right col">
                                         <div className="complainee mb-3">
                                             <label className='fs-7 fw-bold' htmlFor="complainee">Complainee</label>
-                                            <select 
-                                                id="complainee"
-                                                className='form-control-1'
-                                                name="complainee" 
-                                                defaultValue=''
-                                            >
-                                                <option value='' disabled>--- select name ---</option>
-                                                <option>Buknoy</option>
-                                                <option>Burnok</option>
-                                            </select>
+                                            <div className='position-relative'>
+                                                <button 
+                                                    className='form-control-1 text-start'
+                                                    name="complainee__name"
+                                                    onClick={complaineeDropdownButton}
+                                                >
+                                                    {updateBlotter.complainee__name === '' ? '--- Select name ---' : updateBlotter.complainee__name}
+                                                </button>
+                                                <div 
+                                                    className='position-absolute bg-white border w-100'
+                                                    style={{display: complaineeActive ? 'block': 'none'}}
+                                                >
+                                                    
+                                                    <input 
+                                                        type="text" 
+                                                        className='form-control-1' 
+                                                        placeholder='search...'
+                                                    />
+                                                    <div className='test-1 w-100 px-2 hover'>
+                                                        <input 
+                                                            type="radio"
+                                                            className='d-none'
+                                                            id="johndoe" 
+                                                            name="complainee__name"
+                                                            value="John Doe" 
+                                                            onChange={handleChange}
+                                                        />
+                                                        <label className='fs-7' htmlFor="johndoe">John Doe</label>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div className="complainee__age mb-3">
                                             <label className='fs-7 fw-bold' htmlFor="complainee__age">Age</label>
@@ -140,6 +244,7 @@ function BlotterManage(){
                                                 placeholder='complainee age' 
                                                 className='form-control-1'
                                                 name='complainee__age'
+                                                onChange={handleChange}
                                             />
                                         </div>
                                         <div className="complainee__gender mb-3">
@@ -149,6 +254,7 @@ function BlotterManage(){
                                                 className='form-control-1'
                                                 name="complainee__gender" 
                                                 defaultValue=''
+                                                onChange={handleChange}
                                             >
                                                 <option value='' disabled>--- complainee gender ---</option>
                                                 <option>Male</option>
@@ -162,6 +268,7 @@ function BlotterManage(){
                                                 placeholder='complainee address' 
                                                 className='form-control-1'
                                                 name='complainee__address'
+                                                onChange={handleChange}
                                             />
                                         </div>
                                     </div>
@@ -175,6 +282,7 @@ function BlotterManage(){
                                                 className='form-control-1' 
                                                 placeholder='complaint'
                                                 name='complaint'
+                                                onChange={handleChange}
                                             />
                                         </div>
                                         <div className="locationOfIncident mb-3">
@@ -184,6 +292,7 @@ function BlotterManage(){
                                                 className='form-control-1' 
                                                 placeholder='Location of Incident'
                                                 name='locationOfIncident'
+                                                onChange={handleChange}
                                             />
                                         </div>
                                         <div className="Status">
@@ -193,6 +302,7 @@ function BlotterManage(){
                                                 className='form-control-1'
                                                 defaultValue=''
                                                 name="status" 
+                                                onChange={handleChange}
                                             >
                                                 <option value='' disabled>--- select status ---</option>
                                                 <option>Solve</option>
@@ -203,8 +313,9 @@ function BlotterManage(){
                                 </div>
                                 <div className="d-flex align-items-center justify-content-end p-3">
                                     <button 
-                                    type="button" 
-                                    className="btn text-bg-primary fs-7 fw-semibold"
+                                        type="button" 
+                                        className="btn text-bg-primary fs-7 fw-semibold"
+                                        onClick={saveUpdateBlotter}
                                     >
                                         Update Blotter
                                     </button>
