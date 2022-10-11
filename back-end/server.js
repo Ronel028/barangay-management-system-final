@@ -1,5 +1,5 @@
 const express = require('express')
-const dbConnection = require('./database/connection')
+const db = require('./database/connectionClass')
 const app = express()
 
 
@@ -8,11 +8,12 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 // db connection testing
-dbConnection().getConnection((error)=>{
+const dbConnection = new db() //create new instance of db
+dbConnection.dbConnect().getConnection(error =>{
     if(error){
         console.log(error)
     }else{
-        console.log('Connected')
+        console.log('connected')
     }
 })
 
