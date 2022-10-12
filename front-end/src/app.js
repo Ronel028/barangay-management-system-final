@@ -1,5 +1,7 @@
+import { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Login from "./pages/login/login"
+import axios from 'axios'
 
 // dashboard
 import Dashboard from './pages/dashboard/dashboard';
@@ -31,13 +33,15 @@ import PermitPrint from './pages/certificate/permit/permit-print';
 
 import RootLayout from './Layout/RootLayout';
 
+axios.defaults.withCredentials = true
+
 function App(){
+
     return (
         <>
             <BrowserRouter>
                 <Routes>
-                    
-                    <Route path="/login" element={<Login />} />
+                    <Route path="/login" element={ <Login /> } />
 
                     <Route element={<RootLayout />}>
                         <Route path="/" element={<Dashboard />} />

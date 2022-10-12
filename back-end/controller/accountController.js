@@ -27,10 +27,22 @@ const registerNewAccount = async (request, response)=>{
 //login user
 const loginUser = async (request, response) =>{
     try {
-        const { username } = request.body
+        const { username, password } = request.body
         const login = new db(username)
-        const admin = await login.login();
-        response.json(admin)
+        const userAccount = await login.login();
+
+        // comparing user creadentails if match
+        if(userAccount.length > 0){
+            const userPassword = await bcrypt.compare(password, userAccount[0].password)
+            if(userPassword){
+                response.json({ message : 'success' })
+            }else{
+                response.json({ message: 'password not match'})
+            }
+        }else{
+            response.json({ message: 'user credentials not found'})
+        }
+
     } catch (error) {
         console.log(error)
     }
@@ -38,5 +50,5 @@ const loginUser = async (request, response) =>{
 
 module.exports = {
     registerNewAccount,
-    loginUser
+    loginUser,
 }

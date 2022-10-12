@@ -7,6 +7,7 @@ const app = express()
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
+
 // db connection testing
 const dbConnection = new db() //create new instance of db
 dbConnection.dbConnect().getConnection(error =>{
@@ -19,6 +20,7 @@ dbConnection.dbConnect().getConnection(error =>{
 
 // Routes
 app.use('/account', require('./routes/user-routes'))
+app.use('/officials', require('./routes/officialRoutes'))
 
 app.listen(3001, ()=>{
     console.log('server is running')
