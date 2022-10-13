@@ -30,21 +30,26 @@ const loginUser = async (request, response) =>{
         const { username, password } = request.body
         const login = new db(username)
         const userAccount = await login.login();
-
-        // comparing user creadentails if match
-        if(userAccount.length > 0){
-            const userPassword = await bcrypt.compare(password, userAccount[0].password)
-            if(userPassword){
-                response.json({ message : 'success' })
-            }else{
-                response.json({ message: 'password not match'})
-            }
+        // add condition for username and password if has a value
+        if(!username || !password){
+            response.json({ message : 'username/password cannot be empty!' })
+            return
         }else{
-            response.json({ message: 'user credentials not found'})
+            // comparing user creadentails if match
+            if(userAccount.length > 0){
+                const userPassword = await bcrypt.compare(password, userAccount[0].password)
+                if(userPassword){
+                    response.json({ message : 'success', isLogin: true })
+                }else{
+                    response.json({ message: 'username/password not match!'})
+                }
+            }else{
+                response.json({ message: 'username/password not match!'})
+            }
         }
 
     } catch (error) {
-        console.log(error)
+        response.json({ message: "something's wrong with the server!"})
     }
 }
 

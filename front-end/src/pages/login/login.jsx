@@ -11,7 +11,10 @@ function Login(){
         username: '',
         password: ''
     })
-
+    const [alert, setAlert] = useState({
+        isActive: false,
+        alertMessage: ''
+    })
     const handleChange = (event)=>{
         const { name, value } = event.target
         setLogin({
@@ -23,11 +26,25 @@ function Login(){
     const handleLogin = async ()=>{
         const userLogin = await axios.post('/account/login', login)
         if(userLogin.data.message === 'success'){
-            window.localStorage.setItem('loginStatus', true)
+            window.localStorage.setItem('loginStatus', userLogin.data.isLogin)
             navigate('/')
             window.location.reload()
         }else{
             console.log(userLogin.data.message)
+            setAlert({
+                ...alert,
+                isActive: true,
+                alertMessage: userLogin.data.message
+            })
+
+            // add set timeout to make the alert back to its previews data
+            setTimeout(()=>{
+                setAlert({
+                    ...alert,
+                    isActive: false,
+                    alertMessage: ''
+                })
+            }, 2000)
         }
     }
 
@@ -38,6 +55,15 @@ function Login(){
                     <h1 className='fw-bold fs-1'>LOG IN</h1>
                     <p className='fw-semibold'>Barangay management system</p>
                 </div>
+
+                <div 
+                    class="alert alert-danger" 
+                    role="alert"
+                    style={{display: alert.isActive ? 'block' : 'none'}}
+                >
+                    {alert.alertMessage}
+                </div>
+
                 <form className='d-flex flex-column'>
                     <div className="input-group mb-4">
                         <span className="input-group-text" id="basic-addon1"><FontAwesomeIcon icon={faUser}/></span>

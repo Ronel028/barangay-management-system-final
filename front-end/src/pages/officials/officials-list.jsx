@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUserPlus } from '@fortawesome/free-solid-svg-icons'
 import TitleCard from '../../components/title'
@@ -7,6 +8,7 @@ import OfficialListTable from './official-list-table'
 
 function OfficialsList(){
 
+    //state for storing the value from the input
     const [official, setOfficial] = useState({
         name: '',
         position: '',
@@ -17,6 +19,9 @@ function OfficialsList(){
         photo: null
     })
 
+    const [officials, getOfficials] = useState([]) // state for storing offical data from database
+
+    // function for getting all the value from input and save to official state
     const handleChange = (event)=>{
         const { name, value, files } = event.target
         setOfficial({
@@ -24,10 +29,21 @@ function OfficialsList(){
             [name] : name === 'photo' ? files[0] : value
         })
     }
+
+    // function for saving all the data of officials to database
     const saveOfficials = (event) =>{
         event.preventDefault()
         console.log(official)
     }
+
+    // fetching data of officials in database
+    useEffect(()=>{
+        const getOfficialsData = async ()=>{
+            const official = await axios.get('/officials')
+            getOfficials(official.data)
+        }
+        getOfficialsData();
+    }, [])
 
     return (
         <>
@@ -47,7 +63,9 @@ function OfficialsList(){
                         <Search />
                     </div>
                     
-                    <OfficialListTable />
+                    <OfficialListTable 
+                        officials={officials}
+                    />
 
                     {/* modal */}
                     <div className="modal modal fade" id='add-official' data-bs-backdrop="static" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

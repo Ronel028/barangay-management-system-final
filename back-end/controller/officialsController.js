@@ -5,9 +5,7 @@ const officialsDB = new Official() //create a instance new object
 const getOfficials = async (request, response) =>{
     try {
         const official = await officialsDB.getOfficials()
-        console.log(official)
         response.json(official)
-        console.log('this is running')
     } catch (error) {
         console.log(error)
     }

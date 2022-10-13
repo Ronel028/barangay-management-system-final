@@ -1,5 +1,8 @@
 
-function OfficialListTable(){
+function OfficialListTable(props){
+
+    console.log(props.officials)
+
     return (
             <table className="table table-hover table-bordered">
                 <thead>
@@ -23,19 +26,6 @@ function OfficialListTable(){
                         <td>Ronel Florida</td>
                         <td>09345652345</td>
                         <td>Captain</td>
-                        <td>Sitio kalikasan, Sto nino, Rizal Occidental Mindoro</td>
-                        <td>07-29-2022</td>
-                        <td>07-29-2024</td>
-                    </tr>
-                    <tr className='align-middle fs-7'>
-                        <td>
-                            <div className='table__image__container border rounded border-secondary p-1'>
-                                <img src="" alt="..." />
-                            </div>
-                        </td>
-                        <td>Ronel Florida</td>
-                        <td>09451234354</td>
-                        <td>Kagawad</td>
                         <td>Sitio kalikasan, Sto nino, Rizal Occidental Mindoro</td>
                         <td>07-29-2022</td>
                         <td>07-29-2024</td>
