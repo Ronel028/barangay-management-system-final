@@ -1,12 +1,20 @@
-import { useState, useEffect } from 'react'
-import axios from 'axios'
+import { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUserPlus } from '@fortawesome/free-solid-svg-icons'
+import axios from 'axios'
+import useAxios from '../../hooks/useAxios'
+import useSearch from '../../hooks/useSearch'
 import TitleCard from '../../components/title'
 import Search from '../../components/search'
 import OfficialListTable from './official-list-table'
 
 function OfficialsList(){
+
+    //state for modal active if have a error
+    const [error, setError] = useState(true)
+
+    //stete for value of input search
+    const [search, searchValue] = useSearch()
 
     //state for storing the value from the input
     const [official, setOfficial] = useState({
@@ -19,7 +27,11 @@ function OfficialsList(){
         photo: null
     })
 
-    const [officials, getOfficials] = useState([]) // state for storing offical data from database
+    //state for the error message response by the server
+    const [errorMessage, setErrorMessage] = useState({
+        display: 'none',
+        message: ''
+    })
 
     // function for getting all the value from input and save to official state
     const handleChange = (event)=>{
@@ -31,19 +43,56 @@ function OfficialsList(){
     }
 
     // function for saving all the data of officials to database
-    const saveOfficials = (event) =>{
+    const saveOfficials = async (event) =>{
         event.preventDefault()
-        console.log(official)
+        const officialsForm = new FormData()
+        officialsForm.append('name', official.name)
+        officialsForm.append('contact', official.contact)
+        officialsForm.append('position', official.position)
+        officialsForm.append('termStart', official.startTerm)
+        officialsForm.append('termEnd', official.endTerm)
+        officialsForm.append('address', official.address)
+        officialsForm.append('officialsPhoto', official.photo)
+        
+        // call endpoint for saving this formdata to database
+        const insertOfficials = await axios.post('/officials/insert', officialsForm, {
+            headers : {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+        
+        if(insertOfficials.data.message === 'success'){
+            setError(false)
+            setOfficial({
+                ...official,
+                name: '',
+                conatact: '',
+                position: '',
+                startTerm: '',
+                endTerm: '',
+                address: '',
+                photo: null
+            })
+            window.location.reload()
+        }else{
+            setError(true)
+            setErrorMessage({
+                ...errorMessage,
+                display: 'block',
+                message: insertOfficials.data.message
+            })
+            setTimeout(()=>{
+                setErrorMessage({
+                    ...errorMessage,
+                    display: 'none',
+                    message: ''
+                })
+            }, 2000)
+        }
     }
 
-    // fetching data of officials in database
-    useEffect(()=>{
-        const getOfficialsData = async ()=>{
-            const official = await axios.get('/officials')
-            getOfficials(official.data)
-        }
-        getOfficialsData();
-    }, [])
+    // custom hook for getting all data in database
+    const [data] = useAxios('/officials')
 
     return (
         <>
@@ -60,11 +109,14 @@ function OfficialsList(){
                             <FontAwesomeIcon className='me-1' icon={faUserPlus}/>
                             Add Officials
                         </button>
-                        <Search />
+                        <Search 
+                            filterOfficials={searchValue}
+                        />
                     </div>
                     
                     <OfficialListTable 
-                        officials={officials}
+                        officials={data}
+                        searchOfficials={search}
                     />
 
                     {/* modal */}
@@ -78,6 +130,14 @@ function OfficialsList(){
                                     </h1>
                                     <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
+
+                                <div 
+                                    className='alert alert-danger rounded-0'
+                                    style={{display: errorMessage.display}}
+                                >
+                                    {errorMessage.message}
+                                </div>
+
                                 <form className="modal-body">
                                     <div>
                                         <div className='align-items-center mb-3'>
@@ -166,6 +226,7 @@ function OfficialsList(){
                                         <button 
                                             type="button" 
                                             className="btn text-bg-primary fs-7 fw-semibold"
+                                            data-bs-dismiss={error ? '' : 'modal'}
                                             onClick={saveOfficials}
                                         >
                                             Add Official

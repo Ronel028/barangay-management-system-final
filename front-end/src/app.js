@@ -1,7 +1,5 @@
-import { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Login from "./pages/login/login"
-import axios from 'axios'
 
 // dashboard
 import Dashboard from './pages/dashboard/dashboard';
@@ -32,8 +30,6 @@ import ResidentPrint from './pages/certificate/Residency/residency-print';
 import PermitPrint from './pages/certificate/permit/permit-print';
 
 import RootLayout from './Layout/RootLayout';
-
-axios.defaults.withCredentials = true
 
 function App(){
 
