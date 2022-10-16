@@ -1,13 +1,16 @@
 const dbConnection = require('../connectionClass')
 
 class Official extends dbConnection{
+    
+    #query
 
-    #selectQuery = 'SELECT * FROM tbl_officials'
-    #insertQuery = 'INSERT INTO tbl_officials VALUES(null, ?, ?, ?, ?, ?, ?, ?)'
-
+    // get method
     getOfficials = () =>{
+
+        this.#query = this.sqlQuery('SELECT * FROM tbl_officials')
+
         return new Promise((resolve, reject) =>{
-            this.dbConnect().query(this.#selectQuery, (error, result) =>{
+            this.dbConnect().query(this.#query, (error, result) =>{
                 if(error){
                     reject(error)
                 }else{
@@ -17,9 +20,13 @@ class Official extends dbConnection{
         })
     }
 
+    // insert method
     insertOfficials = (name, position, contact, termStart, termEnd, address, photo)=>{
+
+        this.#query = this.sqlQuery('INSERT INTO tbl_officials VALUES(null, ?, ?, ?, ?, ?, ?, ?)')
+
         return new Promise((resolve, reject)=>{
-            this.dbConnect().query(this.#insertQuery, [
+            this.dbConnect().query(this.#query, [
                 name, position, contact, termStart, termEnd, address, photo
             ], (error, result) =>{
                 if(error){
@@ -29,6 +36,39 @@ class Official extends dbConnection{
                 }
             })
         })
+    }
+
+    //delete method
+    deleteOfficial = (id) =>{
+
+        this.#query = this.sqlQuery('DELETE FROM tbl_officials WHERE id=?')
+
+        return new Promise((resolve, reject)=>{
+            this.dbConnect().query(this.#query, [id], (error, result)=>{
+                if(error){
+                    reject(error)
+                }else{
+                    resolve(result)
+                }
+            })
+        })
+    }
+
+    // get data of official by id
+    getOfficialById = (id) =>{
+
+        this.#query = this.sqlQuery('SELECT * FROM tbl_officials WHERE id=?')
+
+        return new Promise((resolve, reject)=>{
+            this.dbConnect().query(this.#query, [id], (error, result)=>{
+                if(error){
+                    reject(error)
+                }else{
+                    resolve(result)
+                }
+            })
+        })
+
     }
 
 }

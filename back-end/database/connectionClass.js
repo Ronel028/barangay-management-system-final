@@ -20,6 +20,10 @@ class DbConfig{
         return this.#connection
     }
 
+    sqlQuery = (query) =>{
+        return query
+    }
+
 }
 
 module.exports = DbConfig;

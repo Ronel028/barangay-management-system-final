@@ -1,3 +1,4 @@
+import { convertBase64ToImage } from '../../custom/function'
 
 function OfficialListTable(props){
 
@@ -32,7 +33,7 @@ function OfficialListTable(props){
                                     return <tr className='align-middle fs-7' key={official.id}>
                                                 <td>
                                                     <div className='table__image__container border rounded border-secondary p-1'>
-                                                        <img className='w-100 h-100' src={require(`./image/${official.photo}`)} alt={official.name} />
+                                                        <img className='w-100 h-100' src={convertBase64ToImage(official.photo)} alt={official.name} />
                                                     </div>
                                                 </td>
                                                 <td>{official.name}</td>

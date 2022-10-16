@@ -11,11 +11,11 @@ const getOfficials = async (request, response) =>{
     }
 }
 
+// insert official
 const insertOfficials = async (request, response)=>{
     try {
         const { name, position, contact, termStart, termEnd, address } = request.body
-        const officialPhoto = request.file.filename
-        const photo = officialPhoto.replace(/ /g, '-') // escaping all the spacing in filename of image
+        const photo = request.file.buffer.toString('base64')
 
         // validate if all the input are have a value
         if(!name || !position || !contact || !termStart || !termEnd || !address){
@@ -36,8 +36,32 @@ const insertOfficials = async (request, response)=>{
     }
 }   
 
+//delete official
+const deleteOfficial = async (request, response) =>{
+    try {
+        const officialID = request.query.id
+        await officialsDB.deleteOfficial(officialID)
+        response.json({ message: 'success' })
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+//get official data by id
+const getOfficialById = async (request, response) =>{
+    try {
+        const officialID = request.query.id
+        const officialInfo = await officialsDB.getOfficialById(officialID)
+        response.json(officialInfo)
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 
 module.exports = {
     getOfficials,
-    insertOfficials
+    insertOfficials,
+    deleteOfficial,
+    getOfficialById
 }
