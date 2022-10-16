@@ -1,9 +1,27 @@
+import useAxios from '../../hooks/useAxios'
+import useSearch from '../../hooks/useSearch'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit, faTrash, faPenToSquare } from '@fortawesome/free-solid-svg-icons'
 import Search from '../../components/search'
 import TitleCard from '../../components/title'
 
 function OfficialManage(){
+
+    //custom hooks for search
+    const [search, searchValue] = useSearch()
+
+    // format date
+    const dateFormat = (date)=>{
+        return new Date(date).toLocaleDateString()
+    }
+    // get data of officials from database
+    const [data, loading] = useAxios('/officials')
+
+    // filter official 
+    const filterOfficial = data.filter(official =>{
+        return official.name.toLowerCase().includes(search)
+    })
+
     return(
         <>
             <section className="officials__manage__container main-padding">
@@ -13,7 +31,9 @@ function OfficialManage(){
                 {/* main */}
                 <main className="officials__manage__main p-2 mt-3">
                     <div className='d-flex justify-content-end align-items-center mb-4'>
-                        <Search />
+                        <Search 
+                            filterOfficials={searchValue}
+                        />
                     </div>
                     {/* table */}
                     <table className="table table-hover table-bordered">
@@ -29,31 +49,47 @@ function OfficialManage(){
                             </tr>
                         </thead>
                         <tbody>
-                            <tr className='align-middle fs-7'>
-                                <td>
-                                    <div className='table__image__container border rounded border-secondary p-1'>
-                                        <img className='w-100 h-100' src="" alt="..." />
-                                    </div>
-                                </td>
-                                <td>Ronel Florida</td>
-                                <td>09345652345</td>
-                                <td>Captain</td>
-                                <td>07-29-2022</td>
-                                <td>07-29-2024</td>
-                                <td>
-                                    <button 
-                                        className="border-0 py-1 px-2 rounded text-bg-primary me-2" 
-                                        type="button" 
-                                        data-bs-toggle="modal" 
-                                        data-bs-target="#update-official"
-                                    >
-                                        <FontAwesomeIcon icon={faEdit}/>
-                                    </button>
-                                    <button className="border-0 py-1 px-2 rounded text-bg-danger" type="button">
-                                        <FontAwesomeIcon icon={faTrash}/>
-                                    </button>
-                                </td>
-                            </tr>
+                            {
+                                data.length > 0 ? 
+                                        filterOfficial.length > 0 ?
+                                            filterOfficial.map(official =>{
+                                                return <tr className='align-middle fs-7' key={official.id}>
+                                                            <td>
+                                                                <div className='table__image__container border rounded border-secondary p-1'>
+                                                                    <img className='w-100 h-100' src={require(`./image/${official.photo}`)} alt={official.name} />
+                                                                </div>
+                                                            </td>
+                                                            <td>{official.name}</td>
+                                                            <td>{official.contact}</td>
+                                                            <td>{official.position}</td>
+                                                            <td>{dateFormat(official.term_start)}</td>
+                                                            <td>{dateFormat(official.term_end)}</td>
+                                                            <td>
+                                                                <button 
+                                                                    className="border-0 py-1 px-2 rounded text-bg-primary me-2" 
+                                                                    type="button" 
+                                                                    data-bs-toggle="modal" 
+                                                                    data-bs-target="#update-official"
+                                                                >
+                                                                    <FontAwesomeIcon icon={faEdit}/>
+                                                                </button>
+                                                                <button className="border-0 py-1 px-2 rounded text-bg-danger" type="button">
+                                                                    <FontAwesomeIcon icon={faTrash}/>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                            })
+                                        :<tr>
+                                            <td colSpan='7' className="text-center">
+                                                {search} is not found...
+                                            </td>
+                                        </tr>
+                                    :<tr>
+                                        <td colSpan='7' className="text-center">
+                                            No data found
+                                        </td>
+                                    </tr>
+                            }
                         </tbody>
                     </table>
                     {/* end table */}

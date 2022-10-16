@@ -11,10 +11,12 @@ import OfficialListTable from './official-list-table'
 function OfficialsList(){
 
     //state for modal active if have a error
-    const [error, setError] = useState(true)
-
+    const [hideModal, setHideModal] = useState(true)
     //stete for value of input search
     const [search, searchValue] = useSearch()
+
+    //state for loading animation in saving
+    const [loader, setLoader] = useState(false)
 
     //state for storing the value from the input
     const [official, setOfficial] = useState({
@@ -55,27 +57,19 @@ function OfficialsList(){
         officialsForm.append('officialsPhoto', official.photo)
         
         // call endpoint for saving this formdata to database
+        setLoader(true)
         const insertOfficials = await axios.post('/officials/insert', officialsForm, {
             headers : {
                 'Content-Type': 'multipart/form-data'
             }
         })
-        
+        setLoader(false)
+        //condition that what will happen the response of the server
         if(insertOfficials.data.message === 'success'){
-            setError(false)
-            setOfficial({
-                ...official,
-                name: '',
-                conatact: '',
-                position: '',
-                startTerm: '',
-                endTerm: '',
-                address: '',
-                photo: null
-            })
             window.location.reload()
+
         }else{
-            setError(true)
+            setHideModal(true)
             setErrorMessage({
                 ...errorMessage,
                 display: 'block',
@@ -92,12 +86,12 @@ function OfficialsList(){
     }
 
     // custom hook for getting all data in database
-    const [data] = useAxios('/officials')
+    const [data, loading] = useAxios('/officials')
 
     return (
         <>
             {/* main section */}
-            <section className="officials__container main-padding">
+            <section className="officials__container main-padding position-relative">
 
                 <TitleCard 
                     title="Official list"
@@ -116,6 +110,7 @@ function OfficialsList(){
                     
                     <OfficialListTable 
                         officials={data}
+                        loading={loading}
                         searchOfficials={search}
                     />
 
@@ -138,7 +133,16 @@ function OfficialsList(){
                                     {errorMessage.message}
                                 </div>
 
+
                                 <form className="modal-body">
+                                    <div 
+                                        className='align-items-center mb-2'
+                                        style={{display: loader ? 'flex' : 'none'}}
+                                    >
+                                        <div className='spinner me-2'></div>
+                                        saving...
+                                    </div>
+                                    
                                     <div>
                                         <div className='align-items-center mb-3'>
                                             <label htmlFor="name" className='me-4 fw-semibold mb-2 fs-7'>Name <small className='fw-light'><em>(First name, Middle name, Last name)</em></small></label>
@@ -226,7 +230,7 @@ function OfficialsList(){
                                         <button 
                                             type="button" 
                                             className="btn text-bg-primary fs-7 fw-semibold"
-                                            data-bs-dismiss={error ? '' : 'modal'}
+                                            data-bs-dismiss={hideModal ? '' : 'modal'}
                                             onClick={saveOfficials}
                                         >
                                             Add Official

@@ -30,31 +30,38 @@ function OfficialListTable(props){
                             filteredOfficial.length > 0 ? 
                                 filteredOfficial.map(official =>{
                                     return <tr className='align-middle fs-7' key={official.id}>
-                                            <td>
-                                                <div className='table__image__container border rounded border-secondary p-1'>
-                                                    <img className='w-100 h-100' src={require(`./image/${official.photo}`)} alt={official.name} />
+                                                <td>
+                                                    <div className='table__image__container border rounded border-secondary p-1'>
+                                                        <img className='w-100 h-100' src={require(`./image/${official.photo}`)} alt={official.name} />
+                                                    </div>
+                                                </td>
+                                                <td>{official.name}</td>
+                                                <td>{official.contact}</td>
+                                                <td>{official.position}</td>
+                                                <td>{official.address}</td>
+                                                <td>{dateFormat(official.term_start)}</td>
+                                                <td>{dateFormat(official.term_end)}</td>
+                                            </tr>
+                                })
+                            :<tr>
+                                <td colSpan='7' className="text-center">
+                                    {props.searchOfficials} is not found in the list!
+                                </td>
+                            </tr>  
+                        :props.loading ?<tr>
+                                            <td colSpan='7' className="text-center">
+                                                <div className="w-100 d-flex align-items-center justify-content-center">
+                                                    <div className="spinner me-2"></div>
+                                                    loading...
                                                 </div>
                                             </td>
-                                            <td>{official.name}</td>
-                                            <td>{official.contact}</td>
-                                            <td>{official.position}</td>
-                                            <td>{official.address}</td>
-                                            <td>{dateFormat(official.term_start)}</td>
-                                            <td>{dateFormat(official.term_end)}</td>
                                         </tr>
-                                })
-                            :   <tr>
-                                    <td colSpan='7' className="text-center">
-                                        {props.searchOfficials} is not found in the list!
-                                    </td>
-                                </tr>  
-                        :   <tr>
-                                <td colSpan='7' className="text-center">
-                                    No data available!
-                                </td>
-                            </tr>   
+                                        :<tr>
+                                            <td colSpan='7' className="text-center">
+                                                No data found
+                                            </td>
+                                        </tr>  
                     }
-
                     
                 </tbody>
             </table>
