@@ -7,7 +7,7 @@ const getOfficials = async (request, response) =>{
         const official = await officialsDB.getOfficials()
         response.json(official)
     } catch (error) {
-        console.log(error)
+        response.json({ message: "Something's wrong! Please try again" })
     }
 }
 
@@ -43,7 +43,7 @@ const deleteOfficial = async (request, response) =>{
         await officialsDB.deleteOfficial(officialID)
         response.json({ message: 'success' })
     } catch (error) {
-        console.log(error)
+        response.json({ message: "Something's wrong! Please try again" })
     }
 }
 
@@ -54,7 +54,32 @@ const getOfficialById = async (request, response) =>{
         const officialInfo = await officialsDB.getOfficialById(officialID)
         response.json(officialInfo)
     } catch (error) {
-        console.log(error)
+        response.json({ message: "Something's wrong! Please try again" })
+    }
+}
+
+// update official
+const updateOfficial = async (request, response) =>{
+    try {
+        const officialID = request.query.id
+        const { name, position, contact, term_start, term_end, address } = request.body
+        const photo = request.file.buffer.toString('base64')
+
+        // validate the data from client if it has no value
+        if(!name || !position || !contact || !term_start || !term_end || !address){
+            return response.json({ message: 'Please fill-up all the fields!' })
+        }
+
+        //validate contact number if its valid phone number
+        if(contact.length > 11 || contact.length < 11){
+            return response.json({ message: 'Contact not valid!' })
+        }
+
+        await officialsDB.updateOfficial(name, position, contact, term_start, term_end, address, photo, officialID)
+        response.json({ message: 'success' })
+
+    } catch (error) {
+        response.json({ message: "Something's wrong! Please try agin..." })
     }
 }
 
@@ -63,5 +88,6 @@ module.exports = {
     getOfficials,
     insertOfficials,
     deleteOfficial,
-    getOfficialById
+    getOfficialById,
+    updateOfficial
 }

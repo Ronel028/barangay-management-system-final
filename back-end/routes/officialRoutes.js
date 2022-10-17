@@ -1,7 +1,7 @@
 const express = require('express')
 const multer = require('multer')
 const router = express.Router()
-const { getOfficials, insertOfficials, deleteOfficial, getOfficialById } = require('../controller/officialsController')
+const { getOfficials, insertOfficials, deleteOfficial, getOfficialById, updateOfficial } = require('../controller/officialsController')
 
 //creating storage for using multer
 const storage = multer.memoryStorage()
@@ -12,5 +12,6 @@ router.get('/', getOfficials)
 router.post('/insert',upload.single('officialsPhoto'), insertOfficials)
 router.delete('/delete', deleteOfficial)
 router.get('/data', getOfficialById)
+router.post('/update', upload.single('officialPhoto'), updateOfficial)
 
 module.exports = router

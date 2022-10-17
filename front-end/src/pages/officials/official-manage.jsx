@@ -7,6 +7,7 @@ import { faEdit, faTrash, faPenToSquare } from '@fortawesome/free-solid-svg-icon
 import { convertBase64ToImage, dataURLtoFile } from '../../custom/function'
 import Search from '../../components/search'
 import TitleCard from '../../components/title'
+import Loader from '../../components/loader'
 
 
 function OfficialManage(){
@@ -69,9 +70,22 @@ function OfficialManage(){
         photo: null
     })
 
+    // state for id of official
+    const [officialID, setOfficialID] = useState()
+
+    //state for displaying error message response by the server
+    const [errorMessage, setErrorMessage] = useState({
+        display: 'none',
+        message: ''
+    })
+
+    //loader
+    const [loader, setLoader] = useState(false)
+
     // fetching official data
     const updateOfficial = async (id)=>{
         const getOfficialById = await axios.get(`/officials/data?id=${id}`)
+        setOfficialID(id)
         const { name, position, contact, term_start, term_end, address, photo } = getOfficialById.data[0]
         setOfficial({
             ...official,
@@ -94,10 +108,42 @@ function OfficialManage(){
         })
     }
 
-    // update
-    const updateOfficialData = (event) =>{
+    // update official
+    const updateOfficialData = async (event) =>{
         event.preventDefault();
-        console.log(official)
+        const updateFormData = new FormData()
+        updateFormData.append('name', official.name)
+        updateFormData.append('position', official.position)
+        updateFormData.append('contact', official.contact)
+        updateFormData.append('term_start', official.term_start)
+        updateFormData.append('term_end', official.term_end)
+        updateFormData.append('address', official.address)
+        updateFormData.append('officialPhoto', official.photo)
+
+        setLoader(true)
+        const updateOfficialData = await axios.post(`/officials/update?id=${officialID}`, updateFormData, {
+            headers : {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+        setLoader(false)
+
+        if(updateOfficialData.data.message === 'success'){
+            window.location.reload()
+        }else{
+            setErrorMessage({
+                ...errorMessage, 
+                display: 'block',
+                message: updateOfficialData.data.message
+            })
+            setTimeout(()=>{
+                setErrorMessage({
+                    ...errorMessage, 
+                    display: 'none',
+                    message: ''
+                })
+            }, 2000)
+        }
     }
 
 
@@ -206,7 +252,20 @@ function OfficialManage(){
                                     </h1>
                                     <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
+
+                                {/* error message */}
+                                <div 
+                                    className='alert alert-danger rounded-0'
+                                    style={{display: errorMessage.display}}
+                                >
+                                    {errorMessage.message}
+                                </div>
+
+
                                 <form className="modal-body">
+
+                                    <Loader loader={loader} title='updating...'/>
+
                                     <div>
                                         <div className='align-items-center mb-3'>
                                             <label htmlFor="name" className='me-4 fw-semibold mb-2 fs-7'>Name <small className='fw-light'><em>(First name, Middle name, Last name)</em></small></label>

@@ -68,7 +68,22 @@ class Official extends dbConnection{
                 }
             })
         })
+    }
 
+    // update method
+    updateOfficial = (name, position, contact, term_start, term_end, address, photo, id) =>{
+
+        this.#query = this.sqlQuery('UPDATE tbl_officials SET name=?, position=?, contact=?, term_start=?, term_end=?, address=?, photo=? WHERE id=?')
+
+        return new Promise((resolve, reject)=>{
+            this.dbConnect().query(this.#query, [name, position, contact, term_start, term_end, address, photo, id], (error, result)=>{
+                if(error){
+                    reject(error)
+                }else{
+                    resolve(result)
+                }
+            })
+        })
     }
 
 }

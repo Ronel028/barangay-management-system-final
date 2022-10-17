@@ -6,6 +6,7 @@ import useAxios from '../../hooks/useAxios'
 import useSearch from '../../hooks/useSearch'
 import TitleCard from '../../components/title'
 import Search from '../../components/search'
+import Loader from '../../components/loader'
 import OfficialListTable from './official-list-table'
 
 function OfficialsList(){
@@ -135,13 +136,8 @@ function OfficialsList(){
 
 
                                 <form className="modal-body">
-                                    <div 
-                                        className='align-items-center mb-2'
-                                        style={{display: loader ? 'flex' : 'none'}}
-                                    >
-                                        <div className='spinner me-2'></div>
-                                        saving...
-                                    </div>
+                                    
+                                    <Loader loader={loader} title="saving..."/>
                                     
                                     <div>
                                         <div className='align-items-center mb-3'>
