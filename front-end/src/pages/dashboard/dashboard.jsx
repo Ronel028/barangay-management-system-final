@@ -1,9 +1,14 @@
+import useAxios from "../../hooks/useAxios"
 import TitleCard from "../../components/title"
 import ResidentImage from '../../Images/people-fill.svg'
 import BlotterIcon from '../../Images/blotter-icon.svg'
 import CertificateIcon from '../../Images/open-folder.svg'
 import OfficialIcon from '../../Images/buildings.svg'
 function Dashboard(){
+
+    const [official] = useAxios('/officials') // get all official data
+    const [resident] = useAxios('/resident') // get all resident data
+
     return (
         <>
             <section className="dashboard__container main-padding">
@@ -20,7 +25,7 @@ function Dashboard(){
                         </div>
                         <div className="dashboard__title p-2">
                             <h4 className="fs-7 fw-semibold text-nowrap">TOTAL RESIDENT</h4>
-                            <p className="fs-4 text-secondary">40</p>
+                            <p className="fs-4 text-secondary">{resident.length}</p>
                         </div>  
                     </div>
 
@@ -56,7 +61,7 @@ function Dashboard(){
                         </div>
                         <div className="dashboard__title p-2">
                             <h4 className="fs-7 fw-semibold text-nowrap">TOTAL OFFICIAL</h4>
-                            <p className="fs-4 text-secondary">5</p>
+                            <p className="fs-4 text-secondary">{official.length}</p>
                         </div>  
                     </div>
                     

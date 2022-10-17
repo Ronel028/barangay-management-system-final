@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUserPlus } from '@fortawesome/free-solid-svg-icons'
+import useAxios from '../../hooks/useAxios'
 import Search from "../../components/search"
 import TitleCard from '../../components/title'
 import ResidentListTable from './resident-list-table'
@@ -16,6 +17,7 @@ function ResidentList(){
         bplace: '',
         age: '',
         gender: '',
+        contact: '',
         purok: '',
         totalHouseold: '',
         pwd: '',
@@ -46,6 +48,9 @@ function ResidentList(){
         console.log(resident)
     }
 
+    // get all resident data from database
+    const [data, loading] = useAxios('/resident')
+
     return (
         <>
             <section className="resident__list main-padding">
@@ -68,7 +73,12 @@ function ResidentList(){
                         </button>
                         <Search />
                     </div>
-                    <ResidentListTable />
+
+                    <ResidentListTable 
+                        resident={data}
+                        loading={loading}
+                    />
+
                 </main>
 
                 {/* add resident modal */}
@@ -154,6 +164,16 @@ function ResidentList(){
                                                 <option>Male</option>
                                                 <option>Female</option>
                                             </select>
+                                        </div>
+                                        <div className='resident__contact mb-3'>
+                                            <label htmlFor="contact" className='fs-7'>Contact</label>
+                                            <input 
+                                                type="text" 
+                                                className='form-control-1' 
+                                                id='contact' 
+                                                name='contact'
+                                                onChange={handleChange}
+                                            />
                                         </div>
                                         <div className='resident__purok mb-3'>
                                             <label htmlFor="purok" className='fs-7'>Purok/Sitio</label>

@@ -21,6 +21,7 @@ dbConnection.dbConnect().getConnection(error =>{
 // Routes
 app.use('/account', require('./routes/user-routes'))
 app.use('/officials', require('./routes/officialRoutes'))
+app.use('/resident', require('./routes/residentRoutes'))
 
 app.listen(3001, ()=>{
     console.log('server is running')
