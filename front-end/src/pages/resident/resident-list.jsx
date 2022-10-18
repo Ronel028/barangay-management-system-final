@@ -1,14 +1,17 @@
 import { useState } from 'react'
+import axios from 'axios'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUserPlus } from '@fortawesome/free-solid-svg-icons'
 import useAxios from '../../hooks/useAxios'
 import Search from "../../components/search"
 import TitleCard from '../../components/title'
+import Loader from '../../components/loader'
 import ResidentListTable from './resident-list-table'
 import DataModal from '../../components/data-modal'
 
 function ResidentList(){
 
+    // state for the value of all input field
     const [resident, setResident] = useState({
         lname: '',
         fname: '',
@@ -19,7 +22,7 @@ function ResidentList(){
         gender: '',
         contact: '',
         purok: '',
-        totalHouseold: '',
+        totalHousehold: '',
         pwd: '',
         relationToHead: '',
         cstatus: '',
@@ -35,6 +38,9 @@ function ResidentList(){
         photo: null
     })
 
+    // state for saving loading
+    const [saveLoading, setSaveLoading] = useState(false)
+
     const handleChange = (event) =>{
         const { name, value, files } = event.target
         setResident({
@@ -43,9 +49,52 @@ function ResidentList(){
         })
     }
 
-    const saveResident = (event) =>{
+    // save resident to database
+    const saveResident = async (event) =>{
         event.preventDefault();
-        console.log(resident)
+
+
+
+        const residentFormData = new FormData()
+
+        residentFormData.append('lname', resident.lname)
+        residentFormData.append('fname', resident.fname)
+        residentFormData.append('mname', resident.mname)
+        residentFormData.append('dateOfBirth', resident.bdate)
+        residentFormData.append('placeOfBirth', resident.bplace)
+        residentFormData.append('age', resident.age)
+        residentFormData.append('gender', resident.gender)
+        residentFormData.append('contact', resident.contact)
+        residentFormData.append('purok', resident.purok)
+        residentFormData.append('totalHousehold', resident.totalHousehold)
+        residentFormData.append('pwd', resident.pwd)
+        residentFormData.append('relationToHead', resident.relationToHead)
+        residentFormData.append('civilStatus', resident.cstatus)
+        residentFormData.append('bloodType', resident.btype)
+        residentFormData.append('occupation', resident.occupation)
+        residentFormData.append('monthlyIncome', resident.income)
+        residentFormData.append('lengthOfStay', resident.lenghtOfStay)
+        residentFormData.append('religion', resident.religion)
+        residentFormData.append('nationality', resident.nationality)
+        residentFormData.append('educationAttainment', resident.education)
+        residentFormData.append('houseOwnership', resident.houseOwnerShip)
+        residentFormData.append('formerAddress', resident.formerAddress)
+        residentFormData.append('residentPhoto', resident.photo)
+
+        setSaveLoading(true)
+        const insertResident = await axios.post('/resident/insert', residentFormData, {
+            headers : {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+        setSaveLoading(false)
+        if(insertResident.data.message === 'success'){
+            window.location.reload()
+            
+        }else{
+            console.log(insertResident.data.message)
+        }
+
     }
 
     // get all resident data from database
@@ -94,6 +143,12 @@ function ResidentList(){
                             </div>
                             <form>
                                 <div className="modal-body row">
+
+                                    <Loader 
+                                        loader={saveLoading}
+                                        title="Saving..."
+                                    />
+
                                     <div className='resident__left col'>
                                         <div className='resident_name__container mb-3'>
                                             <label className='fs-7'>Name</label>
@@ -103,6 +158,7 @@ function ResidentList(){
                                                     className='form-control-1' 
                                                     placeholder='Last name'
                                                     name='lname'
+                                                    value={resident.lname}
                                                     onChange={handleChange}
                                                 />
                                                 <input 
@@ -110,6 +166,7 @@ function ResidentList(){
                                                     className='form-control-1' 
                                                     placeholder='First name'
                                                     name='fname'
+                                                    value={resident.fname}
                                                     onChange={handleChange}
                                                 />
                                                 <input 
@@ -117,6 +174,7 @@ function ResidentList(){
                                                     className='form-control-1' 
                                                     placeholder='Middle name'
                                                     name='mname'
+                                                    value={resident.mname}
                                                     onChange={handleChange}
                                                 />
                                             </div>
@@ -128,6 +186,7 @@ function ResidentList(){
                                                 className='form-control-1' 
                                                 id='bdate' 
                                                 name='bdate'
+                                                value={resident.bdate}
                                                 onChange={handleChange}
                                             />
                                         </div>
@@ -138,6 +197,7 @@ function ResidentList(){
                                                 className='form-control-1' 
                                                 id='bplace' 
                                                 name='bplace'
+                                                value={resident.bplace}
                                                 onChange={handleChange}
                                             />
                                         </div>
@@ -148,6 +208,7 @@ function ResidentList(){
                                                 className='form-control-1' 
                                                 id='age' 
                                                 name='age'
+                                                value={resident.age}
                                                 onChange={handleChange}
                                             />
                                         </div>
@@ -157,10 +218,10 @@ function ResidentList(){
                                                 className='form-control-1'
                                                 id="gender"
                                                 name="gender" 
-                                                defaultValue=''
+                                                defaultValue={resident.gender}
                                                 onChange={handleChange}
                                             >
-                                                <option value='' disabled>-- select gender --</option>
+                                                <option value={resident.gender} disabled>-- select gender --</option>
                                                 <option>Male</option>
                                                 <option>Female</option>
                                             </select>
@@ -172,6 +233,7 @@ function ResidentList(){
                                                 className='form-control-1' 
                                                 id='contact' 
                                                 name='contact'
+                                                value={resident.contact}
                                                 onChange={handleChange}
                                             />
                                         </div>
@@ -182,16 +244,18 @@ function ResidentList(){
                                                 className='form-control-1' 
                                                 id='purok' 
                                                 name='purok'
+                                                value={resident.purok}
                                                 onChange={handleChange}
                                             />
                                         </div>
-                                        <div className='resident__totalhousehOld mb-3'>
+                                        <div className='resident__totalhousehold mb-3'>
                                             <label htmlFor="totalhousehold" className='fs-7'>Total Household</label>
                                             <input 
                                                 type="number" 
                                                 className='form-control-1' 
-                                                id='totalHousehOld' 
-                                                name='totalHouseold'
+                                                id='totalHousehold' 
+                                                name='totalHousehold'
+                                                value={resident.totalHousehold}
                                                 onChange={handleChange}
                                             />
                                         </div>
@@ -202,6 +266,7 @@ function ResidentList(){
                                                 className='form-control-1' 
                                                 id='pwd' 
                                                 name='pwd'
+                                                value={resident.pwd}
                                                 onChange={handleChange}
                                             />
                                         </div>
@@ -212,31 +277,47 @@ function ResidentList(){
                                                 className='form-control-1' 
                                                 id='relationToHead' 
                                                 name='relationToHead'
+                                                value={resident.relationToHead}
                                                 onChange={handleChange}
                                             />
                                         </div>
                                         <div className='resident__cstatus'>
                                             <label htmlFor="cstatus" className='fs-7'>Civil Status</label>
-                                            <input 
-                                                type="text" 
-                                                className='form-control-1' 
-                                                id='cstatus' 
-                                                name='cstatus'
+                                            <select 
+                                                className='form-control-1'
+                                                id="cstatus"
+                                                name="cstatus" 
+                                                defaultValue={resident.cstatus}
                                                 onChange={handleChange}
-                                            />
+                                            >
+                                                <option value={resident.cstatus} disabled>-- select status --</option>
+                                                <option>Single</option>
+                                                <option>Married</option>
+                                            </select>
                                         </div>
                                     </div>
                                     {/* right */}
                                     <div className='resident__right col'>
                                         <div className='resident__btype mb-3'>
                                             <label htmlFor="btype" className='fs-7'>Blood type</label>
-                                            <input 
-                                                type="text" 
-                                                className='form-control-1' 
-                                                id='btype' 
-                                                name='btype'
+                                            <select 
+                                                className='form-control-1'
+                                                id="btype"
+                                                name="btype" 
+                                                defaultValue={resident.btype}
                                                 onChange={handleChange}
-                                            />
+                                            >
+                                                <option value={resident.btype} disabled>-- select Blood-Type --</option>
+                                                <option>Not sure</option>
+                                                <option>type - O position</option>
+                                                <option>type - O negative</option>
+                                                <option>type - A position</option>
+                                                <option>type - A negative</option>
+                                                <option>type - B position</option>
+                                                <option>type - B negative</option>
+                                                <option>type - AB position</option>
+                                                <option>type - AB negative</option>
+                                            </select>
                                         </div>
                                         <div className='resident__occupation mb-3'>
                                             <label htmlFor="occupation" className='fs-7'>Occupation</label>
@@ -245,6 +326,7 @@ function ResidentList(){
                                                 className='form-control-1' 
                                                 id='occupation' 
                                                 name='occupation'
+                                                value={resident.occupation}
                                                 onChange={handleChange}
                                             />
                                         </div>
@@ -255,16 +337,18 @@ function ResidentList(){
                                                 className='form-control-1' 
                                                 id='income' 
                                                 name='income'
+                                                value={resident.income}
                                                 onChange={handleChange}
                                             />
                                         </div>
                                         <div className='resident__lenghtOfStay mb-3'>
-                                            <label htmlFor="lenghtOfStay" className='fs-7'>Length of Stay <small><em>(months)</em></small></label>
+                                            <label htmlFor="lenghtOfStay" className='fs-7'>Length of Stay <small><em>(years)</em></small></label>
                                             <input 
                                                 type="number" 
                                                 className='form-control-1' 
                                                 id='lenghtOfStay' 
                                                 name='lenghtOfStay'
+                                                value={resident.lenghtOfStay}
                                                 onChange={handleChange}
                                             />
                                         </div>
@@ -273,11 +357,11 @@ function ResidentList(){
                                             <select 
                                                 className='form-control-1'
                                                 id="religion"
-                                                defaultValue=''
                                                 name="religion"
+                                                defaultValue={resident.religion}
                                                 onChange={handleChange}
                                             >
-                                                <option value='' disabled>--- Select Religion ---</option>
+                                                <option value={resident.religion} disabled>--- Select Religion ---</option>
                                                 <option>Roman Catholic</option>
                                                 <option value='Iglesia ni Cristo'>Iglesia ni Cristo</option>
                                                 <option>Seventh Day Adventist</option>
@@ -292,6 +376,7 @@ function ResidentList(){
                                                 className='form-control-1' 
                                                 id='nationality' 
                                                 name='nationality'
+                                                value={resident.nationality}
                                                 onChange={handleChange}
                                             />
                                         </div>
@@ -300,11 +385,11 @@ function ResidentList(){
                                             <select 
                                                 className='form-control-1'
                                                 id="education"
-                                                defaultValue=''
                                                 name="education"
+                                                defaultValue={resident.education}
                                                 onChange={handleChange}
                                             >
-                                                <option value='' disabled>--- Select ---</option>
+                                                <option value={resident.education} disabled>--- Select ---</option>
                                                 <option>No Schooling Completed</option>
                                                 <option>Elementary (Undergrad)</option>
                                                 <option>Elementary (Graduate)</option>
@@ -322,11 +407,11 @@ function ResidentList(){
                                             <select 
                                                 className='form-control-1'
                                                 id="houseOwnerShip"
-                                                defaultValue=''
                                                 name="houseOwnerShip"
+                                                defaultValue={resident.houseOwnerShip}
                                                 onChange={handleChange}
                                             >
-                                                <option value='' disabled>--- Select ---</option>
+                                                <option value={resident.houseOwnerShip} disabled>--- Select ---</option>
                                                 <option>Own Home</option>
                                                 <option>Rent</option>
                                                 <option>Live with Parents/Relatives</option>
@@ -339,6 +424,7 @@ function ResidentList(){
                                                 className='form-control-1' 
                                                 id='formerAddress' 
                                                 name='formerAddress'
+                                                value={resident.formerAddress}
                                                 onChange={handleChange}
                                             />
                                         </div>
@@ -349,6 +435,7 @@ function ResidentList(){
                                                 className='form-control-1' 
                                                 id='photo' 
                                                 name='photo'
+                                                defaultValue={resident.photo}
                                                 onChange={handleChange}
                                             />
                                         </div>

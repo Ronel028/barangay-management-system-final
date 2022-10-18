@@ -15,7 +15,12 @@ function useAxios(url){
         getData()
     }, [])
 
-    return [data, loading]
+    // add new data
+    const addNewResident = (newResident) =>{
+        setData(newResident)
+    }
+
+    return [data, loading, addNewResident]
 }
 
 export default useAxios

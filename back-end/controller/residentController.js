@@ -26,32 +26,37 @@ const insertResident = async (request, response) =>{
         const { 
             lname, fname, mname, dateOfBirth, placeOfBirth, age, gender, contact, purok, 
             totalHousehold, pwd, relationToHead, civilStatus, bloodType, occupation, monthlyIncome,
-            lengthOfStay, religion, nationality, educationAttainment, houseOwnerShip, formerAddress,
+            lengthOfStay, religion, nationality, educationAttainment, houseOwnership, formerAddress,
         } = request.body
+
+        //function that capitalize first letter and lowercase the rest of the letter
+        const capitalizeString = (string)=>{
+            return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+        }
 
         //get the photo from multer middleware
         const residentPhoto = request.file.buffer.toString('base64')
-
         // create a condition if the data comes from the body are empty
-        if(request.body === ''){
+        if(!request.body){
             return response.json({ message: 'Please fill-up all the field!' })
         }
+        
 
-        // condition in the contact info is valid
+        // check if condition in the contact info is valid
         if(contact.length < 11 || contact.length > 11){
             return response.json({ message: 'Please input valid contact!' })
         }
 
         await residentModel.insertResident(
-            lname, fname, mname, dateOfBirth, placeOfBirth, age, gender, contact, purok, 
+            capitalizeString(lname) , capitalizeString(fname), capitalizeString(mname), dateOfBirth, placeOfBirth, age, gender, contact, purok, 
             totalHousehold, pwd, relationToHead, civilStatus, bloodType, occupation, monthlyIncome,
-            lengthOfStay, religion, nationality, educationAttainment, houseOwnerShip, formerAddress,
+            lengthOfStay, religion, nationality, educationAttainment, houseOwnership, formerAddress,
             residentPhoto
         )
         response.json({ message: 'success' })
 
     } catch (error) {
-        console.log(error)
+        response.json({ message: 'Please image cannot be empty!' })
     }
 }
 

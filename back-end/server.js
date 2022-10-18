@@ -5,7 +5,7 @@ const app = express()
 
 // middle that can convert data from client into json object
 app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
+app.use(express.urlencoded({ extended: false }))
 
 
 // db connection testing
