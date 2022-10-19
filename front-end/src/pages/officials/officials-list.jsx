@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Button, Modal } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUserPlus } from '@fortawesome/free-solid-svg-icons'
 import axios from 'axios'
@@ -11,8 +12,11 @@ import OfficialListTable from './official-list-table'
 
 function OfficialsList(){
 
-    //state for modal active if have a error
-    const [hideModal, setHideModal] = useState(true)
+    // function and state for handle the close and open of modal using react-bootsrap
+    const [show, setShow] = useState(false);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+
     //stete for value of input search
     const [search, searchValue] = useSearch()
 
@@ -66,11 +70,7 @@ function OfficialsList(){
         })
         setLoader(false)
         //condition that what will happen the response of the server
-        if(insertOfficials.data.message === 'success'){
-            window.location.reload()
-
-        }else{
-            setHideModal(true)
+        if(insertOfficials.data.message){
             setErrorMessage({
                 ...errorMessage,
                 display: 'block',
@@ -83,11 +83,25 @@ function OfficialsList(){
                     message: ''
                 })
             }, 2000)
+        }else{
+            addNew(insertOfficials.data)
+            setOfficial({
+                ...official,
+                name: '',
+                position: '',
+                contact: '',
+                startTerm: '',
+                endTerm: '',
+                address: '',
+                photo: null
+            })
+            setShow(false)
         }
+        
     }
 
     // custom hook for getting all data in database
-    const [data, loading] = useAxios('/officials')
+    const [data, loading, addNew] = useAxios('/officials')
 
     return (
         <>
@@ -100,10 +114,14 @@ function OfficialsList(){
 
                 <main className="officials__main p-2 mt-3">
                     <div className='d-flex justify-content-between align-items-center align-middle mb-4'>
-                        <button type="button" className="btn text-bg-primary fs-7 fw-semibold" data-bs-toggle="modal" data-bs-target="#add-official">
+                        <Button 
+                            type="button" 
+                            className="btn text-bg-primary fs-7 fw-semibold"
+                            onClick={handleShow}
+                        >
                             <FontAwesomeIcon className='me-1' icon={faUserPlus}/>
                             Add Officials
-                        </button>
+                        </Button>
                         <Search 
                             filterOfficials={searchValue}
                         />
@@ -116,16 +134,15 @@ function OfficialsList(){
                     />
 
                     {/* modal */}
-                    <div className="modal modal fade" id='add-official' data-bs-backdrop="static" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div className="modal-dialog">
-                            <div className="modal-content">
-                                <div className="modal-header">
-                                    <h1 className="modal-title fs-6 d-flex align-items-center">
-                                        <FontAwesomeIcon className='me-2' icon={faUserPlus}/>
-                                        Add new officials
-                                    </h1>
-                                    <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
+                    <Modal show={show} onHide={handleClose} backdrop="static">
+                                <Modal.Header closeButton>
+                                    <Modal.Title>
+                                        <h1 className="modal-title fs-6 d-flex align-items-center">
+                                            <FontAwesomeIcon className='me-2' icon={faUserPlus}/>
+                                            Add new officials
+                                        </h1>
+                                    </Modal.Title>
+                                </Modal.Header>
 
                                 <div 
                                     className='alert alert-danger rounded-0'
@@ -156,13 +173,13 @@ function OfficialsList(){
                                             <label htmlFor="position" className='me-4 fw-semibold mb-2 fs-7'>Position</label>
                                             <select 
                                                 className="form-control-1" 
-                                                defaultValue='' 
                                                 id='position' 
                                                 aria-label="Default select example"
                                                 name='position'
+                                                defaultValue={official.position}
                                                 onChange={handleChange}
                                             >
-                                                <option value='' disabled>---Select position---</option>
+                                                <option value={official.position} disabled>---Select position---</option>
                                                 <option value="Captain">Captain</option>
                                                 <option value="Kagawad">Kagawad</option>
                                                 <option value="SK Chairman">SK Chairman</option>
@@ -187,6 +204,7 @@ function OfficialsList(){
                                                 id='startTerm' 
                                                 className='form-control-1' 
                                                 name='startTerm'
+                                                defaultValue={official.startTerm}
                                                 onChange={handleChange}
                                             />
                                         </div>
@@ -197,6 +215,7 @@ function OfficialsList(){
                                                 id='endTerm' 
                                                 className='form-control-1' 
                                                 name='endTerm'
+                                                defaultValue={official.endTerm}
                                                 onChange={handleChange}
                                             />
                                         </div>
@@ -218,6 +237,7 @@ function OfficialsList(){
                                                 id='photo' 
                                                 className='form-control-1' 
                                                 name='photo'
+                                                defaultValue={official.photo}
                                                 onChange={handleChange}
                                             />
                                         </div>
@@ -226,16 +246,13 @@ function OfficialsList(){
                                         <button 
                                             type="button" 
                                             className="btn text-bg-primary fs-7 fw-semibold"
-                                            data-bs-dismiss={hideModal ? '' : 'modal'}
                                             onClick={saveOfficials}
                                         >
                                             Add Official
                                         </button>
                                     </div>
                                 </form>
-                            </div>
-                        </div>
-                    </div>
+                    </Modal>
 
                 </main>
 

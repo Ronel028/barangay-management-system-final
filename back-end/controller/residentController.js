@@ -53,7 +53,7 @@ const insertResident = async (request, response) =>{
             lengthOfStay, religion, nationality, educationAttainment, houseOwnership, formerAddress,
             residentPhoto
         )
-        response.json({ message: 'success' })
+        response.redirect('/resident')
 
     } catch (error) {
         response.json({ message: 'Please image cannot be empty!' })

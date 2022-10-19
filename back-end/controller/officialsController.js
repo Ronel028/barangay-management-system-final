@@ -29,7 +29,7 @@ const insertOfficials = async (request, response)=>{
 
         // save to database if no error found
         await officialsDB.insertOfficials(name, position, contact, termStart, termEnd, address, photo)
-        response.json({ message: 'success' })
+        response.redirect('/officials')
         
     } catch (error) {
         response.json({ message: 'Image cannot be empty!' })
@@ -41,7 +41,7 @@ const deleteOfficial = async (request, response) =>{
     try {
         const officialID = request.query.id
         await officialsDB.deleteOfficial(officialID)
-        response.json({ message: 'success' })
+        response.redirect(303, '/officials')
     } catch (error) {
         response.json({ message: "Something's wrong! Please try again" })
     }
@@ -76,7 +76,7 @@ const updateOfficial = async (request, response) =>{
         }
 
         await officialsDB.updateOfficial(name, position, contact, term_start, term_end, address, photo, officialID)
-        response.json({ message: 'success' })
+        response.redirect('/officials')
 
     } catch (error) {
         response.json({ message: "Something's wrong! Please try agin..." })

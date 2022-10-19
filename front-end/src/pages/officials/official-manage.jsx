@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import axios from 'axios'
+import { Button, Modal } from 'react-bootstrap';
 import useAxios from '../../hooks/useAxios'
 import useSearch from '../../hooks/useSearch'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -11,6 +12,11 @@ import Loader from '../../components/loader'
 
 
 function OfficialManage(){
+
+    // function and state for handle the close and open of modal using react-bootsrap
+    const [show, setShow] = useState(false);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
 
     //custom hooks for search
     const [search, searchValue] = useSearch()
@@ -26,7 +32,7 @@ function OfficialManage(){
         return new Date(date).toLocaleDateString()
     }
     // get data of officials from database
-    const [data, loading] = useAxios('/officials')
+    const [data, loading, addnew] = useAxios('/officials')
 
     // filter official 
     const filterOfficial = data.filter(official =>{
@@ -47,9 +53,12 @@ function OfficialManage(){
                 deleting: false,
                 id: null
             })
-            if(deleteOfficial.data.message === 'success'){
-                window.location.reload()
+            if(deleteOfficial.data.message){
+                return
+            }else{
+                addnew(deleteOfficial.data)
             }
+            
         }else{
             return;
         }
@@ -86,6 +95,7 @@ function OfficialManage(){
     const updateOfficial = async (id)=>{
         const getOfficialById = await axios.get(`/officials/data?id=${id}`)
         setOfficialID(id)
+        handleShow()
         const { name, position, contact, term_start, term_end, address, photo } = getOfficialById.data[0]
         setOfficial({
             ...official,
@@ -128,9 +138,7 @@ function OfficialManage(){
         })
         setLoader(false)
 
-        if(updateOfficialData.data.message === 'success'){
-            window.location.reload()
-        }else{
+        if(updateOfficialData.data.message){
             setErrorMessage({
                 ...errorMessage, 
                 display: 'block',
@@ -143,6 +151,9 @@ function OfficialManage(){
                     message: ''
                 })
             }, 2000)
+        }else{
+            addnew(updateOfficialData.data)
+            handleClose()
         }
     }
 
@@ -192,16 +203,14 @@ function OfficialManage(){
                                                             <td>{dateFormat(official.term_start)}</td>
                                                             <td>{dateFormat(official.term_end)}</td>
                                                             <td>
-                                                                <button 
+                                                                <Button 
                                                                     className="border-0 py-1 px-2 rounded text-bg-primary me-2" 
-                                                                    type="button" 
-                                                                    data-bs-toggle="modal" 
-                                                                    data-bs-target="#update-official"
+                                                                    type="button"
                                                                     onClick={() => updateOfficial(official.id)}
                                                                 >
                                                                     <FontAwesomeIcon icon={faEdit}/>
-                                                                </button>
-                                                                <button 
+                                                                </Button>
+                                                                <Button 
                                                                     className="border-0 py-1 px-2 rounded text-bg-danger" 
                                                                     type="button"
                                                                     onClick={() => deleteOfficials(official.id)}
@@ -213,7 +222,7 @@ function OfficialManage(){
                                                                         />
                                                                     </div>
                                                                     
-                                                                </button>
+                                                                </Button>
                                                             </td>
                                                         </tr>
                                             })
@@ -242,127 +251,124 @@ function OfficialManage(){
 
 
                     {/* modal */}
-                    <div className="modal modal fade" id='update-official' data-bs-backdrop="static" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div className="modal-dialog">
-                            <div className="modal-content">
-                                <div className="modal-header">
+                    <Modal show={show} onHide={handleClose} backdrop="static">
+                            <Modal.Header closeButton>
+                                <Modal.Title>
                                     <h1 className="modal-title fs-6 d-flex align-items-center">
                                         <FontAwesomeIcon className='me-2' icon={faPenToSquare}/>
                                         Update officials
                                     </h1>
-                                    <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
+                                </Modal.Title>
+                            </Modal.Header>
 
-                                {/* error message */}
-                                <div 
-                                    className='alert alert-danger rounded-0'
-                                    style={{display: errorMessage.display}}
-                                >
-                                    {errorMessage.message}
-                                </div>
-
-
-                                <form className="modal-body">
-
-                                    <Loader loader={loader} title='updating...'/>
-
-                                    <div>
-                                        <div className='align-items-center mb-3'>
-                                            <label htmlFor="name" className='me-4 fw-semibold mb-2 fs-7'>Name <small className='fw-light'><em>(First name, Middle name, Last name)</em></small></label>
-                                            <input 
-                                                type="text" 
-                                                id='name' 
-                                                className='form-control-1' 
-                                                placeholder='Enter full name...'
-                                                name='name'
-                                                value={official.name}
-                                                onChange={handleUpdateChange}
-                                            />
-                                        </div>
-                                        <div className='align-items-center mb-3'>
-                                            <label htmlFor="position" className='me-4 fw-semibold mb-2 fs-7'>Position</label>
-                                            <select 
-                                                className="form-control-1 col"
-                                                id='position' 
-                                                aria-label="Default select example"
-                                                name='position'
-                                                value={official.position}
-                                                onChange={handleUpdateChange}
-                                            >
-                                                <option>Captain</option>
-                                                <option>Kagawad</option>
-                                                <option>SK Chairman</option>
-                                            </select>
-                                        </div>
-                                        <div className='align-items-center mb-3'>
-                                            <label htmlFor="contact" className='me-4 fw-semibold mb-2 fs-7'>Contact</label>
-                                            <input 
-                                                type="text" 
-                                                id='contact' 
-                                                className='form-control-1' 
-                                                placeholder='Phone number...'
-                                                name='contact'
-                                                value={official.contact}
-                                                onChange={handleUpdateChange}
-                                            />
-                                        </div>
-                                        <div className='align-items-center mb-3'>
-                                            <label htmlFor="startTerm" className='me-4 fw-semibold mb-2 fs-7'>Term Start</label>
-                                            <input 
-                                                type="date" 
-                                                id='startTerm' 
-                                                className='form-control-1' 
-                                                name='term_start'
-                                                value={official.term_start}
-                                                onChange={handleUpdateChange}
-                                            />
-                                        </div>
-                                        <div className='align-items-center mb-3'>
-                                            <label htmlFor="endTerm" className='me-4 fw-semibold mb-2 fs-7'>Term End</label>
-                                            <input 
-                                                type="date" 
-                                                id='endTerm' 
-                                                className='form-control-1' 
-                                                name='term_end'
-                                                value={official.term_end}
-                                                onChange={handleUpdateChange}
-                                            />
-                                        </div>
-                                        <div className='align-items-center mb-3'>
-                                            <label htmlFor="address" className='me-4 fw-semibold mb-2 fs-7'>Address</label>
-                                            <textarea 
-                                                className="form-control-1" 
-                                                id='address' 
-                                                aria-label="With textarea"
-                                                name='address'
-                                                value={official.address}
-                                                onChange={handleUpdateChange}
-                                            ></textarea>
-                                        </div>
-                                        <div className='align-items-center mb-3'>
-                                            <label htmlFor="photo" className='me-4 fw-semibold mb-2 fs-7'>Upload photo</label>
-                                            <input 
-                                                type="file" 
-                                                id='photo' 
-                                                className='form-control-1'
-                                                name='photo'
-                                                onChange={handleUpdateChange}
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="d-flex align-items-center justify-content-end p-2 pe-0">
-                                        <button 
-                                            type="button" 
-                                            className="btn text-bg-primary fs-7 fw-semibold"
-                                            onClick={updateOfficialData}
-                                        >
-                                            Update Official
-                                        </button>
-                                    </div>
-                                </form>
+                            {/* error message */}
+                            <div 
+                                className='alert alert-danger rounded-0'
+                                style={{display: errorMessage.display}}
+                            >
+                                {errorMessage.message}
                             </div>
-                        </div>
-                    </div>
+
+
+                            <form className="modal-body">
+
+                                <Loader loader={loader} title='updating...'/>
+
+                                <div>
+                                    <div className='align-items-center mb-3'>
+                                        <label htmlFor="name" className='me-4 fw-semibold mb-2 fs-7'>Name <small className='fw-light'><em>(First name, Middle name, Last name)</em></small></label>
+                                        <input 
+                                            type="text" 
+                                            id='name' 
+                                            className='form-control-1' 
+                                            placeholder='Enter full name...'
+                                            name='name'
+                                            value={official.name}
+                                            onChange={handleUpdateChange}
+                                        />
+                                    </div>
+                                    <div className='align-items-center mb-3'>
+                                        <label htmlFor="position" className='me-4 fw-semibold mb-2 fs-7'>Position</label>
+                                        <select 
+                                            className="form-control-1 col"
+                                            id='position' 
+                                            aria-label="Default select example"
+                                            name='position'
+                                            value={official.position}
+                                            onChange={handleUpdateChange}
+                                        >
+                                            <option>Captain</option>
+                                            <option>Kagawad</option>
+                                            <option>SK Chairman</option>
+                                        </select>
+                                    </div>
+                                    <div className='align-items-center mb-3'>
+                                        <label htmlFor="contact" className='me-4 fw-semibold mb-2 fs-7'>Contact</label>
+                                        <input 
+                                            type="text" 
+                                            id='contact' 
+                                            className='form-control-1' 
+                                            placeholder='Phone number...'
+                                            name='contact'
+                                            value={official.contact}
+                                            onChange={handleUpdateChange}
+                                        />
+                                    </div>
+                                    <div className='align-items-center mb-3'>
+                                        <label htmlFor="startTerm" className='me-4 fw-semibold mb-2 fs-7'>Term Start</label>
+                                        <input 
+                                            type="date" 
+                                            id='startTerm' 
+                                            className='form-control-1' 
+                                            name='term_start'
+                                            value={official.term_start}
+                                            onChange={handleUpdateChange}
+                                        />
+                                    </div>
+                                    <div className='align-items-center mb-3'>
+                                        <label htmlFor="endTerm" className='me-4 fw-semibold mb-2 fs-7'>Term End</label>
+                                        <input 
+                                            type="date" 
+                                            id='endTerm' 
+                                            className='form-control-1' 
+                                            name='term_end'
+                                            value={official.term_end}
+                                            onChange={handleUpdateChange}
+                                        />
+                                    </div>
+                                    <div className='align-items-center mb-3'>
+                                        <label htmlFor="address" className='me-4 fw-semibold mb-2 fs-7'>Address</label>
+                                        <textarea 
+                                            className="form-control-1" 
+                                            id='address' 
+                                            aria-label="With textarea"
+                                            name='address'
+                                            value={official.address}
+                                            onChange={handleUpdateChange}
+                                        ></textarea>
+                                    </div>
+                                    <div className='align-items-center mb-3'>
+                                        <label htmlFor="photo" className='me-4 fw-semibold mb-2 fs-7'>Upload photo</label>
+                                        <input 
+                                            type="file" 
+                                            id='photo' 
+                                            className='form-control-1'
+                                            name='photo'
+                                            onChange={handleUpdateChange}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="d-flex align-items-center justify-content-end p-2 pe-0">
+                                    <Button 
+                                        type="button" 
+                                        className="btn text-bg-primary fs-7 fw-semibold"
+                                        onClick={updateOfficialData}
+                                    >
+                                        Update Official
+                                    </Button>
+                                </div>
+                            </form>
+                    </Modal>
                     {/* end modal */}
                 </main>
             </section>

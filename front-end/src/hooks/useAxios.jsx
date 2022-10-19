@@ -16,11 +16,11 @@ function useAxios(url){
     }, [])
 
     // add new data
-    const addNewResident = (newResident) =>{
+    const addNew = (newResident) =>{
         setData(newResident)
     }
 
-    return [data, loading, addNewResident]
+    return [data, loading, addNew]
 }
 
 export default useAxios
