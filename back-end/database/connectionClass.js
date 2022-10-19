@@ -24,6 +24,24 @@ class DbConfig{
         return query
     }
 
+    queryData = (query) =>{
+        return new Promise((resolve, reject)=>{
+            this.dbConnect().getConnection(error =>{
+                if(error){
+                    reject(error)
+                }else{
+                    this.dbConnect().query(query, (error, result)=>{
+                        if(error){
+                            reject(error)
+                        }else{
+                            resolve(result)
+                        }
+                    })
+                }
+            })
+        })
+    }
+
 }
 
 module.exports = DbConfig;
