@@ -8,7 +8,6 @@ import Search from "../../components/search"
 import TitleCard from '../../components/title'
 import Loader from '../../components/loader'
 import ResidentListTable from './resident-list-table'
-import DataModal from '../../components/data-modal'
 
 function ResidentList(){
 
@@ -29,7 +28,7 @@ function ResidentList(){
         gender: '',
         contact: '',
         purok: '',
-        totalHousehold: '',
+        totalFamilyMember: '',
         pwd: '',
         relationToHead: '',
         cstatus: '',
@@ -73,7 +72,7 @@ function ResidentList(){
         residentFormData.append('gender', resident.gender)
         residentFormData.append('contact', resident.contact)
         residentFormData.append('purok', resident.purok)
-        residentFormData.append('totalHousehold', resident.totalHousehold)
+        residentFormData.append('totalFamilyMember', resident.totalFamilyMember)
         residentFormData.append('pwd', resident.pwd)
         residentFormData.append('relationToHead', resident.relationToHead)
         residentFormData.append('civilStatus', resident.cstatus)
@@ -254,13 +253,13 @@ function ResidentList(){
                                     />
                                 </div>
                                 <div className='resident__totalhousehold mb-3'>
-                                    <label htmlFor="totalhousehold" className='fs-7'>Total Household</label>
+                                    <label htmlFor="totalFamilyMember" className='fs-7'>Total Family Member</label>
                                     <input 
                                         type="number" 
                                         className='form-control-1' 
-                                        id='totalHousehold' 
-                                        name='totalHousehold'
-                                        value={resident.totalHousehold}
+                                        id='totalFamilyMember' 
+                                        name='totalFamilyMember'
+                                        value={resident.totalFamilyMember}
                                         onChange={handleChange}
                                     />
                                 </div>
@@ -457,9 +456,6 @@ function ResidentList(){
                         </div>
                     </form>
                 </Modal>
-
-                {/* view resident data modal */}
-                <DataModal />
 
             </section>
         </>

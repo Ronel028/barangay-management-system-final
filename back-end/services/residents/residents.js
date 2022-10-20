@@ -1,4 +1,5 @@
 const DbConfig = require("../../database/connectionClass");
+const { capitalizeString } = require('../../custom/customFunction')
 
 class Resident extends DbConfig{
 
@@ -21,17 +22,12 @@ class Resident extends DbConfig{
             //get the coming request from the body
             const { 
                 lname, fname, mname, dateOfBirth, placeOfBirth, age, gender, contact, purok, 
-                totalHousehold, pwd, relationToHead, civilStatus, bloodType, occupation, monthlyIncome,
+                totalFamilyMember, pwd, relationToHead, civilStatus, bloodType, occupation, monthlyIncome,
                 lengthOfStay, religion, nationality, educationAttainment, houseOwnership, formerAddress,
             } = request.body
             
             //get the photo from multer middleware
             const residentPhoto = request.file.buffer.toString('base64')
-
-            //function that capitalize first letter and lowercase the rest of the letter
-            const capitalizeString = (string)=>{
-                return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
-            }
 
             // create a condition if the data comes from the body are empty
             if(!request.body){
@@ -45,16 +41,34 @@ class Resident extends DbConfig{
             }
 
             // query
-            const query = `INSERT INTO tbl_residence 
-                                VALUES(null,'${capitalizeString(lname)}','${capitalizeString(fname)}','${capitalizeString(mname)}',
-                                        '${dateOfBirth}','${placeOfBirth}',${age},'${gender}','${contact}','${purok}',
-                                        ${totalHousehold},'${pwd}','${relationToHead}','${civilStatus}','${bloodType}',
-                                        '${occupation}',${monthlyIncome},${lengthOfStay},'${religion}','${nationality}',
-                                        '${educationAttainment}','${houseOwnership}','${formerAddress}','${residentPhoto}',now())`
+            const query = `INSERT INTO tbl_residence VALUES(null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,now())`
+            const data = [capitalizeString(lname), capitalizeString(fname), capitalizeString(mname), dateOfBirth, placeOfBirth, age, gender, contact, purok,totalFamilyMember, 
+                            pwd, relationToHead, civilStatus, bloodType, occupation, monthlyIncome,lengthOfStay, 
+                            religion, nationality, educationAttainment, houseOwnership, formerAddress, residentPhoto
+                        ]
             
-            
-            await this.queryData(query)
+            //save to database if no error found
+            await this.queryData(query, data)
             response.redirect('/resident')
+
+        } catch (error) {
+            response.json({ message: 'Image cannot be empty!' })
+        }
+    }
+
+    // 
+    getResidentById = async (request, response) =>{
+        try {
+
+            const residentID = request.query.id
+
+            // query
+            const query = `SELECT * FROM tbl_residence WHERE id=?`
+            const data = [residentID]
+
+            //save to database if no error found
+            const resident = await this.queryData(query, data)
+            response.json(resident)
 
         } catch (error) {
             console.log(error)

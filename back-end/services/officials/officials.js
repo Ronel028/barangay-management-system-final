@@ -18,10 +18,10 @@ class Official extends DbConfig{
             const { name, position, contact, termStart, termEnd, address } = request.body
             const photo = request.file.buffer.toString('base64')
 
+            // query
             const query = `INSERT INTO tbl_officials 
-                            VALUES (null, '${name}', '${position}',
-                                    '${contact}', '${termStart}', '${termEnd}', 
-                                    '${address}', '${photo}')`
+                            VALUES (null,?,?,?,?,?,?,?)`
+            const data = [name, position, contact, termStart, termEnd, address, photo]
 
             // validate if all the input are have a value
             if(!name || !position || !contact || !termStart || !termEnd || !address){
@@ -34,7 +34,7 @@ class Official extends DbConfig{
             }
 
             // save to database if no error found
-            await this.queryData(query)
+            await this.queryData(query, data)
             response.redirect('/officials')
 
         } catch (error) {
@@ -46,9 +46,13 @@ class Official extends DbConfig{
     deleteOfficial = async (request, response) =>{
         try {
             const officialID = request.query.id
-            const query = `DELETE FROM tbl_officials WHERE id=${officialID}`
 
-            await this.queryData(query)
+            // query
+            const query = `DELETE FROM tbl_officials WHERE id=?`
+            const data = [officialID]
+
+             // save to database if no error found
+            await this.queryData(query, data)
             response.redirect(303, '/officials')
 
         } catch (error) {
@@ -60,9 +64,13 @@ class Official extends DbConfig{
     getOfficialById = async (request, response) =>{
         try {
             const officialID = request.query.id
-            const query = `SELECT * FROM tbl_officials WHERE id=${officialID}`
 
-            const official = await this.queryData(query)
+            // query
+            const query = `SELECT * FROM tbl_officials WHERE id=?`
+            const data = [officialID]
+
+            // save to database if no error found
+            const official = await this.queryData(query, data)
             response.json(official)
 
         } catch (error) {
@@ -77,10 +85,12 @@ class Official extends DbConfig{
             const { name, position, contact, term_start, term_end, address } = request.body
             const photo = request.file.buffer.toString('base64')
 
+            // query
             const query = `UPDATE tbl_officials 
-                            SET name='${name}', position='${position}', contact='${contact}', 
-                                term_start='${term_start}', term_end='${term_end}', address='${address}', photo='${photo}' 
-                            WHERE id=${officialID}`
+                                    SET name=?, position=?, contact=?, 
+                                    term_start=?, term_end=?, address=?, photo=? 
+                                WHERE id=?`
+            const data = [name, position, contact, term_start, term_end, address, photo, officialID]
 
             // validate the data from client if it has no value
             if(!name || !position || !contact || !term_start || !term_end || !address){
@@ -92,7 +102,8 @@ class Official extends DbConfig{
                 return response.json({ message: 'Contact not valid!' })
             }
 
-            await this.queryData(query)
+            // saving code to database if no error found
+            await this.queryData(query, data)
             response.redirect('/officials')
 
         } catch (error) {

@@ -11,5 +11,6 @@ const upload = multer({ storage: storage })
 // creating endpoint
 router.get('/', residents.getResidents)
 router.post('/insert', upload.single('residentPhoto'), residents.insertResident)
+router.get('/id', residents.getResidentById)
 
 module.exports = router
