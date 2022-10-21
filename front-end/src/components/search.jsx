@@ -5,7 +5,7 @@ function Search(props){
             <input 
                 type="text" 
                 className="form-control"
-                onChange={props.filterOfficials}
+                onChange={props.filterSearch}
             />
         </div>
     )

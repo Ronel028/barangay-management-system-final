@@ -1,7 +1,12 @@
+import axios from 'axios'
+import useAxios from '../../hooks/useAxios'
+import useSearch from '../../hooks/useSearch'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit, faTrash, faPenToSquare } from '@fortawesome/free-solid-svg-icons'
+import { convertBase64ToImage } from '../../custom/function'
 import Search from '../../components/search'
 import TitleCard from '../../components/title'
+import { useState } from 'react'
 
 function ResidentManage(){
 
@@ -12,6 +17,49 @@ function ResidentManage(){
     const updateResident  = (event) =>{
         console.log('Testing')
     }
+
+    // get all data of resident
+    const [data, loading, update] = useAxios('/resident')
+
+    //search
+    const [search, searchValue] = useSearch()
+
+    //filter resident
+    const filterResident = data.filter(resident =>{
+        return resident.fname.toLowerCase().includes(search) || resident.lname.toLowerCase().includes(search)
+    })
+
+    //  delete function ---------------------------------
+
+    //loading delete
+    const [loadingDelete, setLoadingDelete] = useState({
+        deleting: false,
+        id: null
+    })
+
+    const handleDelete = async (id)=>{
+        if(window.confirm('Are you sure you to remove this resident?')){
+            setLoadingDelete({
+                ...loadingDelete,
+                deleting: true,
+                id: id
+            })
+            const deleteResident = await axios.delete(`/resident/delete?id=${id}`)
+            setLoadingDelete({
+                ...loadingDelete,
+                deleting: false,
+                id: null
+            })
+            if(deleteResident.data.message){
+                return
+            }else{
+                update(deleteResident.data)
+            }
+        }else{
+            return
+        }
+    }
+    // -------------------------------------------------------
 
     return(
         <>
@@ -24,7 +72,11 @@ function ResidentManage(){
                 {/* main */}
                 <main className="officials__manage__main p-2 mt-3">
                     <div className='d-flex justify-content-end align-items-center mb-4'>
-                        <Search />
+
+                        <Search 
+                            filterSearch={searchValue}
+                        />
+
                     </div>
                     {/* table */}
                     <table className="table table-hover table-bordered">
@@ -39,30 +91,64 @@ function ResidentManage(){
                             </tr>
                         </thead>
                         <tbody>
-                            <tr className='align-middle fs-7'>
-                                <td>
-                                    <div className='table__image__container border rounded border-secondary p-1'>
-                                        <img className='w-100 h-100' src="" alt="..." />
-                                    </div>
-                                </td>
-                                <td>Ronel Florida</td>
-                                <td>09345652345</td>
-                                <td>22</td>
-                                <td>Male</td>
-                                <td>
-                                    <button 
-                                        className="border-0 py-1 px-2 rounded text-bg-primary me-2" 
-                                        type="button" 
-                                        data-bs-toggle="modal" 
-                                        data-bs-target="#update-resident"
-                                    >
-                                        <FontAwesomeIcon icon={faEdit}/>
-                                    </button>
-                                    <button className="border-0 py-1 px-2 rounded text-bg-danger" type="button">
-                                        <FontAwesomeIcon icon={faTrash}/>
-                                    </button>
-                                </td>
-                            </tr>
+                            {
+                                data.length > 0 ? 
+                                    filterResident.length > 0 ?
+                                        filterResident.map(resident =>{
+                                            return <tr key={resident.id} className='align-middle fs-7'>
+                                                        <td>
+                                                            <div className='table__image__container border rounded border-secondary p-1'>
+                                                                <img className='w-100 h-100' src={convertBase64ToImage(resident.photo)} alt={`${resident.fname} ${resident.lname}`} />
+                                                            </div>
+                                                        </td>
+                                                        <td>{`${resident.fname} ${resident.lname}`}</td>
+                                                        <td>{resident.contact}</td>
+                                                        <td>{resident.age}</td>
+                                                        <td>{resident.gender}</td>
+                                                        <td>
+                                                            <button 
+                                                                className="border-0 py-1 px-2 rounded text-bg-primary me-2" 
+                                                                type="button" 
+                                                                data-bs-toggle="modal" 
+                                                                data-bs-target="#update-resident"
+                                                            >
+                                                                <FontAwesomeIcon icon={faEdit}/>
+                                                            </button>
+                                                            <button 
+                                                                className="border-0 py-1 px-2 rounded text-bg-danger" 
+                                                                type="button"
+                                                                onClick={() => handleDelete(resident.id)}
+                                                            >
+                                                                <div className={loadingDelete.id === resident.id ? 'spinner-arrow d-flex' : ''}>
+                                                                    <FontAwesomeIcon
+                                                                        className={loadingDelete.id === resident.id ? 'invisible' : 'visible'}
+                                                                        icon={faTrash} 
+                                                                    />
+                                                                </div>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                        })
+                                    :   <tr>
+                                            <td colSpan='7' className="text-center">
+                                                {`${search} not found!`}
+                                            </td>
+                                        </tr>
+                                : loading ?   <tr>
+                                                    <td colSpan='7' className="text-center">
+                                                        <div className="w-100 d-flex align-items-center justify-content-center">
+                                                            <div className="spinner me-2"></div>
+                                                            loading...
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            :   <tr>
+                                                    <td colSpan='7' className="text-center">
+                                                        No data found
+                                                    </td>
+                                                </tr>  
+                            }
+                            
                         </tbody>
                     </table>
                     {/* end table */}

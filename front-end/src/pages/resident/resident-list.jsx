@@ -4,6 +4,7 @@ import { Modal, Button } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUserPlus } from '@fortawesome/free-solid-svg-icons'
 import useAxios from '../../hooks/useAxios'
+import useSearch from '../../hooks/useSearch'
 import Search from "../../components/search"
 import TitleCard from '../../components/title'
 import Loader from '../../components/loader'
@@ -106,6 +107,8 @@ function ResidentList(){
     // get all resident data from database
     const [data, loading, addNew] = useAxios('/resident')
 
+    const [search, searchValue] = useSearch()
+
     return (
         <>
             <section className="resident__list main-padding">
@@ -125,12 +128,18 @@ function ResidentList(){
                             <FontAwesomeIcon className='me-1' icon={faUserPlus}/>
                             Add Residents
                         </Button>
-                        <Search />
+                        
+                        {/* search */}
+                        <Search 
+                            filterSearch={searchValue}
+                        />  
+
                     </div>
 
                     <ResidentListTable 
                         resident={data}
                         loading={loading}
+                        search={search}
                     />
 
                 </main>

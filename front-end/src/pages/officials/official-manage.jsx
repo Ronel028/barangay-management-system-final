@@ -170,7 +170,7 @@ function OfficialManage(){
                 <main className="officials__manage__main p-2 mt-3">
                     <div className='d-flex justify-content-end align-items-center mb-4'>
                         <Search 
-                            filterOfficials={searchValue}
+                            filterSearch={searchValue}
                         />
                     </div>
                     {/* table */}

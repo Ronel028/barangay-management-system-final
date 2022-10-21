@@ -12,5 +12,7 @@ const upload = multer({ storage: storage })
 router.get('/', residents.getResidents)
 router.post('/insert', upload.single('residentPhoto'), residents.insertResident)
 router.get('/id', residents.getResidentById)
+router.delete('/delete', residents.deleteResident)
+
 
 module.exports = router

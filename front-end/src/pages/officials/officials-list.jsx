@@ -123,7 +123,7 @@ function OfficialsList(){
                             Add Officials
                         </Button>
                         <Search 
-                            filterOfficials={searchValue}
+                            filterSearch={searchValue}
                         />
                     </div>
                     

@@ -42,12 +42,13 @@ class Resident extends DbConfig{
 
             // query
             const query = `INSERT INTO tbl_residence VALUES(null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,now())`
-            const data = [capitalizeString(lname), capitalizeString(fname), capitalizeString(mname), dateOfBirth, placeOfBirth, age, gender, contact, purok,totalFamilyMember, 
+            const data = [capitalizeString(lname), capitalizeString(fname), capitalizeString(mname), 
+                            dateOfBirth, placeOfBirth, age, gender, contact, purok,totalFamilyMember, 
                             pwd, relationToHead, civilStatus, bloodType, occupation, monthlyIncome,lengthOfStay, 
                             religion, nationality, educationAttainment, houseOwnership, formerAddress, residentPhoto
                         ]
             
-            //save to database if no error found
+            //execute this code if no error found
             await this.queryData(query, data)
             response.redirect('/resident')
 
@@ -56,7 +57,7 @@ class Resident extends DbConfig{
         }
     }
 
-    // 
+    // get resident data by id
     getResidentById = async (request, response) =>{
         try {
 
@@ -66,12 +67,31 @@ class Resident extends DbConfig{
             const query = `SELECT * FROM tbl_residence WHERE id=?`
             const data = [residentID]
 
-            //save to database if no error found
+            //execute this code if no error found
             const resident = await this.queryData(query, data)
             response.json(resident)
 
         } catch (error) {
-            console.log(error)
+            response.json({ message: 'Somethings wrong with the server! Please try again...' })
+        }
+    }
+
+    //delete resident data
+    deleteResident = async (request, response) =>{
+        try {
+            
+            const residentID = request.query.id
+
+            //query
+            const query = 'DELETE FROM tbl_residence WHERE id=?'
+            const data = [residentID]
+
+            //execute this code if no error found
+            await this.queryData(query, data)
+            response.redirect(303, '/resident')
+
+        } catch (error) {
+            response.json({ message: 'Somethings wrong with the server! Please try again...' })
         }
     }
 
