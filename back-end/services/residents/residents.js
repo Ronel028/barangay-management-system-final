@@ -95,6 +95,57 @@ class Resident extends DbConfig{
         }
     }
 
+    //update resident
+    updateResident = async (request, response) =>{
+        try {
+
+            // get resident id using query
+            const residentID = request.query.id
+
+            //get the data coming from the client
+            const { 
+                lname, fname, mname, dateOfBirth, placeOfBirth, age, gender, contact, purok, 
+                totalFamilyMember, pwd, relationToHead, civilStatus, bloodType, occupation, monthlyIncome,
+                lengthOfStay, religion, nationality, educationAttainment, houseOwnership, formerAddress,
+            } = request.body
+
+            //get the photo from multer middleware
+            const residentPhoto = request.file.buffer.toString('base64')
+
+            //query
+            const query = `UPDATE tbl_residence 
+                                SET lname=?, fname=?, lname=?, dateOfBirth=?, fname=?, placeOfBirth=?,
+                                    age=?, gender=?, contact=?, purok=?, totalFamilyMember=?, personWithDisability=?,
+                                    relationToHead=?, civilStatus=?, bloodType=?, occupation=?, monthlyIncome=?,
+                                    lengthOfStay=?, religion=?, nationality=?, educationAttainment=?, houseOwnership=?,
+                                    formerAddress=?, photo=?
+                                WHERE id=?`
+            const data = [lname, fname, mname, dateOfBirth, placeOfBirth, age, gender, contact, purok, 
+                            totalFamilyMember, pwd, relationToHead, civilStatus, bloodType, occupation, monthlyIncome,
+                            lengthOfStay, religion, nationality, educationAttainment, houseOwnership, formerAddress,residentPhoto,
+                            residentID
+                        ]
+
+            // create a condition if the data comes from the body are empty
+            if(!request.body){
+                return response.json({ message: 'Please fill-up all the field!' })
+            }
+            
+
+            // check if condition in the contact info is valid
+            if(contact.length < 11 || contact.length > 11){
+                return response.json({ message: 'Please input valid contact!' })
+            }
+
+            // execute this code if no error found
+            await this.queryData(query, data)
+            response.redirect('/resident')
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
 }
 
 module.exports = { Resident }

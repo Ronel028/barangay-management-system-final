@@ -322,13 +322,13 @@ function ResidentList(){
                                     >
                                         <option value={resident.btype} disabled>-- select Blood-Type --</option>
                                         <option>Not sure</option>
-                                        <option>type - O position</option>
+                                        <option>type - O positive</option>
                                         <option>type - O negative</option>
-                                        <option>type - A position</option>
+                                        <option>type - A positive</option>
                                         <option>type - A negative</option>
-                                        <option>type - B position</option>
+                                        <option>type - B positive</option>
                                         <option>type - B negative</option>
-                                        <option>type - AB position</option>
+                                        <option>type - AB positive</option>
                                         <option>type - AB negative</option>
                                     </select>
                                 </div>

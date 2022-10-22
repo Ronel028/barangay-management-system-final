@@ -13,6 +13,7 @@ router.get('/', residents.getResidents)
 router.post('/insert', upload.single('residentPhoto'), residents.insertResident)
 router.get('/id', residents.getResidentById)
 router.delete('/delete', residents.deleteResident)
+router.post('/update', upload.single('residentPhoto'), residents.updateResident)
 
 
 module.exports = router

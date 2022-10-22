@@ -1,22 +1,15 @@
 import axios from 'axios'
+import { Modal } from 'react-bootstrap'
 import useAxios from '../../hooks/useAxios'
 import useSearch from '../../hooks/useSearch'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit, faTrash, faPenToSquare } from '@fortawesome/free-solid-svg-icons'
-import { convertBase64ToImage } from '../../custom/function'
+import { convertBase64ToImage, dataURLtoFile } from '../../custom/function'
 import Search from '../../components/search'
 import TitleCard from '../../components/title'
 import { useState } from 'react'
 
 function ResidentManage(){
-
-    const handleChange = (event) =>{
-        console.log(event.target)
-    }
-
-    const updateResident  = (event) =>{
-        console.log('Testing')
-    }
 
     // get all data of resident
     const [data, loading, update] = useAxios('/resident')
@@ -60,6 +53,87 @@ function ResidentManage(){
         }
     }
     // -------------------------------------------------------
+
+    // update function ---------------------------------------
+
+    // state for handling input data
+    const [residentUpdate, setResidentUpdate] = useState({
+        lname: '',
+        fname: '',
+        mname: '',
+        dateOfBirth: '',
+        placeOfBirth: '',
+        age: '',
+        gender: '',
+        contact: '',
+        purok: '',
+        totalFamilyMember: '',
+        pwd: '',
+        relationToHead: '',
+        civilStatus: '',
+        btype: '',
+        occupation: '',
+        income: '',
+        lengthOfStay: '',
+        religion: '',
+        nationality: '',
+        education: '',
+        houseOwnership: '',
+        formerAddress: '',
+        photo: null
+    })
+
+    const [show, setShow] = useState(false);
+    const handleClose = () => setShow(false);
+
+    // open modal and get resident by info
+    const handleShow = async (id) => {
+        const resident = await axios.get(`/resident/id?id=${id}`)
+        setResidentUpdate({
+            ...residentUpdate,
+            lname: resident.data[0].lname,
+            fname: resident.data[0].fname,
+            mname: resident.data[0].mname,
+            dateOfBirth: new Date(resident.data[0].dateOfBirth).toISOString().slice(0, 10),
+            placeOfBirth: resident.data[0].placeOfBirth,
+            age: resident.data[0].age,
+            gender: resident.data[0].gender,
+            contact: resident.data[0].contact,
+            purok: resident.data[0].purok,
+            totalFamilyMember: resident.data[0].totalFamilyMember,
+            pwd: resident.data[0].personWithDisability,
+            relationToHead: resident.data[0].relationToHead,
+            civilStatus: resident.data[0].civilStatus,
+            btype: resident.data[0].bloodType,
+            occupation: resident.data[0].occupation,
+            income: resident.data[0].monthlyIncome,
+            lengthOfStay: resident.data[0].lengthOfStay,
+            religion: resident.data[0].religion,
+            nationality: resident.data[0].nationality,
+            education: resident.data[0].educationAttainment,
+            houseOwnership: resident.data[0].houseOwnership,
+            formerAddress: resident.data[0].formerAddress,
+            photo: dataURLtoFile(convertBase64ToImage(resident.data[0].photo), resident.data[0].fname)
+        })
+        setShow(true)
+    };
+
+
+    const handleChange = (event) =>{
+        const { name, value, files } = event.target
+        setResidentUpdate({
+            ...residentUpdate,
+            [name] : name === 'photo' ? files[0] : value
+        })
+    }
+
+    const updateResident  = (event) =>{
+        event.preventDefault()
+        console.log(residentUpdate)
+    }
+
+
+    //--------------------------------------------------------
 
     return(
         <>
@@ -109,8 +183,7 @@ function ResidentManage(){
                                                             <button 
                                                                 className="border-0 py-1 px-2 rounded text-bg-primary me-2" 
                                                                 type="button" 
-                                                                data-bs-toggle="modal" 
-                                                                data-bs-target="#update-resident"
+                                                                onClick={() => handleShow(resident.id)}
                                                             >
                                                                 <FontAwesomeIcon icon={faEdit}/>
                                                             </button>
@@ -155,281 +228,313 @@ function ResidentManage(){
 
 
                     {/* update resident modal */}
-                    <div className="modal modal-lg fade" id="update-resident" data-bs-backdrop="static" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div className="modal-dialog">
-                            <div className="modal-content">
-                                <div className="modal-header">
-                                    <h1 className="modal-title fs-6 d-flex align-items-center" id="exampleModalLabel">
-                                        <FontAwesomeIcon className='me-2' icon={faPenToSquare}/>
-                                        Update Resident
-                                    </h1>
-                                    <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <form>
-                                    <div className="modal-body row">
-                                        <div className='resident__left col'>
-                                            <div className='resident_name__container mb-3'>
-                                                <label className='fs-7'>Name</label>
-                                                <div className='resident__name__input d-flex align-items-center gap-2'>
-                                                    <input 
-                                                        type="text" 
-                                                        className='form-control-1' 
-                                                        placeholder='Last name'
-                                                        name='lname'
-                                                        onChange={handleChange}
-                                                    />
-                                                    <input 
-                                                        type="text" 
-                                                        className='form-control-1' 
-                                                        placeholder='First name'
-                                                        name='fname'
-                                                        onChange={handleChange}
-                                                    />
-                                                    <input 
-                                                        type="text" 
-                                                        className='form-control-1' 
-                                                        placeholder='Middle name'
-                                                        name='mname'
-                                                        onChange={handleChange}
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div className='resident__bday mb-3'>
-                                                <label htmlFor="bdate" className='fs-7'>Date of Birth</label>
-                                                <input 
-                                                    type="date" 
-                                                    className='form-control-1' 
-                                                    id='bdate' 
-                                                    name='bdate'
-                                                    onChange={handleChange}
-                                                />
-                                            </div>
-                                            <div className='resident__bplace mb-3'>
-                                                <label htmlFor="bplace" className='fs-7'>Place of Birth</label>
-                                                <input 
-                                                    type="text" 
-                                                    className='form-control-1' 
-                                                    id='bplace' 
-                                                    name='bplace'
-                                                    onChange={handleChange}
-                                                />
-                                            </div>
-                                            <div className='resident__age mb-3'>
-                                                <label htmlFor="age" className='fs-7'>Age</label>
-                                                <input 
-                                                    type="number" 
-                                                    className='form-control-1' 
-                                                    id='age' 
-                                                    name='age'
-                                                    onChange={handleChange}
-                                                />
-                                            </div>
-                                            <div className='resident__gender mb-3'>
-                                                <label htmlFor="gender" className='fs-7'>Gender</label>
-                                                <select 
-                                                    className='form-control-1'
-                                                    id="gender"
-                                                    name="gender" 
-                                                    defaultValue=''
-                                                    onChange={handleChange}
-                                                >
-                                                    <option value='' disabled>-- select gender --</option>
-                                                    <option>Male</option>
-                                                    <option>Female</option>
-                                                </select>
-                                            </div>
-                                            <div className='resident__purok mb-3'>
-                                                <label htmlFor="purok" className='fs-7'>Purok/Sitio</label>
-                                                <input 
-                                                    type="text" 
-                                                    className='form-control-1' 
-                                                    id='purok' 
-                                                    name='purok'
-                                                    onChange={handleChange}
-                                                />
-                                            </div>
-                                            <div className='resident__totalhousehOld mb-3'>
-                                                <label htmlFor="totalhousehold" className='fs-7'>Total Household</label>
-                                                <input 
-                                                    type="number" 
-                                                    className='form-control-1' 
-                                                    id='totalHousehOld' 
-                                                    name='totalHouseold'
-                                                    onChange={handleChange}
-                                                />
-                                            </div>
-                                            <div className='resident__pwd mb-3'>
-                                                <label htmlFor="pwd" className='fs-7'>Person with Disability</label>
-                                                <input 
-                                                    type="text" 
-                                                    className='form-control-1' 
-                                                    id='pwd' 
-                                                    name='pwd'
-                                                    onChange={handleChange}
-                                                />
-                                            </div>
-                                            <div className='resident__relationToHead mb-3'>
-                                                <label htmlFor="relationToHead" className='fs-7'>Relation to Head</label>
-                                                <input 
-                                                    type="text" 
-                                                    className='form-control-1' 
-                                                    id='relationToHead' 
-                                                    name='relationToHead'
-                                                    onChange={handleChange}
-                                                />
-                                            </div>
-                                            <div className='resident__cstatus'>
-                                                <label htmlFor="cstatus" className='fs-7'>Civil Status</label>
-                                                <input 
-                                                    type="text" 
-                                                    className='form-control-1' 
-                                                    id='cstatus' 
-                                                    name='cstatus'
-                                                    onChange={handleChange}
-                                                />
-                                            </div>
-                                        </div>
-                                        {/* right */}
-                                        <div className='resident__right col'>
-                                            <div className='resident__btype mb-3'>
-                                                <label htmlFor="btype" className='fs-7'>Blood type</label>
-                                                <input 
-                                                    type="text" 
-                                                    className='form-control-1' 
-                                                    id='btype' 
-                                                    name='btype'
-                                                    onChange={handleChange}
-                                                />
-                                            </div>
-                                            <div className='resident__occupation mb-3'>
-                                                <label htmlFor="occupation" className='fs-7'>Occupation</label>
-                                                <input 
-                                                    type="text" 
-                                                    className='form-control-1' 
-                                                    id='occupation' 
-                                                    name='occupation'
-                                                    onChange={handleChange}
-                                                />
-                                            </div>
-                                            <div className='resident__income mb-3'>
-                                                <label htmlFor="income" className='fs-7'>Monthly Income</label>
-                                                <input 
-                                                    type="number" 
-                                                    className='form-control-1' 
-                                                    id='income' 
-                                                    name='income'
-                                                    onChange={handleChange}
-                                                />
-                                            </div>
-                                            <div className='resident__lenghtOfStay mb-3'>
-                                                <label htmlFor="lenghtOfStay" className='fs-7'>Length of Stay <small><em>(months)</em></small></label>
-                                                <input 
-                                                    type="number" 
-                                                    className='form-control-1' 
-                                                    id='lenghtOfStay' 
-                                                    name='lenghtOfStay'
-                                                    onChange={handleChange}
-                                                />
-                                            </div>
-                                            <div className='resident__religion mb-3'>
-                                                <label htmlFor="religion" className='fs-7'>Religion</label>
-                                                <select 
-                                                    className='form-control-1'
-                                                    id="religion"
-                                                    defaultValue=''
-                                                    name="religion"
-                                                    onChange={handleChange}
-                                                >
-                                                    <option value='' disabled>--- Select Religion ---</option>
-                                                    <option>Roman Catholic</option>
-                                                    <option value='Iglesia ni Cristo'>Iglesia ni Cristo</option>
-                                                    <option>Seventh Day Adventist</option>
-                                                    <option>Born Again</option>
-                                                    <option>Muslim</option>
-                                                </select>
-                                            </div>
-                                            <div className='resident__nationality mb-3'>
-                                                <label htmlFor="nationality" className='fs-7'>Nationality</label>
-                                                <input 
-                                                    type="text" 
-                                                    className='form-control-1' 
-                                                    id='nationality' 
-                                                    name='nationality'
-                                                    onChange={handleChange}
-                                                />
-                                            </div>
-                                            <div className='resident__education mb-3'>
-                                                <label htmlFor="education" className='fs-7'>Educational Attainment</label>
-                                                <select 
-                                                    className='form-control-1'
-                                                    id="education"
-                                                    defaultValue=''
-                                                    name="education"
-                                                    onChange={handleChange}
-                                                >
-                                                    <option value='' disabled>--- Select ---</option>
-                                                    <option>No Schooling Completed</option>
-                                                    <option>Elementary (Undergrad)</option>
-                                                    <option>Elementary (Graduate)</option>
-                                                    <option>High School (Undergrad)</option>
-                                                    <option>Hight School (Graduate)</option>
-                                                    <option>College (Undergrad)</option>
-                                                    <option>College (Graduate)</option>
-                                                    <option>Bachelor's Degree</option>
-                                                    <option>Master's Degree</option>
-                                                    <option>Doctorate Degree</option>
-                                                </select>
-                                            </div>
-                                            <div className='resident__houseOwnerShip mb-3'>
-                                                <label htmlFor="houseOwnerShip" className='fs-7'>House Ownership</label>
-                                                <select 
-                                                    className='form-control-1'
-                                                    id="houseOwnerShip"
-                                                    defaultValue=''
-                                                    name="houseOwnerShip"
-                                                    onChange={handleChange}
-                                                >
-                                                    <option value='' disabled>--- Select ---</option>
-                                                    <option>Own Home</option>
-                                                    <option>Rent</option>
-                                                    <option>Live with Parents/Relatives</option>
-                                                </select>
-                                            </div>
-                                            <div className='resident__formerAddress mb-3'>
-                                                <label htmlFor="formerAddress" className='fs-7'>Former Address</label>
-                                                <input 
-                                                    type="text" 
-                                                    className='form-control-1' 
-                                                    id='formerAddress' 
-                                                    name='formerAddress'
-                                                    onChange={handleChange}
-                                                />
-                                            </div>
-                                            <div className='resident__photo'>
-                                                <label htmlFor="photo" className='fs-7'>Photo</label>
-                                                <input 
-                                                    type="file" 
-                                                    className='form-control-1' 
-                                                    id='photo' 
-                                                    name='photo'
-                                                    onChange={handleChange}
-                                                />
-                                            </div>
+                    <Modal show={show} onHide={handleClose} size='lg'>
+                        <Modal.Header closeButton>
+                            <Modal.Title>
+                                <h1 className="modal-title fs-6 d-flex align-items-center" id="exampleModalLabel">
+                                    <FontAwesomeIcon className='me-2' icon={faPenToSquare}/>
+                                    Update Resident
+                                </h1>
+                            </Modal.Title>
+                        </Modal.Header>
+                        <form>
+                            <div className="modal-body row">
+                                <div className='resident__left col'>
+                                    <div className='resident_name__container mb-3'>
+                                        <label className='fs-7'>Name</label>
+                                        <div className='resident__name__input d-flex align-items-center gap-2'>
+                                            <input 
+                                                type="text" 
+                                                className='form-control-1' 
+                                                placeholder='Last name'
+                                                name='lname'
+                                                value={residentUpdate.lname}
+                                                onChange={handleChange}
+                                            />
+                                            <input 
+                                                type="text" 
+                                                className='form-control-1' 
+                                                placeholder='First name'
+                                                name='fname'
+                                                value={residentUpdate.fname}
+                                                onChange={handleChange}
+                                            />
+                                            <input 
+                                                type="text" 
+                                                className='form-control-1' 
+                                                placeholder='Middle name'
+                                                name='mname'
+                                                value={residentUpdate.mname}
+                                                onChange={handleChange}
+                                            />
                                         </div>
                                     </div>
-                                    <div className="d-flex align-items-center justify-content-end p-3">
-                                        <button 
-                                            type="button" 
-                                            className="btn text-bg-primary fs-7 fw-semibold"
-                                            onClick={updateResident}
+                                    <div className='resident__bday mb-3'>
+                                        <label htmlFor="dateOfBirth" className='fs-7'>Date of Birth</label>
+                                        <input 
+                                            type="date" 
+                                            className='form-control-1' 
+                                            id='dateOfBirth' 
+                                            name='dateOfBirth'
+                                            value={residentUpdate.dateOfBirth}
+                                            onChange={handleChange}
+                                        />
+                                    </div>
+                                    <div className='resident__bplace mb-3'>
+                                        <label htmlFor="placeOfBirth" className='fs-7'>Place of Birth</label>
+                                        <input 
+                                            type="text" 
+                                            className='form-control-1' 
+                                            id='placeOfBirth' 
+                                            name='placeOfBirth'
+                                            value={residentUpdate.placeOfBirth}
+                                            onChange={handleChange}
+                                        />
+                                    </div>
+                                    <div className='resident__age mb-3'>
+                                        <label htmlFor="age" className='fs-7'>Age</label>
+                                        <input 
+                                            type="number" 
+                                            className='form-control-1' 
+                                            id='age' 
+                                            name='age'
+                                            value={residentUpdate.age}
+                                            onChange={handleChange}
+                                        />
+                                    </div>
+                                    <div className='resident__gender mb-3'>
+                                        <label htmlFor="gender" className='fs-7'>Gender</label>
+                                        <select 
+                                            className='form-control-1'
+                                            id="gender"
+                                            name="gender" 
+                                            value={residentUpdate.gender}
+                                            onChange={handleChange}
                                         >
-                                            Update Resident
-                                        </button>
+                                            <option>Male</option>
+                                            <option>Female</option>
+                                        </select>
                                     </div>
-                                </form>
+                                    <div className='resident__contact mb-3'>
+                                        <label htmlFor="contact" className='fs-7'>Contact</label>
+                                        <input 
+                                            type="text" 
+                                            className='form-control-1' 
+                                            id='contact' 
+                                            name='contact'
+                                            value={residentUpdate.contact}
+                                            onChange={handleChange}
+                                        />
+                                    </div>
+                                    <div className='resident__purok mb-3'>
+                                        <label htmlFor="purok" className='fs-7'>Purok/Sitio</label>
+                                        <input 
+                                            type="text" 
+                                            className='form-control-1' 
+                                            id='purok' 
+                                            name='purok'
+                                            value={residentUpdate.purok}
+                                            onChange={handleChange}
+                                        />
+                                    </div>
+                                    <div className='resident__totalhousehOld mb-3'>
+                                        <label htmlFor="totalFamilyMember" className='fs-7'>Total Family Member</label>
+                                        <input 
+                                            type="number" 
+                                            className='form-control-1' 
+                                            id='totalFamilyMember' 
+                                            name='totalFamilyMember'
+                                            value={residentUpdate.totalFamilyMember}
+                                            onChange={handleChange}
+                                        />
+                                    </div>
+                                    <div className='resident__pwd mb-3'>
+                                        <label htmlFor="pwd" className='fs-7'>Person with Disability</label>
+                                        <input 
+                                            type="text" 
+                                            className='form-control-1' 
+                                            id='pwd' 
+                                            name='pwd'
+                                            value={residentUpdate.pwd}
+                                            onChange={handleChange}
+                                        />
+                                    </div>
+                                    <div className='resident__relationToHead mb-3'>
+                                        <label htmlFor="relationToHead" className='fs-7'>Relation to Head</label>
+                                        <input 
+                                            type="text" 
+                                            className='form-control-1' 
+                                            id='relationToHead' 
+                                            name='relationToHead'
+                                            value={residentUpdate.relationToHead}
+                                            onChange={handleChange}
+                                        />
+                                    </div>
+                                    <div className='resident__cstatus'>
+                                        <label htmlFor="civilStatus" className='fs-7'>Civil Status</label>
+                                        <select 
+                                            className='form-control-1'
+                                            id="civilStatus"
+                                            name="civilStatus" 
+                                            value={residentUpdate.civilStatus}
+                                            onChange={handleChange}
+                                        >
+                                        <option>Single</option>
+                                        <option>Married</option>
+                                    </select>
+                                    </div>
+                                </div>
+                                {/* right */}
+                                <div className='resident__right col'>
+                                    <div className='resident__btype mb-3'>
+                                        <label htmlFor="btype" className='fs-7'>Blood type</label>
+                                        <select 
+                                            className='form-control-1'
+                                            id="btype"
+                                            name="btype" 
+                                            value={residentUpdate.btype}
+                                            onChange={handleChange}
+                                        >
+                                            <option>Not sure</option>
+                                            <option>type - O positive</option>
+                                            <option>type - O negative</option>
+                                            <option>type - A positive</option>
+                                            <option>type - A negative</option>
+                                            <option>type - B positive</option>
+                                            <option>type - B negative</option>
+                                            <option>type - AB positive</option>
+                                            <option>type - AB negative</option>
+                                        </select>
+                                    </div>
+                                    <div className='resident__occupation mb-3'>
+                                        <label htmlFor="occupation" className='fs-7'>Occupation</label>
+                                        <input 
+                                            type="text" 
+                                            className='form-control-1' 
+                                            id='occupation' 
+                                            name='occupation'
+                                            value={residentUpdate.occupation}
+                                            onChange={handleChange}
+                                        />
+                                    </div>
+                                    <div className='resident__income mb-3'>
+                                        <label htmlFor="income" className='fs-7'>Monthly Income</label>
+                                        <input 
+                                            type="number" 
+                                            className='form-control-1' 
+                                            id='income' 
+                                            name='income'
+                                            value={residentUpdate.income}
+                                            onChange={handleChange}
+                                        />
+                                    </div>
+                                    <div className='resident__lenghtOfStay mb-3'>
+                                        <label htmlFor="lenghtOfStay" className='fs-7'>Length of Stay <small><em>(years)</em></small></label>
+                                        <input 
+                                            type="number" 
+                                            className='form-control-1' 
+                                            id='lenghtOfStay' 
+                                            name='lenghtOfStay'
+                                            value={residentUpdate.lengthOfStay}
+                                            onChange={handleChange}
+                                        />
+                                    </div>
+                                    <div className='resident__religion mb-3'>
+                                        <label htmlFor="religion" className='fs-7'>Religion</label>
+                                        <select 
+                                            className='form-control-1'
+                                            id="religion"
+                                            name="religion"
+                                            value={residentUpdate.religion}
+                                            onChange={handleChange}
+                                        >
+                                            <option>Roman Catholic</option>
+                                            <option value='Iglesia ni Cristo'>Iglesia ni Cristo</option>
+                                            <option>Seventh Day Adventist</option>
+                                            <option>Born Again</option>
+                                            <option>Muslim</option>
+                                        </select>
+                                    </div>
+                                    <div className='resident__nationality mb-3'>
+                                        <label htmlFor="nationality" className='fs-7'>Nationality</label>
+                                        <input 
+                                            type="text" 
+                                            className='form-control-1' 
+                                            id='nationality' 
+                                            name='nationality'
+                                            value={residentUpdate.nationality}
+                                            onChange={handleChange}
+                                        />
+                                    </div>
+                                    <div className='resident__education mb-3'>
+                                        <label htmlFor="education" className='fs-7'>Educational Attainment</label>
+                                        <select 
+                                            className='form-control-1'
+                                            id="education"
+                                            name="education"
+                                            value={residentUpdate.education}
+                                            onChange={handleChange}
+                                        >
+                                            <option>No Schooling Completed</option>
+                                            <option>Elementary (Undergrad)</option>
+                                            <option>Elementary (Graduate)</option>
+                                            <option>High School (Undergrad)</option>
+                                            <option>Hight School (Graduate)</option>
+                                            <option>College (Undergrad)</option>
+                                            <option>College (Graduate)</option>
+                                            <option>Bachelor's Degree</option>
+                                            <option>Master's Degree</option>
+                                            <option>Doctorate Degree</option>
+                                        </select>
+                                    </div>
+                                    <div className='resident__houseOwnerShip mb-3'>
+                                        <label htmlFor="houseOwnership" className='fs-7'>House Ownership</label>
+                                        <select 
+                                            className='form-control-1'
+                                            id="houseOwnership"
+                                            name="houseOwnership"
+                                            value={residentUpdate.houseOwnership}
+                                            onChange={handleChange}
+                                        >
+                                            <option>Own Home</option>
+                                            <option>Rent</option>
+                                            <option>Live with Parents/Relatives</option>
+                                        </select>
+                                    </div>
+                                    <div className='resident__formerAddress mb-3'>
+                                        <label htmlFor="formerAddress" className='fs-7'>Former Address</label>
+                                        <input 
+                                            type="text" 
+                                            className='form-control-1' 
+                                            id='formerAddress' 
+                                            name='formerAddress'
+                                            value={residentUpdate.formerAddress}
+                                            onChange={handleChange}
+                                        />
+                                    </div>
+                                    <div className='resident__photo'>
+                                        <label htmlFor="photo" className='fs-7'>Photo</label>
+                                        <input 
+                                            type="file" 
+                                            className='form-control-1' 
+                                            id='photo' 
+                                            name='photo'
+                                            onChange={handleChange}
+                                        />
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
+                            <div className="d-flex align-items-center justify-content-end p-3">
+                                <button 
+                                    type="button" 
+                                    className="btn text-bg-primary fs-7 fw-semibold"
+                                    onClick={updateResident}
+                                >
+                                    Update Resident
+                                </button>
+                            </div>
+                        </form>
+                    </Modal>
                     {/* end modal */}
                 </main>
             </section>
