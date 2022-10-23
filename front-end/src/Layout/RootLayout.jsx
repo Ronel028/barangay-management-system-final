@@ -8,15 +8,14 @@ function RootLayout(){
 
     return (
         <> 
-        
-        {
-            isLogin ? <>
-                <Navigation />
-                    <Outlet />
-                <Sidemenu />
-            </>
-            : <Navigate to='/login' />
-        }
+            {
+                isLogin ? <>
+                    <Navigation />
+                        <Outlet />
+                    <Sidemenu />
+                </>
+                : <Navigate to='/login' />
+            }
         </>
     )
 }

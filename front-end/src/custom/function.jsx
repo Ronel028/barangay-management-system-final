@@ -17,7 +17,15 @@ const  dataURLtoFile = (dataurl, filename) =>{
     return new File([u8arr], filename, {type:mime});
 }
 
+const numberToCurrency = (number) =>{
+
+    let dollarUSLocale = Intl.NumberFormat('en-US');
+
+    return dollarUSLocale.format(number)
+}
+
 export { 
     convertBase64ToImage,
-    dataURLtoFile
+    dataURLtoFile,
+    numberToCurrency
 }

@@ -2,11 +2,9 @@ import Moment from 'react-moment';
 import { Modal } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons'
-import { convertBase64ToImage } from '../custom/function'
+import { convertBase64ToImage, numberToCurrency } from '../custom/function'
 
 function DataModal(props){
-
-    console.log('render')
 
     return (
         <Modal show={props.show} onHide={props.handleClose} backdrop="static" size='lg'>
@@ -82,7 +80,7 @@ function DataModal(props){
                     </div>
                     <div className="resident__income mb-3">
                         <h6 className="fs-7 fw-bold">Monthly Income</h6>
-                        <p>{props.resident.monthlyIncome}</p>
+                        <p>{numberToCurrency(props.resident.monthlyIncome)}</p>
                     </div>
                     <div className="resident__lengthofstay mb-3">
                         <h6 className="fs-7 fw-bold">Length of Stay <small><em>(years)</em></small></h6>

@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import axios from 'axios'
 import { Modal } from 'react-bootstrap'
 import useAxios from '../../hooks/useAxios'
@@ -7,7 +8,7 @@ import { faEdit, faTrash, faPenToSquare } from '@fortawesome/free-solid-svg-icon
 import { convertBase64ToImage, dataURLtoFile } from '../../custom/function'
 import Search from '../../components/search'
 import TitleCard from '../../components/title'
-import { useState } from 'react'
+import Loader from '../../components/loader'
 
 function ResidentManage(){
 
@@ -83,11 +84,20 @@ function ResidentManage(){
         photo: null
     })
 
+    // resident id
+    const [residentID, setResidentID] = useState()
+
+    //loading while updating
+    const [loader, setLoader] = useState(false)
+
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
 
     // open modal and get resident by info
     const handleShow = async (id) => {
+
+        setResidentID(id) // get resident id and save to residentID state
+
         const resident = await axios.get(`/resident/id?id=${id}`)
         setResidentUpdate({
             ...residentUpdate,
@@ -116,6 +126,7 @@ function ResidentManage(){
             photo: dataURLtoFile(convertBase64ToImage(resident.data[0].photo), resident.data[0].fname)
         })
         setShow(true)
+
     };
 
 
@@ -127,11 +138,50 @@ function ResidentManage(){
         })
     }
 
-    const updateResident  = (event) =>{
+    const updateResident  = async (event) =>{
         event.preventDefault()
-        console.log(residentUpdate)
-    }
 
+        const residentFormData = new FormData()
+
+        residentFormData.append('lname', residentUpdate.lname)
+        residentFormData.append('fname', residentUpdate.fname)
+        residentFormData.append('mname', residentUpdate.mname)
+        residentFormData.append('dateOfBirth', residentUpdate.dateOfBirth)
+        residentFormData.append('placeOfBirth', residentUpdate.placeOfBirth)
+        residentFormData.append('age', residentUpdate.age)
+        residentFormData.append('gender', residentUpdate.gender)
+        residentFormData.append('contact', residentUpdate.contact)
+        residentFormData.append('purok', residentUpdate.purok)
+        residentFormData.append('totalFamilyMember', residentUpdate.totalFamilyMember)
+        residentFormData.append('pwd', residentUpdate.pwd)
+        residentFormData.append('relationToHead', residentUpdate.relationToHead)
+        residentFormData.append('civilStatus', residentUpdate.civilStatus)
+        residentFormData.append('bloodType', residentUpdate.btype)
+        residentFormData.append('occupation', residentUpdate.occupation)
+        residentFormData.append('monthlyIncome', residentUpdate.income)
+        residentFormData.append('lengthOfStay', residentUpdate.lengthOfStay)
+        residentFormData.append('religion', residentUpdate.religion)
+        residentFormData.append('nationality', residentUpdate.nationality)
+        residentFormData.append('educationAttainment', residentUpdate.education)
+        residentFormData.append('houseOwnership', residentUpdate.houseOwnership)
+        residentFormData.append('formerAddress', residentUpdate.formerAddress)
+        residentFormData.append('residentPhoto', residentUpdate.photo)
+
+        setLoader(true)
+        const updateResident = await axios.post(`/resident/update?id=${residentID}`, residentFormData, {
+            headers : {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+        setLoader(false)
+
+        if(updateResident.data.message){
+            return
+        }else{
+            update(updateResident.data)
+            handleClose()
+        }
+    }
 
     //--------------------------------------------------------
 
@@ -239,6 +289,12 @@ function ResidentManage(){
                         </Modal.Header>
                         <form>
                             <div className="modal-body row">
+
+                                <Loader 
+                                    loader={loader}
+                                    title="Updating..."
+                                />
+
                                 <div className='resident__left col'>
                                     <div className='resident_name__container mb-3'>
                                         <label className='fs-7'>Name</label>
