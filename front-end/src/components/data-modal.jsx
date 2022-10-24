@@ -28,7 +28,11 @@ function DataModal(props){
                     </div>
                     <div className="resident__bdate mb-3">
                         <h6 className="fs-7 fw-bold">Date of Birth</h6>
-                        <p><Moment format='LL'>{props.resident.dateOfBirth}</Moment></p>
+                        <p>
+                            <Moment format='LL'>
+                                {props.resident.dateOfBirth}
+                            </Moment>
+                        </p>
                     </div>
                     <div className="resident__bplace mb-3">
                         <h6 className="fs-7 fw-bold">Place of Birth</h6>

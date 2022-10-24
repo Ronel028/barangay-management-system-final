@@ -124,12 +124,6 @@ p, h1, h2, h3, h4, h5, h6 {
   z-index: 1000;
 }
 
-.position-absolute {
-  position: absolute;
-  top: 20px;
-  right: 10px;
-}
-
 .spinner {
   width: 24px;
   height: 24px;

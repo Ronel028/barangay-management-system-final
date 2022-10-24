@@ -1,6 +1,7 @@
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUserPlus } from '@fortawesome/free-solid-svg-icons'
+import useAxios from '../../hooks/useAxios'
 import Search from '../../components/search'
 import TitleCard from '../../components/title'
 import BlotterTable from './blotter-list-table'
@@ -8,7 +9,32 @@ import BlotterData from './blotter-data-modal'
 
 function BlotterList(){
 
-    let  searchFocus = useRef()
+    
+    //get resident list data
+    const [data] = useAxios('/resident')
+    
+    // search
+    const [search, setSearch] = useState({
+        search_complainant: '',
+        search_complainee: ''
+    })
+    const handleSearch = (event) =>{
+        const { name, value } = event.target
+        setSearch({
+            ...search,
+            [name]: value
+        })
+    }
+
+    // filter complainant name
+    const filterResidentComplainant = data.filter(resident => {
+        return resident.fname.toLowerCase().includes(search.search_complainant) || resident.lname.toLowerCase().includes(search.search_complainant)
+    })
+    // filter complainee name
+    const filterResidentComplainee = data.filter(resident => {
+        return resident.fname.toLowerCase().includes(search.search_complainant) || resident.lname.toLowerCase().includes(search.search_complainant)
+    })
+
     const [complainantActive, setComplainantActive] = useState(false)
     const [complaineeActive, setComplaineeActive] = useState(false)
     const [addBlotter, setAddBlotter] = useState({
@@ -28,7 +54,7 @@ function BlotterList(){
     // onClick function to toggle custom dropdown
     const complainantDropdownButton = (event) =>{
         event.preventDefault()
-        searchFocus.current.focus()
+
         setComplainantActive((currentState) =>{
             if(currentState === false){
                 return true
@@ -39,7 +65,7 @@ function BlotterList(){
     }
     const complaineeDropdownButton = (event) =>{
         event.preventDefault()
-        searchFocus.current.focus()
+
         setComplaineeActive((currentState) =>{
             if(currentState === false){
                 return true
@@ -120,7 +146,7 @@ function BlotterList(){
                                                     {addBlotter.complainant__name === '' ? '--- Select name ---' : addBlotter.complainant__name}
                                                 </button>
                                                 <div 
-                                                    className='position-absolute bg-white border w-100'
+                                                    className='position-absolute bg-white border w-100 shadow-lg'
                                                     style={{display: complainantActive ? 'block': 'none'}}
                                                 >
                                                     
@@ -128,19 +154,33 @@ function BlotterList(){
                                                         type="text" 
                                                         className='form-control-1' 
                                                         placeholder='search...'
-                                                        ref={searchFocus}
+                                                        name='search_complainant'
+                                                        onChange={handleSearch}
                                                     />
-                                                    <div className='test-1 w-100 px-2 hover'>
-                                                        <input 
-                                                            type="radio"
-                                                            className='d-none'
-                                                            id="Ronel Florida" 
-                                                            name="complainant__name"
-                                                            value="Ronel Florida" 
-                                                            onChange={handleChange}
-                                                        />
-                                                        <label className='fs-7' htmlFor="Ronel Florida">Ronel Florida</label>
-                                                    </div>
+                                                    {   
+                                                        data.length > 0 ? 
+                                                            filterResidentComplainant.length > 0 ? 
+                                                                filterResidentComplainant.map(resident => (
+                                                                                <div key={resident.id} className='test-1 w-100 px-2 hover'>
+                                                                                    <input 
+                                                                                        type="radio"
+                                                                                        className='d-none'
+                                                                                        id={`${resident.fname} ${resident.lname}`} 
+                                                                                        name="complainant__name"
+                                                                                        value={`${resident.fname} ${resident.lname}`} 
+                                                                                        onChange={handleChange}
+                                                                                    />
+                                                                                    <label 
+                                                                                        className='fs-7' 
+                                                                                        htmlFor={`${resident.fname} ${resident.lname}`}
+                                                                                    >
+                                                                                        {`${resident.fname} ${resident.lname}`}
+                                                                                    </label>
+                                                                                </div>
+                                                                            ))
+                                                            : <label className='fs-7 px-2'>Can't find this resident</label>
+                                                        : <label className='fs-7 px-2'>No data find</label>
+                                                    }
                                                 </div>
                                             </div>
                                         </div>
@@ -193,7 +233,7 @@ function BlotterList(){
                                                     {addBlotter.complainee__name === '' ? '--- Select name ---' : addBlotter.complainee__name}
                                                 </button>
                                                 <div 
-                                                    className='position-absolute bg-white border w-100'
+                                                    className='position-absolute bg-white border w-100 shadow-lg'
                                                     style={{display: complaineeActive ? 'block': 'none'}}
                                                 >
                                                     
@@ -201,19 +241,32 @@ function BlotterList(){
                                                         type="text" 
                                                         className='form-control-1' 
                                                         placeholder='search...'
-                                                        ref={searchFocus}
                                                     />
-                                                    <div className='test-1 w-100 px-2 hover'>
-                                                        <input 
-                                                            type="radio"
-                                                            className='d-none'
-                                                            id="johndoe" 
-                                                            name="complainee__name"
-                                                            value="John Doe" 
-                                                            onChange={handleChange}
-                                                        />
-                                                        <label className='fs-7' htmlFor="johndoe">John Doe</label>
-                                                    </div>
+
+                                                    {
+                                                        data.length > 0 ?
+                                                            filterResidentComplainee.length > 0 ?
+                                                                filterResidentComplainee.map(resident => (
+                                                                    <div key={resident.id} className='test-1 w-100 px-2 hover'>
+                                                                        <input 
+                                                                            type="radio"
+                                                                            className='d-none'
+                                                                            id={`${resident.lname} ${resident.fname}`}  
+                                                                            name="complainee__name"
+                                                                            value={`${resident.fname} ${resident.lname}`}  
+                                                                            onChange={handleChange}
+                                                                        />
+                                                                        <label 
+                                                                            className='fs-7' 
+                                                                            htmlFor={`${resident.lname} ${resident.fname}`}  
+                                                                        >
+                                                                            {`${resident.fname} ${resident.lname}`}
+                                                                        </label>
+                                                                    </div>
+                                                                ))
+                                                            : <label className='fs-7 px-2'>Can't find this resident</label>
+                                                        : <label className='fs-7 px-2'>No data find</label>
+                                                    }
                                                 </div>
                                             </div>
                                         </div>
