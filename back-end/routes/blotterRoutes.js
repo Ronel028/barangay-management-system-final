@@ -9,5 +9,6 @@ const blotter = new Blotter()
 router.get('/', blotter.getBlotterData)
 router.post('/insert', blotter.insertBlotterData)
 router.get('/blotter', blotter.getBlotterById)
+router.delete('/delete', blotter.deleteBlotter)
 
 module.exports = router

@@ -28,6 +28,12 @@ function BlotterList(){
         display: false,
         message: ''
     })
+
+    // filter data of blotter
+    const [filterData, setFilterData] = useState('')
+    const filterBlotter = (event) =>{
+        setFilterData(event.target.value)
+    }
     
     // search
     const [search, setSearch] = useState({
@@ -158,7 +164,9 @@ function BlotterList(){
                         </button>
                         
                         {/* blotter search */}
-                        <Search />
+                        <Search 
+                            filterSearch={filterBlotter}
+                        />
 
                     </div>
 
@@ -166,6 +174,7 @@ function BlotterList(){
                     <BlotterTable 
                         blotter={blotterData}
                         loading={loading}
+                        filterData={filterData}
                     />
 
                 </main>

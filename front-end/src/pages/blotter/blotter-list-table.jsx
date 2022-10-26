@@ -20,6 +20,11 @@ function BlotterTable(props){
         handleShow();
     }
 
+    // filter blotter data
+    const filterBlotter = props.blotter.filter(blotter =>{
+        return blotter.complainant_name.toLowerCase().includes(props.filterData) || blotter.complainee_name.toLowerCase().includes(props.filterData)
+    })
+
     return (
         <>
             <table className="table table-hover table-bordered">
@@ -37,24 +42,30 @@ function BlotterTable(props){
                 <tbody>
                     {
                         props.blotter.length > 0 ?
-                            props.blotter.map(blotter =>(
-                                <tr key={blotter.id} className='align-middle fs-7'>
-                                    <td>{blotter.complainant_name}</td>
-                                    <td>{blotter.complainee_name}</td>
-                                    <td>{blotter.complaint}</td>
-                                    <td>{blotter.locationOfIncident}</td>
-                                    <td>{blotter.status}</td>
-                                    <td>
-                                        <button 
-                                            className="btn text-bg-warning fw-semibold d-flex align-items-center fs-7"
-                                            onClick={() => showBlotterData(blotter.id)}
-                                        >
-                                            <FontAwesomeIcon className='me-1' icon={faCircleInfo}/>
-                                            More
-                                        </button>
+                            filterBlotter.length > 0 ?
+                                filterBlotter.map(blotter =>(
+                                    <tr key={blotter.id} className='align-middle fs-7'>
+                                        <td>{blotter.complainant_name}</td>
+                                        <td>{blotter.complainee_name}</td>
+                                        <td>{blotter.complaint}</td>
+                                        <td>{blotter.locationOfIncident}</td>
+                                        <td>{blotter.status}</td>
+                                        <td>
+                                            <button 
+                                                className="btn text-bg-warning fw-semibold d-flex align-items-center fs-7"
+                                                onClick={() => showBlotterData(blotter.id)}
+                                            >
+                                                <FontAwesomeIcon className='me-1' icon={faCircleInfo}/>
+                                                More
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))
+                            :   <tr>
+                                    <td colSpan='7' className="text-center">
+                                        {props.filterData} not found
                                     </td>
                                 </tr>
-                            ))
                         :props.loading ? <tr>
                                             <td colSpan='7' className="text-center">
                                                 <div className="w-100 d-flex align-items-center justify-content-center">

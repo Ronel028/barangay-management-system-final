@@ -39,7 +39,7 @@ class Blotter extends DbConfig{
             response.redirect('/blotter')
 
         } catch (error) {
-            return response.json({ message: "Something's wrong! please try again..." })
+            response.json({ message: "Something's wrong! please try again..." })
         }
     }
 
@@ -55,6 +55,26 @@ class Blotter extends DbConfig{
 
             const blotter = await this.queryData(query, data)
             response.json(blotter)
+
+        } catch (error) {
+            response.json({ message: "Something's wrong! please try again..." })
+        }
+    }
+
+    // delete blotter data
+    deleteBlotter = async (request,response) =>{
+        try {
+            
+            // get blotter id
+            const blotterID = request.query.id
+
+            //query
+            const query = 'DELETE FROM tbl_blotter WHERE id=?'
+            const data = [blotterID]
+
+            // execute this code to delete blotter data
+            await this.queryData(query, data)
+            response.redirect(303, '/blotter')
 
         } catch (error) {
             console.log(error)

@@ -1,10 +1,28 @@
 import { useState } from 'react'
+import axios from 'axios'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
+import useAxios from '../../hooks/useAxios'
 import Search from "../../components/search"
 import TitleCard from '../../components/title'
 
 function BlotterManage(){
+
+    // hooks for getting all the data from the database
+    const [blotterData, loading, updateNew] = useAxios('/blotter')
+
+    //filter blotter data ------------------------------------------
+    const [filterBlotter, setFilterBlotter] = useState('')
+    const filterBlotterData = (event) =>{
+        setFilterBlotter(event.target.value)
+    }
+
+    // filter function
+    const blotterFilter = blotterData.filter(blotter =>{
+        return blotter.complainant_name.toLowerCase().includes(filterBlotter) || blotter.complainee_name.toLowerCase().includes(filterBlotter)
+    })
+
+    //--------------------------------------------------------
 
     const [complainantActive, setComplainantActive] = useState(false)
     const [complaineeActive, setComplaineeActive] = useState(false)
@@ -63,6 +81,33 @@ function BlotterManage(){
     }
     // --end function---------------------------
 
+    // delete function -------------------------------------------------
+    const [loadingDelete, setLoadingDelete] = useState({
+        deleting: false,
+        id: null
+    })
+    const deleteBlotter = async (id) =>{
+        setLoadingDelete({
+            ...loadingDelete,
+            deleting: true,
+            id: id
+        })
+        const deleteBlotter = await axios.delete(`/blotter/delete?id=${id}`)
+        setLoadingDelete({
+            ...loadingDelete,
+            deleting: false,
+            id: null
+        })
+
+        if(deleteBlotter.data.message){
+            return
+        }else{
+            updateNew(deleteBlotter.data)
+        }
+    }
+
+    //---------------------------------------------------------------
+
     return (
         <>
             <section className="blotter__manage__container main-padding">
@@ -74,7 +119,12 @@ function BlotterManage(){
                  {/* main */}
                 <main className="blotter_list__main p-2 mt-3">
                     <div className="d-flex justify-content-end align-items-center mb-4"> 
-                        <Search />
+
+                        {/* search */}
+                        <Search 
+                            filterSearch={filterBlotterData}
+                        />
+
                     </div>
 
                     {/* table */}
@@ -90,26 +140,59 @@ function BlotterManage(){
                             </tr>
                         </thead>
                         <tbody>
-                            <tr className='align-middle fs-7'>
-                                <td>Buknoy</td>
-                                <td>Tuknoy</td>
-                                <td>Nagnakaw ng Pato</td>
-                                <td>Sitio tae tae</td>
-                                <td>UnSolved</td>
-                                <td>
-                                    <button 
-                                        className="border-0 py-1 px-2 rounded text-bg-primary me-2" 
-                                        type="button" 
-                                        data-bs-toggle="modal" 
-                                        data-bs-target="#update-blotter"
-                                    >
-                                        <FontAwesomeIcon icon={faEdit}/>
-                                    </button>
-                                    <button className="border-0 py-1 px-2 rounded text-bg-danger" type="button">
-                                        <FontAwesomeIcon icon={faTrash}/>
-                                    </button>
-                                </td>
-                            </tr>
+                            {
+                                blotterData.length > 0 ? 
+                                    blotterFilter.length > 0 ?
+                                        blotterFilter.map(blotter =>(
+                                            <tr key={blotter.id} className='align-middle fs-7'>
+                                                <td>{blotter.complainant_name}</td>
+                                                <td>{blotter.complainee_name}</td>
+                                                <td>{blotter.complaint}</td>
+                                                <td>{blotter.locatioOfIncident}</td>
+                                                <td>{blotter.status}</td>
+                                                <td>
+                                                    <button 
+                                                        className="border-0 py-1 px-2 rounded text-bg-primary me-2" 
+                                                        type="button" 
+                                                        data-bs-toggle="modal" 
+                                                        data-bs-target="#update-blotter"
+                                                    >
+                                                        <FontAwesomeIcon icon={faEdit}/>
+                                                    </button>
+                                                    <button 
+                                                        className="border-0 py-1 px-2 rounded text-bg-danger" 
+                                                        type="button"
+                                                        onClick={() => deleteBlotter(blotter.id)}
+                                                    >
+                                                        <div className={loadingDelete.id === blotter.id ? 'spinner-arrow d-flex' : ''}>
+                                                            <FontAwesomeIcon
+                                                                className={loadingDelete.id === blotter.id ? 'invisible' : 'visible'}
+                                                                icon={faTrash} 
+                                                            />
+                                                        </div>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))
+                                    :<tr>
+                                        <td colSpan='7' className="text-center">
+                                            {filterBlotter} not found!
+                                        </td>
+                                    </tr>
+                                : loading ? <tr>
+                                                <td colSpan='7' className="text-center">
+                                                    <div className="w-100 d-flex align-items-center justify-content-center">
+                                                        <div className="spinner me-2"></div>
+                                                        loading...
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        :   <tr>
+                                                <td colSpan='7' className="text-center">
+                                                    No data found
+                                                </td>
+                                            </tr>
+                            }
                         </tbody>
                     </table>
                     {/* end table */}
