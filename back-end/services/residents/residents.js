@@ -114,7 +114,7 @@ class Resident extends DbConfig{
 
             //query
             const query = `UPDATE tbl_residence 
-                                SET lname=?, fname=?, lname=?, dateOfBirth=?, placeOfBirth=?,
+                                SET lname=?, fname=?, mname=?, dateOfBirth=?, placeOfBirth=?,
                                     age=?, gender=?, contact=?, purok=?, totalFamilyMember=?, personWithDisability=?,
                                     relationToHead=?, civilStatus=?, bloodType=?, occupation=?, monthlyIncome=?,
                                     lengthOfStay=?, religion=?, nationality=?, educationAttainment=?, houseOwnership=?,

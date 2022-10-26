@@ -20,10 +20,7 @@ class DbConfig{
         return this.#connection
     }
 
-    sqlQuery = (query) =>{
-        return query
-    }
-
+    // query data
     queryData = (query, data) =>{
         return new Promise((resolve, reject)=>{
             this.dbConnect().getConnection(error =>{

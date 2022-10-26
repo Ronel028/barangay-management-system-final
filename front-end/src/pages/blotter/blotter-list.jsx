@@ -1,17 +1,33 @@
 import { useState } from 'react'
+import axios from 'axios'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUserPlus } from '@fortawesome/free-solid-svg-icons'
+import { Modal } from 'react-bootstrap'
 import useAxios from '../../hooks/useAxios'
 import Search from '../../components/search'
 import TitleCard from '../../components/title'
 import BlotterTable from './blotter-list-table'
-import BlotterData from './blotter-data-modal'
+import Loader from '../../components/loader'
+import ErrorCard from '../../components/errorCard'
 
 function BlotterList(){
 
     
     //get resident list data
     const [data] = useAxios('/resident')
+    const [blotterData, loading, addNewBlotter] = useAxios('/blotter')
+    const [saveLoading, setSaveLoading] = useState(false)
+
+    //modal show
+    const [show, setShow] = useState(false);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+
+    // error response by the server
+    const [error, setError] = useState({
+        display: false,
+        message: ''
+    })
     
     // search
     const [search, setSearch] = useState({
@@ -32,23 +48,24 @@ function BlotterList(){
     })
     // filter complainee name
     const filterResidentComplainee = data.filter(resident => {
-        return resident.fname.toLowerCase().includes(search.search_complainant) || resident.lname.toLowerCase().includes(search.search_complainant)
+        return resident.fname.toLowerCase().includes(search.search_complainee) || resident.lname.toLowerCase().includes(search.search_complainee)
     })
 
     const [complainantActive, setComplainantActive] = useState(false)
     const [complaineeActive, setComplaineeActive] = useState(false)
     const [addBlotter, setAddBlotter] = useState({
-        complainant__name: '',
-        complainant__age: 0,
-        complainant__gender: '',
-        complainant__address: '',
-        complainee__name: '',
-        complainee__age: 0,
-        complainee__gender: '',
-        complainee__address: '',
+        complainant_name: '',
+        complainant_age: 0,
+        complainant_gender: '',
+        complainant_address: '',
+        complainee_name: '',
+        complainee_age: 0,
+        complainee_gender: '',
+        complainee_address: '',
         complaint: '',
         locationOfIncident: '',
-        status: ''
+        status: '',
+        dateOfIncident: ''
     })
 
     // onClick function to toggle custom dropdown
@@ -88,11 +105,37 @@ function BlotterList(){
     }
 
     // onClick function for saving new blotter to database
-    const saveBlotter = (event) =>{
+    const saveBlotter = async (event) =>{
         event.preventDefault()
-        console.log(addBlotter)
+
+        setSaveLoading(true)
+        const saveBlotter = await axios.post('/blotter/insert', addBlotter, {
+            headers : {
+                'Content-Type': 'application/json'
+            }
+        })
+        setSaveLoading(false)
+
+        if(saveBlotter.data.message){
+            setError({
+                ...error,
+                display: true,
+                message: saveBlotter.data.message
+            })
+            setTimeout(()=>{
+                setError({
+                    ...error,
+                    display: false,
+                    message: ''
+                })
+            }, 2000)
+        }else{
+            addNewBlotter(saveBlotter.data)
+            handleClose()
+        }
     }
     // --end function------------------------------------
+
 
     return (
         <>
@@ -108,259 +151,286 @@ function BlotterList(){
                         <button 
                             type="button" 
                             className="btn text-bg-primary fs-7 fw-semibold" 
-                            data-bs-toggle="modal" 
-                            data-bs-target="#add-blotter"
+                            onClick={handleShow}
                         >
                             <FontAwesomeIcon className='me-1' icon={faUserPlus}/>
                             Add Blotter
                         </button>
+                        
+                        {/* blotter search */}
                         <Search />
+
                     </div>
-                    <BlotterTable />
+
+                    {/* blotter list table */}
+                    <BlotterTable 
+                        blotter={blotterData}
+                        loading={loading}
+                    />
+
                 </main>
 
                 {/* modal */}
-                <div className="modal modal-lg fade" id="add-blotter" data-bs-backdrop="static" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div className="modal-dialog">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <h1 className="modal-title fs-6 d-flex align-items-center" id="exampleModalLabel">
-                                    <FontAwesomeIcon className='me-2' icon={faUserPlus}/>
-                                    New Blotter
-                                </h1>
-                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <form>
-                                <div className="modal-body row">
+                <Modal show={show} onHide={handleClose} size="lg" backdrop="static">
+                    <Modal.Header closeButton>
+                        <Modal.Title>
+                            <h1 className="modal-title fs-6 d-flex align-items-center" id="exampleModalLabel">
+                                <FontAwesomeIcon className='me-2' icon={faUserPlus}/>
+                                New Blotter
+                            </h1>
+                        </Modal.Title>
+                    </Modal.Header>
 
-                                    {/* blotter left input */}
-                                    <div className="blotter__left col">
-                                        <div className="complainant mb-3">
-                                            <label className='fs-7 fw-bold' htmlFor="complainant">Complainant</label>
-                                            <div className='position-relative'>
-                                                <button 
-                                                    className='form-control-1 text-start'
-                                                    name="complainant__name"
-                                                    onClick={complainantDropdownButton}
-                                                >
-                                                    {addBlotter.complainant__name === '' ? '--- Select name ---' : addBlotter.complainant__name}
-                                                </button>
-                                                <div 
-                                                    className='position-absolute bg-white border w-100 shadow-lg'
-                                                    style={{display: complainantActive ? 'block': 'none'}}
-                                                >
-                                                    
-                                                    <input 
-                                                        type="text" 
-                                                        className='form-control-1' 
-                                                        placeholder='search...'
-                                                        name='search_complainant'
-                                                        onChange={handleSearch}
-                                                    />
-                                                    {   
-                                                        data.length > 0 ? 
-                                                            filterResidentComplainant.length > 0 ? 
-                                                                filterResidentComplainant.map(resident => (
-                                                                                <div key={resident.id} className='test-1 w-100 px-2 hover'>
-                                                                                    <input 
-                                                                                        type="radio"
-                                                                                        className='d-none'
-                                                                                        id={`${resident.fname} ${resident.lname}`} 
-                                                                                        name="complainant__name"
-                                                                                        value={`${resident.fname} ${resident.lname}`} 
-                                                                                        onChange={handleChange}
-                                                                                    />
-                                                                                    <label 
-                                                                                        className='fs-7' 
-                                                                                        htmlFor={`${resident.fname} ${resident.lname}`}
-                                                                                    >
-                                                                                        {`${resident.fname} ${resident.lname}`}
-                                                                                    </label>
-                                                                                </div>
-                                                                            ))
-                                                            : <label className='fs-7 px-2'>Can't find this resident</label>
-                                                        : <label className='fs-7 px-2'>No data find</label>
-                                                    }
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="complainant__age mb-3">
-                                            <label className='fs-7 fw-bold' htmlFor="complainant__age">Age</label>
-                                            <input 
-                                                type="number" 
-                                                placeholder='complainant age' 
-                                                className='form-control-1'
-                                                name='complainant__age'
-                                                onChange={handleChange}
-                                            />
-                                        </div>
-                                        <div className="complainant__gender mb-3">
-                                            <label className='fs-7 fw-bold' htmlFor="complainant__gender">Gender</label>
-                                            <select 
-                                                id="complainant__gender"
-                                                className='form-control-1'
-                                                name="complainant__gender" 
-                                                defaultValue=''
-                                                onChange={handleChange}
-                                            >
-                                                <option value='' disabled>--- complainant gender ---</option>
-                                                <option>Male</option>
-                                                <option>Female</option>
-                                            </select>
-                                        </div>
-                                        <div className="complainant__address mb-3">
-                                            <label className='fs-7 fw-bold' htmlFor="complainant__address">Address</label>
-                                            <input 
-                                                type="text" 
-                                                placeholder='complainant address' 
-                                                className='form-control-1'
-                                                name='complainant__address'
-                                                onChange={handleChange}
-                                            />
-                                        </div>
-                                    </div>
+                    {/* error display */}
+                    <ErrorCard 
+                        errorDisplay={error.display}
+                        error={error.message}
+                    />
 
-                                    {/* blotter right input */}
-                                    <div className="blotter__right col">
-                                        <div className="complainee mb-3">
-                                            <label className='fs-7 fw-bold' htmlFor="complainee">Complainee</label>
-                                            <div className='position-relative'>
-                                                <button 
-                                                    className='form-control-1 text-start'
-                                                    name="complainee__name"
-                                                    onClick={complaineeDropdownButton}
-                                                >
-                                                    {addBlotter.complainee__name === '' ? '--- Select name ---' : addBlotter.complainee__name}
-                                                </button>
-                                                <div 
-                                                    className='position-absolute bg-white border w-100 shadow-lg'
-                                                    style={{display: complaineeActive ? 'block': 'none'}}
-                                                >
-                                                    
-                                                    <input 
-                                                        type="text" 
-                                                        className='form-control-1' 
-                                                        placeholder='search...'
-                                                    />
+                    {/* form */}
+                    <form>
+                        <div className="modal-body row">
 
-                                                    {
-                                                        data.length > 0 ?
-                                                            filterResidentComplainee.length > 0 ?
-                                                                filterResidentComplainee.map(resident => (
-                                                                    <div key={resident.id} className='test-1 w-100 px-2 hover'>
-                                                                        <input 
-                                                                            type="radio"
-                                                                            className='d-none'
-                                                                            id={`${resident.lname} ${resident.fname}`}  
-                                                                            name="complainee__name"
-                                                                            value={`${resident.fname} ${resident.lname}`}  
-                                                                            onChange={handleChange}
-                                                                        />
-                                                                        <label 
-                                                                            className='fs-7' 
-                                                                            htmlFor={`${resident.lname} ${resident.fname}`}  
-                                                                        >
-                                                                            {`${resident.fname} ${resident.lname}`}
-                                                                        </label>
-                                                                    </div>
-                                                                ))
-                                                            : <label className='fs-7 px-2'>Can't find this resident</label>
-                                                        : <label className='fs-7 px-2'>No data find</label>
-                                                    }
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="complainee__age mb-3">
-                                            <label className='fs-7 fw-bold' htmlFor="complainee__age">Age</label>
-                                            <input 
-                                                type="number" 
-                                                placeholder='complainee age' 
-                                                className='form-control-1'
-                                                name='complainee__age'
-                                                onChange={handleChange}
-                                            />
-                                        </div>
-                                        <div className="complainee__gender mb-3">
-                                            <label className='fs-7 fw-bold' htmlFor="complainee__gender">Gender</label>
-                                            <select 
-                                                id="complainee__gender"
-                                                className='form-control-1'
-                                                name="complainee__gender" 
-                                                defaultValue=''
-                                                onChange={handleChange}
-                                            >
-                                                <option value='' disabled>--- complainee gender ---</option>
-                                                <option>Male</option>
-                                                <option>Female</option>
-                                            </select>
-                                        </div>
-                                        <div className="complainee__address mb-3">
-                                            <label className='fs-7 fw-bold' htmlFor="complainee__address">Address</label>
-                                            <input 
-                                                type="text" 
-                                                placeholder='complainee address' 
-                                                className='form-control-1'
-                                                name='complainee__address'
-                                                onChange={handleChange}
-                                            />
-                                        </div>
-                                    </div>
+                            {/* loader animation while saving*/}
+                            <Loader 
+                                loader={saveLoading}
+                                title="Saving..."
+                            />
 
-                                    {/* blotter bottom input */}
-                                    <div className="blotter__bottom">
-                                        <div className="complaint mb-3">
-                                            <label htmlFor="complaint">Complaint</label>
+                            {/* blotter left input */}
+                            <div className="blotter__left col">
+                                <div className="complainant mb-3">
+                                    <label className='fs-7 fw-bold' htmlFor="complainant">Complainant</label>
+                                    <div className='position-relative'>
+                                        <button 
+                                            className='form-control-1 text-start'
+                                            name="complainant_name"
+                                            onClick={complainantDropdownButton}
+                                        >
+                                            {addBlotter.complainant_name === '' ? '--- Select name ---' : addBlotter.complainant_name}
+                                        </button>
+                                        <div 
+                                            className='position-absolute bg-white border w-100 shadow-lg'
+                                            style={{display: complainantActive ? 'block': 'none'}}
+                                        >
+                                            
                                             <input 
                                                 type="text" 
                                                 className='form-control-1' 
-                                                placeholder='complaint'
-                                                name='complaint'
-                                                onChange={handleChange}
+                                                placeholder='search...'
+                                                name='search_complainant'
+                                                onChange={handleSearch}
                                             />
-                                        </div>
-                                        <div className="locationOfIncident mb-3">
-                                            <label htmlFor="locationOfIncident">Location of Incident</label>
-                                            <input 
-                                                type="text" 
-                                                className='form-control-1' 
-                                                placeholder='Location of Incident'
-                                                name='locationOfIncident'
-                                                onChange={handleChange}
-                                            />
-                                        </div>
-                                        <div className="Status">
-                                            <label htmlFor="status">Status</label>
-                                            <select 
-                                                id="status"
-                                                className='form-control-1'
-                                                defaultValue=''
-                                                name="status" 
-                                                onChange={handleChange}
-                                            >
-                                                <option value='' disabled>--- select status ---</option>
-                                                <option>Solve</option>
-                                                <option>UnSolved</option>
-                                            </select>
+                                            {   
+                                                data.length > 0 ? 
+                                                    filterResidentComplainant.length > 0 ? 
+                                                        filterResidentComplainant.map(resident => (
+                                                                        <div key={resident.id} className='test-1 w-100 px-2 hover'>
+                                                                            <input 
+                                                                                type="radio"
+                                                                                className='d-none'
+                                                                                id={`${resident.fname} ${resident.lname}`} 
+                                                                                name="complainant_name"
+                                                                                value={`${resident.fname} ${resident.lname}`} 
+                                                                                onChange={handleChange}
+                                                                            />
+                                                                            <label 
+                                                                                className='fs-7' 
+                                                                                htmlFor={`${resident.fname} ${resident.lname}`}
+                                                                            >
+                                                                                {`${resident.fname} ${resident.lname}`}
+                                                                            </label>
+                                                                        </div>
+                                                                    ))
+                                                    : <label className='fs-7 px-2'>Can't find this resident</label>
+                                                : <label className='fs-7 px-2'>No data find</label>
+                                            }
                                         </div>
                                     </div>
                                 </div>
-                                <div className="d-flex align-items-center justify-content-end p-3">
-                                    <button 
-                                        type="button" 
-                                        className="btn text-bg-primary fs-7 fw-semibold"
-                                        onClick={saveBlotter}
+                                <div className="complainant_age mb-3">
+                                    <label className='fs-7 fw-bold' htmlFor="complainant__age">Age</label>
+                                    <input 
+                                        type="number" 
+                                        placeholder='complainant age' 
+                                        className='form-control-1'
+                                        name='complainant_age'
+                                        onChange={handleChange}
+                                    />
+                                </div>
+                                <div className="complainant__gender mb-3">
+                                    <label className='fs-7 fw-bold' htmlFor="complainant__gender">Gender</label>
+                                    <select 
+                                        id="complainant__gender"
+                                        className='form-control-1'
+                                        name="complainant_gender" 
+                                        defaultValue=''
+                                        onChange={handleChange}
                                     >
-                                        Save Blotter
-                                    </button>
+                                        <option value='' disabled>--- complainant gender ---</option>
+                                        <option>Male</option>
+                                        <option>Female</option>
+                                    </select>
                                 </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                {/* end modal */}
+                                <div className="complainant__address mb-3">
+                                    <label className='fs-7 fw-bold' htmlFor="complainant__address">Address</label>
+                                    <input 
+                                        type="text" 
+                                        placeholder='complainant address' 
+                                        className='form-control-1'
+                                        name='complainant_address'
+                                        onChange={handleChange}
+                                    />
+                                </div>
+                            </div>
 
-                {/* blotter data modal */}
-                <BlotterData />
+                            {/* blotter right input */}
+                            <div className="blotter__right col">
+                                <div className="complainee mb-3">
+                                    <label className='fs-7 fw-bold' htmlFor="complainee">Complainee</label>
+                                    <div className='position-relative'>
+                                        <button 
+                                            className='form-control-1 text-start'
+                                            name="complainee_name"
+                                            onClick={complaineeDropdownButton}
+                                        >
+                                            {addBlotter.complainee_name === '' ? '--- Select name ---' : addBlotter.complainee_name}
+                                        </button>
+                                        <div 
+                                            className='position-absolute bg-white border w-100 shadow-lg'
+                                            style={{display: complaineeActive ? 'block': 'none'}}
+                                        >
+                                            
+                                            <input 
+                                                type="text" 
+                                                className='form-control-1' 
+                                                placeholder='search...'
+                                                name='search_complainee'
+                                                onChange={handleSearch}
+                                            />
+
+                                            {
+                                                data.length > 0 ?
+                                                    filterResidentComplainee.length > 0 ?
+                                                        filterResidentComplainee.map(resident => (
+                                                            <div key={resident.id} className='test-1 w-100 px-2 hover'>
+                                                                <input 
+                                                                    type="radio"
+                                                                    className='d-none'
+                                                                    id={`${resident.lname} ${resident.fname}`}  
+                                                                    name="complainee_name"
+                                                                    value={`${resident.fname} ${resident.lname}`}  
+                                                                    onChange={handleChange}
+                                                                />
+                                                                <label 
+                                                                    className='fs-7' 
+                                                                    htmlFor={`${resident.lname} ${resident.fname}`}  
+                                                                >
+                                                                    {`${resident.fname} ${resident.lname}`}
+                                                                </label>
+                                                            </div>
+                                                        ))
+                                                    : <label className='fs-7 px-2'>Can't find this resident</label>
+                                                : <label className='fs-7 px-2'>No data find</label>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="complainee__age mb-3">
+                                    <label className='fs-7 fw-bold' htmlFor="complainee__age">Age</label>
+                                    <input 
+                                        type="number" 
+                                        placeholder='complainee age' 
+                                        className='form-control-1'
+                                        name='complainee_age'
+                                        onChange={handleChange}
+                                    />
+                                </div>
+                                <div className="complainee__gender mb-3">
+                                    <label className='fs-7 fw-bold' htmlFor="complainee__gender">Gender</label>
+                                    <select 
+                                        id="complainee__gender"
+                                        className='form-control-1'
+                                        name="complainee_gender" 
+                                        defaultValue=''
+                                        onChange={handleChange}
+                                    >
+                                        <option value='' disabled>--- complainee gender ---</option>
+                                        <option>Male</option>
+                                        <option>Female</option>
+                                    </select>
+                                </div>
+                                <div className="complainee__address mb-3">
+                                    <label className='fs-7 fw-bold' htmlFor="complainee__address">Address</label>
+                                    <input 
+                                        type="text" 
+                                        placeholder='complainee address' 
+                                        className='form-control-1'
+                                        name='complainee_address'
+                                        onChange={handleChange}
+                                    />
+                                </div>
+                            </div>
+
+                            {/* blotter bottom input */}
+                            <div className="blotter__bottom">
+                                <div className="complaint mb-3">
+                                    <label className='fs-7 fw-bold' htmlFor="complaint">Complaint</label>
+                                    <input 
+                                        type="text" 
+                                        className='form-control-1' 
+                                        placeholder='complaint'
+                                        name='complaint'
+                                        onChange={handleChange}
+                                    />
+                                </div>
+                                <div className="locationOfIncident mb-3">
+                                    <label className='fs-7 fw-bold' htmlFor="locationOfIncident">Location of Incident</label>
+                                    <input 
+                                        type="text" 
+                                        className='form-control-1' 
+                                        placeholder='Location of Incident'
+                                        name='locationOfIncident'
+                                        onChange={handleChange}
+                                    />
+                                </div>
+                                <div className="date_incident mb-3">
+                                    <label className='fs-7 fw-bold' htmlFor="date_incident">Date of Incident</label>
+                                    <input 
+                                        type="date" 
+                                        className='form-control-1'
+                                        name='dateOfIncident'
+                                        onChange={handleChange}
+                                    />
+                                </div>
+                                <div className="Status">
+                                    <label className='fs-7 fw-bold' htmlFor="status">Status</label>
+                                    <select 
+                                        id="status"
+                                        className='form-control-1'
+                                        defaultValue=''
+                                        name="status" 
+                                        onChange={handleChange}
+                                    >
+                                        <option value='' disabled>--- select status ---</option>
+                                        <option>Solve</option>
+                                        <option>UnSolved</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="d-flex align-items-center justify-content-end p-3">
+                            <button 
+                                type="button" 
+                                className="btn text-bg-primary fs-7 fw-semibold"
+                                onClick={saveBlotter}
+                            >
+                                Save Blotter
+                            </button>
+                        </div>
+                    </form>
+                </Modal>
+                {/* end modal */}
 
             </section>
         </>
