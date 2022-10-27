@@ -6,6 +6,7 @@ import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { convertDateToIsoString } from '../../custom/function'
 import useAxios from '../../hooks/useAxios'
 import Search from "../../components/search"
+import Loader from '../../components/loader'
 import TitleCard from '../../components/title'
 
 function BlotterManage(){
@@ -174,12 +175,15 @@ function BlotterManage(){
     // --end function----------------------------------
 
     // function for saving update blotter in database
+    const [loader, setLoader] = useState(false)
     const saveUpdateBlotter = async ()=>{
+        setLoader(true)
         const updateBlotterData = await axios.post(`/blotter/update?id=${blotterID}`, updateBlotter, {
             headers : {
                 'Content-Type': 'application/json'
             }
         })
+        setLoader(false)
         if(updateBlotterData.data.message){
             console.log(updateBlotterData.data.message)
             return
@@ -293,6 +297,12 @@ function BlotterManage(){
                     </Modal.Header>
                     <form>
                         <div className="modal-body row">
+
+                            {/* loading animation while updating */}
+                            <Loader 
+                                loader={loader}
+                                title="Updating..."
+                            />
 
                             {/* blotter left input */}
                             <div className="blotter__left col">

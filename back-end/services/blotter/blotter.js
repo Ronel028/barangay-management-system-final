@@ -102,10 +102,6 @@ class Blotter extends DbConfig{
                             complainee_name, complainee_age, complainee_gender, complainee_address, 
                             complaint, locationOfIncident, status, dateOfIncident, blotterID]
 
-            if(!complainant_name || !complainee_name){
-                return response.json({ message: 'Complainant/complainee cannot be Empty!' })
-            }
-
             // save to database if now error found
             await this.queryData(query, data)
             response.redirect(303, '/blotter')
