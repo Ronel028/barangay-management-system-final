@@ -5,7 +5,7 @@ import useAxios from '../../hooks/useAxios'
 import useSearch from '../../hooks/useSearch'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit, faTrash, faPenToSquare } from '@fortawesome/free-solid-svg-icons'
-import { convertBase64ToImage, dataURLtoFile } from '../../custom/function'
+import { convertBase64ToImage, dataURLtoFile, convertDateToIsoString } from '../../custom/function'
 import Search from '../../components/search'
 import TitleCard from '../../components/title'
 import Loader from '../../components/loader'
@@ -104,7 +104,7 @@ function ResidentManage(){
             lname: resident.data[0].lname,
             fname: resident.data[0].fname,
             mname: resident.data[0].mname,
-            dateOfBirth: new Date(resident.data[0].dateOfBirth).toISOString().slice(0, 10),
+            dateOfBirth: convertDateToIsoString(resident.data[0].dateOfBirth),
             placeOfBirth: resident.data[0].placeOfBirth,
             age: resident.data[0].age,
             gender: resident.data[0].gender,

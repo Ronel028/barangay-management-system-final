@@ -5,7 +5,7 @@ import useAxios from '../../hooks/useAxios'
 import useSearch from '../../hooks/useSearch'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit, faTrash, faPenToSquare } from '@fortawesome/free-solid-svg-icons'
-import { convertBase64ToImage, dataURLtoFile } from '../../custom/function'
+import { convertBase64ToImage, dataURLtoFile, convertDateToIsoString } from '../../custom/function'
 import Search from '../../components/search'
 import TitleCard from '../../components/title'
 import Loader from '../../components/loader'
@@ -102,8 +102,8 @@ function OfficialManage(){
             name,
             position,
             contact,
-            term_start: new Date(term_start).toISOString().slice(0, 10), 
-            term_end: new Date(term_end).toISOString().slice(0, 10),
+            term_start: convertDateToIsoString(term_start), 
+            term_end: convertDateToIsoString(term_end),
             address, 
             photo : dataURLtoFile(convertBase64ToImage(photo), name)
         })

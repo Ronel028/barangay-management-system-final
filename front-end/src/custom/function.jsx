@@ -24,8 +24,13 @@ const numberToCurrency = (number) =>{
     return dollarUSLocale.format(number)
 }
 
+const convertDateToIsoString = (date) =>{
+    return new Date(date).toISOString().slice(0, 10)
+}
+
 export { 
     convertBase64ToImage,
     dataURLtoFile,
-    numberToCurrency
+    numberToCurrency,
+    convertDateToIsoString
 }
