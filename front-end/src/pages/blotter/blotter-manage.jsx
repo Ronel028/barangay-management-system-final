@@ -150,7 +150,9 @@ function BlotterManage(){
     // --end function----------------------------------
 
      // --get update data by id----------------------------------
+    const [blotterID, setBlotterID] = useState()
     const handleUpdate = async (id) =>{
+        setBlotterID(id)
         const blotterData = await axios.get(`/blotter/blotter?id=${id}`)
         setUpdateBlotter({
             ...updateBlotter,
@@ -172,8 +174,19 @@ function BlotterManage(){
     // --end function----------------------------------
 
     // function for saving update blotter in database
-    const saveUpdateBlotter = ()=>{
-        console.log(updateBlotter)
+    const saveUpdateBlotter = async ()=>{
+        const updateBlotterData = await axios.post(`/blotter/update?id=${blotterID}`, updateBlotter, {
+            headers : {
+                'Content-Type': 'application/json'
+            }
+        })
+        if(updateBlotterData.data.message){
+            console.log(updateBlotterData.data.message)
+            return
+        }else{
+            updateNew(updateBlotterData.data)
+            handleClose()
+        }
     }
     // --end function---------------------------
 
@@ -202,12 +215,12 @@ function BlotterManage(){
                     <table className="table table-hover table-bordered">
                         <thead>
                             <tr className="text-bg-dark fs-7">
-                            <th scope="col">Complainant</th>
-                            <th scope="col">Complainee</th>
-                            <th scope="col">Complaint</th>
-                            <th scope="col">Location of Incident</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Action</th>
+                                <th scope="col">Complainant</th>
+                                <th scope="col">Complainee</th>
+                                <th scope="col">Complaint</th>
+                                <th scope="col">Location of Incident</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Action</th>
                             </tr>
                         </thead>
                         <tbody>

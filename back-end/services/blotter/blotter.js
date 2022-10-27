@@ -77,6 +77,40 @@ class Blotter extends DbConfig{
             response.redirect(303, '/blotter')
 
         } catch (error) {
+            response.json({ message: "Something's wrong! please try again..." })
+        }
+    }
+
+    // update blotter data
+    updateBlotter = async (request, response) =>{
+        try {
+            // get blotter id
+            const blotterID = request.query.id
+
+            // get data from body
+            const { complainant_name, complainant_age, complainant_gender, complainant_address,
+                    complainee_name, complainee_age, complainee_gender, complainee_address, 
+                    complaint, locationOfIncident, status, dateOfIncident } = request.body
+                
+             //query
+            const query = `UPDATE tbl_blotter SET complainant_name=?, complainant_age=?, complainant_gender=?,
+                                                    complainant_address=?, complainee_name=?, complainee_age=?,
+                                                    complainee_gender=?, complainee_address=?, complaint=?,
+                                                    locationOfIncident=?, status=?, dateOfIncident=?
+                                                WHERE id=?`
+            const data = [complainant_name, complainant_age, complainant_gender, complainant_address,
+                            complainee_name, complainee_age, complainee_gender, complainee_address, 
+                            complaint, locationOfIncident, status, dateOfIncident, blotterID]
+
+            if(!complainant_name || !complainee_name){
+                return response.json({ message: 'Complainant/complainee cannot be Empty!' })
+            }
+
+            // save to database if now error found
+            await this.queryData(query, data)
+            response.redirect(303, '/blotter')
+
+        } catch (error) {
             console.log(error)
         }
     }

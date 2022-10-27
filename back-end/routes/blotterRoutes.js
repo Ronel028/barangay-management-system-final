@@ -10,5 +10,6 @@ router.get('/', blotter.getBlotterData)
 router.post('/insert', blotter.insertBlotterData)
 router.get('/blotter', blotter.getBlotterById)
 router.delete('/delete', blotter.deleteBlotter)
+router.post('/update', blotter.updateBlotter)
 
 module.exports = router

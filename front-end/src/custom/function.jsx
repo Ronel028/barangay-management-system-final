@@ -1,8 +1,9 @@
-
+// convert base64 image into actual image
 const convertBase64ToImage = (image) =>{
     return `data:image/png;base64,${image}`
 }
 
+// convert base64 file into file object
 const  dataURLtoFile = (dataurl, filename) =>{
     var arr = dataurl.split(','),
         mime = arr[0].match(/:(.*?);/)[1],
@@ -17,6 +18,7 @@ const  dataURLtoFile = (dataurl, filename) =>{
     return new File([u8arr], filename, {type:mime});
 }
 
+// convert any number to currency format example -> 5000 to 5,000
 const numberToCurrency = (number) =>{
 
     let dollarUSLocale = Intl.NumberFormat('en-US');
@@ -24,6 +26,7 @@ const numberToCurrency = (number) =>{
     return dollarUSLocale.format(number)
 }
 
+// convert date into ISOString
 const convertDateToIsoString = (date) =>{
     return new Date(date).toISOString().slice(0, 10)
 }
