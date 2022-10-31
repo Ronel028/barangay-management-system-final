@@ -1,5 +1,4 @@
-import { useState } from 'react'
-import axios from 'axios'
+import useInsert from '../../../hooks/useInsert'
 import { Modal } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFile } from '@fortawesome/free-solid-svg-icons'
@@ -8,45 +7,32 @@ import ErrorCard from '../../../components/errorCard'
 
 function ClearanceModal(props){
 
-    // state for loader
-    const [loader, setLoader] = useState(false)
+    const [insertCertificate, loader, error] = useInsert()
 
-    // state for error
-    const [error, setError] = useState({
-        errorDisplay: false,
-        error: ''
-    })
+    // reset the date of input
+    const resetData = () =>{
+        props.resetData({
+            ...props.residentData,
+            name: '',
+            age: 0,
+            gender: '',
+            types: '',
+            orNumber: '',
+            amount: ''
+        })
+    }
 
-    // save clearance to database -----------------------------------
+    //******************save clearance to database***********************
     const saveClearance = async (event) =>{
         event.preventDefault()
 
-        setLoader(true)
-        const clearance = await axios.post('/certificate/insert', props.residentData, {
+        await insertCertificate('/certificate/insert', props.residentData, {
             headers: {
-                'Content-Type': 'application/json'
+                "Content-Type": "application/json"
             }
-        })
-        setLoader(false)
-        
-        if(clearance.data.message === 'success'){
-            props.handleClose()
-        }else{
-            setError({
-                ...error,
-                errorDisplay: true,
-                error: clearance.data.message
-            })
-            setTimeout(()=>{
-                setError({
-                    ...error,
-                    errorDisplay: false,
-                    error: ''
-                })
-            }, 2000)
-        }
+        }, props.handleClose, resetData)
     }
-    //----------------------------------------------------------------
+    //********************END FUNCTION*******************************
 
 
 

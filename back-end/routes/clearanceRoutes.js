@@ -1,12 +1,12 @@
 const express = require('express')
-const { Clearance } = require('../services/certificate/clearance/clearance')
+const { Certificate } = require('../services/certificate/certificate')
 const router = express.Router()
 
 // create an instance for clearance
-const clearance = new Clearance()
+const certificate = new Certificate()
 
 // create endpoint
-router.get('/', clearance.getClearanceData)
-router.post('/insert', clearance.insertClearance)
+router.get('/', certificate.getCertificateData)
+router.post('/insert', certificate.insertCertificate)
 
 module.exports = router

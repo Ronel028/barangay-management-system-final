@@ -1,8 +1,38 @@
 import { Modal } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCertificate } from '@fortawesome/free-solid-svg-icons'
+import Loader from '../../../components/loader'
+import ErrorCard from '../../../components/errorCard'
+import useInsert from '../../../hooks/useInsert'
 
 function IndigencyModal(props){
+
+    const [insertCertificate, loader, error] = useInsert()
+
+    // reset data from input
+    const resetData = () =>{
+        props.resetData({
+            ...props.residentData,
+            name: '',
+            age: 0,
+            gender: '',
+            types: '',
+            orNumber: '',
+            amount: ''
+        })
+    }
+
+    //******************save indigency to database***********************
+    const saveIndigency = async (event) =>{ 
+        event.preventDefault()
+
+        await insertCertificate('/certificate/insert', props.residentData, {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }, props.handleClose, resetData)
+    }
+    //********************END FUNCTION*******************************
 
     return (
         <Modal show={props.show} onHide={props.handleClose} backdrop="static">
@@ -14,8 +44,22 @@ function IndigencyModal(props){
                     </h1>
                 </Modal.Title>
             </Modal.Header>
+
+            {/* error card */}
+            <ErrorCard 
+                errorDisplay={error.errorDisplay}
+                error={error.error}
+            />
+
             <form>
                 <div className="modal-body">
+
+                    {/* loader */}
+                    <Loader 
+                        loader={loader}
+                        title="Saving..."
+                    />
+
                     <div>
                         <div className='mb-3'>
                             <label className='fs-7 fw-semibold' htmlFor="indigency__name">Name</label>
@@ -56,7 +100,7 @@ function IndigencyModal(props){
                                     type="number" 
                                     className='form-control-1' 
                                     id='indigency__ornumber' 
-                                    name='ornumber'
+                                    name='orNumber'
                                     onChange={props.handleInput}
                                 />
                             </div>
@@ -78,7 +122,7 @@ function IndigencyModal(props){
                         type="button" 
                         className="btn text-bg-primary fs-7 fw-semibold"
                         name="indigency"
-                        onClick={props.saveCertificate}
+                        onClick={saveIndigency}
                     >
                         Save Indigency
                     </button>

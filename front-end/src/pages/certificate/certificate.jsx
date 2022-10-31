@@ -36,6 +36,7 @@ function Certificate(){
         name: '',
         age: 0,
         gender: '',
+        types: '',
         orNumber: 0,
         amount: 0
     })
@@ -68,12 +69,6 @@ function Certificate(){
         })
     }
 
-    // // save to clearance, indigency and resident to database
-    // const saveCertificate = (event) =>{
-    //     event.preventDefault()
-    //     console.log(event.target.name)
-    //     console.log(data)
-    // }
     // save to clearance, indigency and resident to database
     const savePermit = (event) =>{
         event.preventDefault()
@@ -83,14 +78,16 @@ function Certificate(){
 
 
     //event to open modal ---------------------------
+
     // click event to open certificate modal
-    const openCertificateModal = async(id) =>{
+    const openClearanceModal = async(id) =>{
         const resident = await axios.get(`/resident/id?id=${id}`)
         setCertificateData({
             ...certificateData,
             name: `${resident.data[0].fname} ${resident.data[0].lname}`,
             age: resident.data[0].age,
-            gender: resident.data[0].gender
+            gender: resident.data[0].gender,
+            types: 'Clearance'
         })
         setShow({
             ...show,
@@ -105,7 +102,8 @@ function Certificate(){
             ...certificateData,
             name: `${resident.data[0].fname} ${resident.data[0].lname}`,
             age: resident.data[0].age,
-            gender: resident.data[0].gender
+            gender: resident.data[0].gender,
+            types: 'Indigency'
         })
         setShow({
             ...show,
@@ -128,7 +126,8 @@ function Certificate(){
             ...certificateData,
             name: `${resident.data[0].fname} ${resident.data[0].lname}`,
             age: resident.data[0].age,
-            gender: resident.data[0].gender
+            gender: resident.data[0].gender,
+            types: 'Residency'
         })
         setShow({
             ...show,
@@ -173,7 +172,7 @@ function Certificate(){
                         residentData={residentData}
                         searchResident={residentFilter}
                         loading={loading}
-                        openCertificateModal={openCertificateModal}
+                        openCertificateModal={openClearanceModal}
                         openIndigencyModal={openIndigencyModal}
                         openPermitModal={openPermitModal}
                         openResidencyModal={openResidencyModal}
@@ -184,6 +183,7 @@ function Certificate(){
                 <ClearanceModal 
                     show={show.clearance}
                     residentData={certificateData}
+                    resetData={setCertificateData}
                     handleClose={handleClose}
                     handleInput={handleInput}
                 />
@@ -193,6 +193,7 @@ function Certificate(){
                     show={show.indigency}
                     handleClose={handleClose}
                     residentData={certificateData}
+                    resetData={setCertificateData}
                     handleInput={handleInput}
                 />
 
