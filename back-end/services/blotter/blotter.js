@@ -107,7 +107,7 @@ class Blotter extends DbConfig{
             response.redirect(303, '/blotter')
 
         } catch (error) {
-            console.log(error)
+            response.json({ message: "Something's wrong! please try again..." })
         }
     }
 

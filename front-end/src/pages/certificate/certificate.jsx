@@ -1,3 +1,6 @@
+import { useState } from 'react'
+import axios from 'axios'
+import useAxios from '../../hooks/useAxios'
 import Search from '../../components/search'
 import TitleCard from '../../components/title'
 import CertificateTable from './certificate-table'
@@ -7,6 +10,146 @@ import ResidencyModal from './certificateModal/residency-modal'
 import PermitModal from './certificateModal/permit-modal'
 
 function Certificate(){
+
+    // get all resident data
+    const [residentData, loading] = useAxios('/resident')
+
+    // modal show----------------------------------
+    const [show, setShow] = useState({
+        clearance: false,
+        indigency: false,
+        permit: false,
+        residency: false,
+    })
+    const handleClose = () => setShow({
+        clearance: false,
+        indigency: false,
+        permit: false,
+        residency: false,
+    })
+    // -----------------------------------------------
+
+    // save certificate data to database ------------------------
+
+    // state for clearance, indigency and residency
+    const [certificateData, setCertificateData] = useState({
+        name: '',
+        age: 0,
+        gender: '',
+        orNumber: 0,
+        amount: 0
+    })
+
+    // state for business permit
+    const [permitData, setPermitData] = useState({
+        ownerName: '',
+        natureOfBusiness: '',
+        businessAddress: '',
+        startDate: '',
+        endDate: '',
+        ornumber: 0,
+        amount: 0
+    })
+
+    // handle input for clearance, indigeny and resident certificate
+    const handleInput = (event) =>{
+        const { name, value } = event.target
+        setCertificateData({
+            ...certificateData,
+            [name] : value
+        })
+    }
+    // handle input for business permit
+    const handleInputPermit = (event) =>{
+        const { name, value } = event.target
+        setPermitData({
+            ...permitData,
+            [name] : value
+        })
+    }
+
+    // // save to clearance, indigency and resident to database
+    // const saveCertificate = (event) =>{
+    //     event.preventDefault()
+    //     console.log(event.target.name)
+    //     console.log(data)
+    // }
+    // save to clearance, indigency and resident to database
+    const savePermit = (event) =>{
+        event.preventDefault()
+        console.log(permitData)
+    }
+    // ---------------------------------------------------------------
+
+
+    //event to open modal ---------------------------
+    // click event to open certificate modal
+    const openCertificateModal = async(id) =>{
+        const resident = await axios.get(`/resident/id?id=${id}`)
+        setCertificateData({
+            ...certificateData,
+            name: `${resident.data[0].fname} ${resident.data[0].lname}`,
+            age: resident.data[0].age,
+            gender: resident.data[0].gender
+        })
+        setShow({
+            ...show,
+            clearance: true
+        })
+    }
+
+    // click event to open indigency modal
+    const openIndigencyModal = async (id) =>{
+        const resident = await axios.get(`/resident/id?id=${id}`)
+        setCertificateData({
+            ...certificateData,
+            name: `${resident.data[0].fname} ${resident.data[0].lname}`,
+            age: resident.data[0].age,
+            gender: resident.data[0].gender
+        })
+        setShow({
+            ...show,
+            indigency: true
+        })
+    }
+
+    // click event to open permit modal
+    const openPermitModal = (id) =>{
+        setShow({
+            ...show,
+            permit: true
+        })
+    }
+
+    // click event to open residency modal
+    const openResidencyModal = async (id) =>{
+        const resident = await axios.get(`/resident/id?id=${id}`)
+        setCertificateData({
+            ...certificateData,
+            name: `${resident.data[0].fname} ${resident.data[0].lname}`,
+            age: resident.data[0].age,
+            gender: resident.data[0].gender
+        })
+        setShow({
+            ...show,
+            residency: true
+        })
+    }
+    //-------------------------------------------
+
+
+
+    // search resident-------------------------------------------
+    const [searchResident, setRearchResident] = useState('')
+    const filterResident = (event) =>{
+        setRearchResident(event.target.value)
+    }
+    const residentFilter = residentData.filter(resident =>{
+        return resident.fname.toLowerCase().includes(searchResident) || resident.lname.toLowerCase().includes(searchResident)
+    })
+    //-----------------------------------------------------------
+
+
     return (
         <>
             <section className='certificate__container main-padding'>
@@ -18,23 +161,57 @@ function Certificate(){
                 {/* main */}
                 <main className="blotter_list__main p-2 mt-3">
                     <div className="d-flex justify-content-end align-items-center mb-4"> 
-                        <Search />
+
+                        {/* search resident */}
+                        <Search 
+                            filterSearch={filterResident}
+                        />
+
                     </div>
                     {/* certificate table */}
-                    <CertificateTable />
+                    <CertificateTable 
+                        residentData={residentData}
+                        searchResident={residentFilter}
+                        loading={loading}
+                        openCertificateModal={openCertificateModal}
+                        openIndigencyModal={openIndigencyModal}
+                        openPermitModal={openPermitModal}
+                        openResidencyModal={openResidencyModal}
+                    />
                 </main>
 
                 {/* clearance modal */}
-                <ClearanceModal />
+                <ClearanceModal 
+                    show={show.clearance}
+                    residentData={certificateData}
+                    handleClose={handleClose}
+                    handleInput={handleInput}
+                />
 
-                {/* indigenct modal */}
-                <IndigencyModal />
+                {/* indigency modal */}
+                <IndigencyModal 
+                    show={show.indigency}
+                    handleClose={handleClose}
+                    residentData={certificateData}
+                    handleInput={handleInput}
+                />
 
                 {/* permit modal */}
-                <PermitModal />
+                <PermitModal 
+                    show={show.permit}
+                    handleClose={handleClose}
+                    handleInputPermit={handleInputPermit}
+                    savePermit={savePermit}
+
+                />
 
                 {/* residency */}
-                <ResidencyModal />
+                <ResidencyModal 
+                    show={show.residency}
+                    handleClose={handleClose}
+                    residentData={certificateData}
+                    handleInput={handleInput}
+                />
 
             </section>
         </>
