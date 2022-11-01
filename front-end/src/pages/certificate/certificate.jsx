@@ -48,7 +48,7 @@ function Certificate(){
         businessAddress: '',
         startDate: '',
         endDate: '',
-        ornumber: 0,
+        orNumber: 0,
         amount: 0
     })
 
@@ -69,11 +69,6 @@ function Certificate(){
         })
     }
 
-    // save to clearance, indigency and resident to database
-    const savePermit = (event) =>{
-        event.preventDefault()
-        console.log(permitData)
-    }
     // ---------------------------------------------------------------
 
 
@@ -202,8 +197,8 @@ function Certificate(){
                     show={show.permit}
                     handleClose={handleClose}
                     handleInputPermit={handleInputPermit}
-                    savePermit={savePermit}
-
+                    resetData={setPermitData}
+                    permitData={permitData}
                 />
 
                 {/* residency */}
@@ -211,6 +206,7 @@ function Certificate(){
                     show={show.residency}
                     handleClose={handleClose}
                     residentData={certificateData}
+                    resetData={setCertificateData}
                     handleInput={handleInput}
                 />
 

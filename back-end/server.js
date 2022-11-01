@@ -23,7 +23,8 @@ app.use('/account', require('./routes/user-routes'))
 app.use('/officials', require('./routes/officialRoutes'))
 app.use('/resident', require('./routes/residentRoutes'))
 app.use('/blotter', require('./routes/blotterRoutes'))
-app.use('/certificate', require('./routes/clearanceRoutes'))
+app.use('/certificate', require('./routes/certificateRoutes'))
+app.use('/permit', require('./routes/permitRoutes'))
 
 app.listen(3001, ()=>{
     console.log('server is running')

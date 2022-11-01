@@ -1,8 +1,37 @@
 import { Modal } from 'react-bootstrap'
+import useInsert from '../../../hooks/useInsert'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faStamp } from '@fortawesome/free-solid-svg-icons'
+import Loader from '../../../components/loader'
+import ErrorCard from '../../../components/errorCard'
 
 function PermitModal(props){
+
+    const [insertCertificate, loader, error] = useInsert()
+
+    // reset data of input
+    const resetPermitData = () =>{
+        props.resetData({
+            ownerName: '',
+            natureOfBusiness: '',
+            businessAddress: '',
+            startDate: '',
+            endDate: '',
+            orNumber: 0,
+            amount: 0
+        })
+    }
+
+    const saveBusinessPermit = async(event) =>{
+        event.preventDefault()
+
+        await insertCertificate('/permit/insert', props.permitData, {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }, props.handleClose, resetPermitData)
+
+    }
 
     return (
         <Modal show={props.show} onHide={props.handleClose} backdrop="static">
@@ -14,8 +43,20 @@ function PermitModal(props){
                     </h1>
                 </Modal.Title>
             </Modal.Header>
+
+            <ErrorCard 
+                errorDisplay={error.errorDisplay}
+                error={error.error}
+            />
+
             <form>
                 <div className="modal-body">
+
+                    <Loader 
+                        loader={loader}
+                        title="Saving..."
+                    />
+
                     <div className='mb-3'>
                         <label className='fs-7 fw-bold' htmlFor="permit__name">Owner/Resident</label>
                         <input 
@@ -75,7 +116,7 @@ function PermitModal(props){
                                 type="number" 
                                 id='permit__ornumber' 
                                 className='form-control-1' 
-                                name='ornumber'
+                                name='orNumber'
                                 onChange={props.handleInputPermit}
                             />
                         </div>
@@ -95,7 +136,7 @@ function PermitModal(props){
                     <button 
                         type="button" 
                         className="btn text-bg-primary fs-7 fw-semibold"
-                        onClick={props.savePermit}
+                        onClick={saveBusinessPermit}
                     >
                         Save Permit
                     </button>

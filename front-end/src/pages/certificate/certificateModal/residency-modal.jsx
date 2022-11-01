@@ -1,8 +1,39 @@
 import { Modal } from 'react-bootstrap'
+import useInsert from '../../../hooks/useInsert'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPeopleGroup } from '@fortawesome/free-solid-svg-icons'
+import Loader from '../../../components/loader'
+import ErrorCard from '../../../components/errorCard'
 
 function ResidencyModal(props){
+
+    const [insertCertificate, loader, error] = useInsert()
+
+    // reset data from input
+    const resetData = () =>{
+        props.resetData({
+            ...props.residentData,
+            name: '',
+            age: 0,
+            gender: '',
+            types: '',
+            orNumber: '',
+            amount: ''
+        })
+    }
+
+    //******************save residency to database***********************
+    const saveResidency = async (event) =>{ 
+        event.preventDefault()
+
+        await insertCertificate('/certificate/insert', props.residentData, {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }, props.handleClose, resetData)
+    }
+    //********************END FUNCTION*******************************
+
     return (
         <Modal show={props.show} onHide={props.handleClose} backdrop="static">
             <Modal.Header closeButton>
@@ -13,8 +44,22 @@ function ResidencyModal(props){
                     </h1>
                 </Modal.Title>
             </Modal.Header>
+
+            {/* error card */}
+            <ErrorCard 
+                errorDisplay={error.errorDisplay}
+                error={error.error}
+            />
+
             <form>
                 <div className="modal-body">
+
+                    {/* loading animation for saving data */}
+                    <Loader 
+                        loader={loader}
+                        title="Saving..."
+                    />
+
                     <div>
                         <div className='mb-3'>
                             <label className='fs-7 fw-semibold' htmlFor="residency__name">Name</label>
@@ -55,7 +100,7 @@ function ResidencyModal(props){
                                     type="number" 
                                     className='form-control-1' 
                                     id='residency__ornumber' 
-                                    name='ornumber'
+                                    name='orNumber'
                                     onChange={props.handleInput}
                                 />
                             </div>
@@ -77,7 +122,7 @@ function ResidencyModal(props){
                         type="button" 
                         className="btn text-bg-primary fs-7 fw-semibold"
                         name="residency"
-                        onClick={props.saveCertificate}
+                        onClick={saveResidency}
                     >
                         Save Indigency
                     </button>

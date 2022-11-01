@@ -8,14 +8,14 @@ function useInsert(){
         error: ''
     })
 
-    const insertCertificate = async(url, data, header, callback, resetData)=>{
+    const insertCertificate = async(url, data, header, closeModal, resetData)=>{
         setLoader(true)
         const insert = await axios.post(url, data, header)
         setLoader(false)
 
         if(insert.data.message === 'success'){
             resetData()
-            callback()
+            closeModal()
         }else{
             setError({
                 ...error,
