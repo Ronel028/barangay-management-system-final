@@ -22,7 +22,7 @@ function useGetDataById(){
         })
     }
 
-    return [data, setData, getData, ]
+    return [data, setData, getData]
 
 }
 

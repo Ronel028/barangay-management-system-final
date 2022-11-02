@@ -1,10 +1,12 @@
 import { useRef } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { useReactToPrint } from 'react-to-print'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPrint, faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 
 function PrintClearance(){
+
+    const clearanceID = useParams()
 
     const printDocument = useRef()
     const handlePrint = useReactToPrint({
@@ -17,6 +19,8 @@ function PrintClearance(){
             handlePrint()
         }
     }
+
+    console.log(clearanceID)
 
     return (
         <>

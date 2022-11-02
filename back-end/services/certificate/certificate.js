@@ -109,12 +109,15 @@ class Certificate extends DbConfig{
         }
     }
 
-    // update certificate data
-    updateCertificate = async(request, response) =>{
+
+
+    /* **************************UPDATE CERTIFICATE DATA*************************** */
+    // update clearance data
+    updateClearance = async(request, response) =>{
         try {
             
             // data from client
-            const certificateID = request.query.id
+            const clearanceID = request.query.id
             const {
                 name,
                 age,
@@ -128,7 +131,7 @@ class Certificate extends DbConfig{
                                             SET name=?, age=?, gender=?,
                                                 or_number=?, amount=?
                                             WHERE id=?`
-            const data = [name, age, gender, orNumber, amount, certificateID]
+            const data = [name, age, gender, orNumber, amount, clearanceID]
 
             // add some condition for orNumber and amount if empty
             if(!orNumber || !amount){
@@ -139,11 +142,86 @@ class Certificate extends DbConfig{
             await this.queryData(updateQuery, data)
             response.redirect(303, '/certificate/clearance')
 
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    // update indigency data
+    updateIndigency = async(request, response) =>{
+        try {
+            
+            // data from client
+            const indigencyID = request.query.id
+            const {
+                name,
+                age,
+                gender,
+                orNumber,
+                amount
+            } = request.body
+
+            // query
+            const updateQuery = `UPDATE tbl_certificate
+                                            SET name=?, age=?, gender=?,
+                                                or_number=?, amount=?
+                                            WHERE id=?`
+            const data = [name, age, gender, orNumber, amount, indigencyID]
+
+            // add some condition for orNumber and amount if empty
+            if(!orNumber || !amount){
+                return response.json({ message: 'Please add OR Number and Amount!' })
+            }
+
+            // execute this code when no error found
+            await this.queryData(updateQuery, data)
+            response.redirect(303, '/certificate/indigency')
 
         } catch (error) {
             console.log(error)
         }
     }
+    /* **************************END FUNCTION*************************** */
+
+
+
+    /* **************************DELETE CERTIFICATE DATA*************************** */
+    // deleteCertificate
+    deleteClearance = async(request, response) =>{
+        try {
+            
+            const clearanceID = request.query.id
+
+            // delete query
+            const deleteQuery = 'DELETE FROM tbl_certificate WHERE id=?'
+            const data = [clearanceID]
+
+            // execute code if no error
+            await this.queryData(deleteQuery, data)
+            response.redirect(303, '/certificate/clearance')
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    // deleteIndigency
+    deleteIndigency = async(request, response) =>{
+        try {
+            
+            const indigencyID = request.query.id
+
+            // delete query
+            const deleteQuery = 'DELETE FROM tbl_certificate WHERE id=?'
+            const data = [indigencyID]
+
+            // execute code if no error
+            await this.queryData(deleteQuery, data)
+            response.redirect(303, '/certificate/indigency')
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    /* **************************END FUNCTION*************************** */
 
 }
 

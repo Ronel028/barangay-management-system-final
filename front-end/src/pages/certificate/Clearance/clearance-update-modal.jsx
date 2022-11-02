@@ -1,6 +1,5 @@
-import { useState } from 'react'
-import axios from 'axios'
 import { Modal } from 'react-bootstrap'
+import useUpdateCertificate from '../../../hooks/useUpdateCertificate'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit } from '@fortawesome/free-solid-svg-icons'
 import Loader from '../../../components/loader'
@@ -8,45 +7,33 @@ import ErrorCard from '../../../components/errorCard'
 
 function ClearanceUpdateModal(props){
 
-    const [loader, setLoader] = useState(false)
-    const [error, setError] = useState({
-        errorDisplay: false,
-        error: ''
-    })
+    const {
+        show, // show the modal
+        handleClose, //close the modal
+        clearanceData, // clearance data object from database
+        updateNew, // update the state of clearance data to avoid page reload
+        handleChange, // change event for handle the user input
+        clearanceID // get clearance id from the database
+    } = props
+
+
+    const [clearanceUpdate, loader, error] = useUpdateCertificate()
 
     // *********************UPDATE CLEARANCE**********************************************
     const updateClearance = async(event) =>{
         event.preventDefault()
 
-        setLoader(true)
-        const updateClearance = await axios.post(`/certificate/update?id=${props.clearanceID}`, props.clearanceData, {
+        await clearanceUpdate(`/certificate/update/clearance?id=${clearanceID}`, clearanceData, {
             headers: {
                 'Content-Type': 'application/json'
             }
-        })
-        setLoader(false)
-        if(updateClearance.data.message){
-            setError({
-                ...error,
-                errorDisplay: true,
-                error: updateClearance.data.message
-            })
-            setTimeout(()=>{
-                setError({
-                    ...error,
-                    errorDisplay: false,
-                    error: ''
-                })
-            }, 2000)
-        }else{
-            props.updateNew(updateClearance.data)
-            props.handleClose()
-        }
+        }, handleClose, updateNew)
+
     }
     // *********************END FUNCTION**********************************************
 
     return (
-        <Modal show={props.show} onHide={props.handleClose} backdrop='static'>
+        <Modal show={show} onHide={handleClose} backdrop='static'>
             <Modal.Header closeButton>
                 <Modal.Title>
                     <h1 className="modal-title fs-6 d-flex align-items-center" id="exampleModalLabel">
@@ -79,8 +66,8 @@ function ClearanceUpdateModal(props){
                                 className='form-control-1' 
                                 id='clearance__name' 
                                 name='name' 
-                                value={props.clearanceData.name}
-                                onChange={props.handleChange}
+                                value={clearanceData.name}
+                                onChange={handleChange}
                             />
                         </div>
                         <div className="mb-3">
@@ -89,8 +76,8 @@ function ClearanceUpdateModal(props){
                                 type="number" 
                                 className='form-control-1' 
                                 name='age'
-                                value={props.clearanceData.age}
-                                onChange={props.handleChange}
+                                value={clearanceData.age}
+                                onChange={handleChange}
                             />
                         </div>
                         <div className="mb-3">
@@ -100,8 +87,8 @@ function ClearanceUpdateModal(props){
                                 className='form-control-1' 
                                 id='clearance__gender' 
                                 name='gender'
-                                value={props.clearanceData.gender}
-                                onChange={props.handleChange} 
+                                value={clearanceData.gender}
+                                onChange={handleChange} 
                             />
                         </div>
                         <div className='row'>
@@ -112,8 +99,8 @@ function ClearanceUpdateModal(props){
                                     className='form-control-1' 
                                     id='clearance__ornumber' 
                                     name='orNumber'
-                                    value={props.clearanceData.orNumber}
-                                    onChange={props.handleChange}
+                                    value={clearanceData.orNumber}
+                                    onChange={handleChange}
                                 />
                             </div>
                             <div className='col'>
@@ -123,8 +110,8 @@ function ClearanceUpdateModal(props){
                                     className='form-control-1' 
                                     id='clearance__amount' 
                                     name='amount'
-                                    value={props.clearanceData.amount}
-                                    onChange={props.handleChange}
+                                    value={clearanceData.amount}
+                                    onChange={handleChange}
                                 />
                             </div>
                         </div>

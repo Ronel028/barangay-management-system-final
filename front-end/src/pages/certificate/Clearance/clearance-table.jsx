@@ -48,17 +48,19 @@ function ClearanceTable(props){
                                                 </button>
                                                 <button
                                                     className="dropdown-item fw-semibold d-flex align-items-center fs-7"
+                                                    onClick={() => props.deleteClearance(clearance.id)}
                                                 >
                                                     <FontAwesomeIcon className='me-1' icon={faTrash}/>
                                                     Remove
                                                 </button>
                                                 <Link 
-                                                    to='/certificate/clearance/print' 
+                                                    to={`/certificate/clearance/print/${clearance.id}`}
                                                     className='dropdown-item fw-semibold d-flex align-items-center fs-7'
                                                 >
                                                     <FontAwesomeIcon className='me-1' icon={faPrint}/>
                                                     Print
                                                 </Link>
+                                                
                                             </ul>
                                         </div>
                                     </td>

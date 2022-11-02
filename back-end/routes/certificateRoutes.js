@@ -12,6 +12,16 @@ router.get('/clearance', certificate.getClearanceData)
 router.get('/indigency', certificate.getIndigencyData)
 router.get('/residency', certificate.getResidencyData)
 router.post('/insert', certificate.insertCertificate)
-router.post('/update', certificate.updateCertificate)
+
+/* ***********************UPDATE CERTIFICATE ROUTES***************** */
+router.post('/update/clearance', certificate.updateClearance)
+router.post('/update/indigency', certificate.updateIndigency)
+/* ***********************END FUNCTION***************** */
+
+
+/* ***********************DELETE CERTIFICATE ROUTES***************** */
+router.delete('/delete/clearance', certificate.deleteClearance)
+router.delete('/delete/indigency', certificate.deleteIndigency)
+/* ***********************DELETE CERTIFICATE ROUTES***************** */
 
 module.exports = router

@@ -54,10 +54,10 @@ function App(){
                         <Route path='/certificate/manage-residency' element={<ResidencyManage />} />
                     </Route>
 
-                    <Route path='/certificate/clearance/print' element={<PrintClearance />} /> {/* route for printing clearance */}
-                    <Route path='/certificate/indigency/print' element={<IndigencyPrint />} /> {/* route for printing indigency */}
-                    <Route path='/certificate/permit/print' element={<PermitPrint />} /> {/* route for printing business permit */}
-                    <Route path='/certificate/residency/print' element={<ResidentPrint />} /> {/* route for printing residency */}
+                    <Route path='/certificate/clearance/print/:id' element={<PrintClearance />} /> {/* route for printing clearance */}
+                    <Route path='/certificate/indigency/print/:id' element={<IndigencyPrint />} /> {/* route for printing indigency */}
+                    <Route path='/certificate/permit/print/:id' element={<PermitPrint />} /> {/* route for printing business permit */}
+                    <Route path='/certificate/residency/print/:id' element={<ResidentPrint />} /> {/* route for printing residency */}
                     
                 </Routes>
             </BrowserRouter>

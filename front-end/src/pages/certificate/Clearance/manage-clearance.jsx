@@ -2,6 +2,7 @@ import { useState } from 'react'
 import useAxios from '../../../hooks/useAxios'
 import useSearch from '../../../hooks/useSearch';
 import useGetDataById from '../../../hooks/getDataById';
+import useDeleteCertificate from '../../../hooks/useDeleteCertificate';
 import Search from "../../../components/search";
 import TitleCard from "../../../components/title";
 import ClearanceTable from "./clearance-table";
@@ -20,10 +21,8 @@ function ClearanceManage(){
     const handleShow = () => setShow(true);
 
 
-
     //**********update clearance data ***********************************
     const updateClearance = async(id) =>{
-        console.log(id)
         setClearanceID(id)
         await setCertificate(`/certificate/id?id=${id}`)
         handleShow()
@@ -32,8 +31,16 @@ function ClearanceManage(){
 
 
 
-    // ******************Change event for Input******************************
+    //**********delete clearance data ***********************************
+    const [deleteClearanceData] = useDeleteCertificate()
+    const deleteClearance = async(id) =>{
+        await deleteClearanceData(`/certificate/delete/clearance?id=${id}`, updateNew)
+    }
+    //**********END FUNCTION ***************************************
 
+
+
+    // ******************Change event for Input******************************
     const handleChange = (event) =>{
         const { name, value } = event.target
         setClearance({
@@ -41,7 +48,6 @@ function ClearanceManage(){
             [name]: value
         })
     }
-
     //**********END FUNCTION ***************************************
 
     return (
@@ -67,6 +73,7 @@ function ClearanceManage(){
                         clearanceData={clearanceData}
                         filterClearance={search}
                         updateClearance={updateClearance}
+                        deleteClearance={deleteClearance}
                     />
 
                 </main>
