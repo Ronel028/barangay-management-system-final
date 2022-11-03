@@ -2,6 +2,7 @@ import { useState } from 'react';
 import useAxios from '../../../hooks/useAxios'
 import useSearch from '../../../hooks/useSearch'
 import useGetDataById from '../../../hooks/getDataById';
+import useDeleteCertificate from '../../../hooks/useDeleteCertificate'
 import Search from "../../../components/search";
 import TitleCard from "../../../components/title";
 import ResidencyTable from "./residency-table";
@@ -44,6 +45,16 @@ function ResidencyManage(){
     /* ********** END FUNCTION ********************************* */
 
 
+
+    /* ********** DELETE RESIDENCY CERT. DATA ********************************* */
+    const [deleteResidencyData] = useDeleteCertificate()
+    const deleteResidency = async(id) =>{
+        await deleteResidencyData(`/certificate/delete/residency?id=${id}`, updateNew)
+    }
+    /* ********** END FUNCTION ********************************* */
+
+
+
     /* ********** SEARCH RESIDENCY DATA ********************************* */
     const [searchValue, searchEvent] = useSearch()
     const filterResidency = residencyData.filter(residency =>{
@@ -73,6 +84,7 @@ function ResidencyManage(){
                         loading={loading}
                         filterResidency={filterResidency}
                         openResidencyModal={openResidencyModal}
+                        deleteResidency={deleteResidency}
                     />
 
                 </main>

@@ -121,7 +121,6 @@ function ResidencyModal(props){
                                     className='form-control-1' 
                                     id='residency__ornumber' 
                                     name='orNumber'
-                                    value={residentData.orNumber}
                                     onChange={handleInput}
                                 />
                             </div>
@@ -132,7 +131,6 @@ function ResidencyModal(props){
                                     className='form-control-1' 
                                     id='residency__amount' 
                                     name='amount'
-                                    value={residentData.amount}
                                     onChange={handleInput}
                                 />
                             </div>

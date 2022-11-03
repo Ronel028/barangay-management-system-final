@@ -23,6 +23,7 @@ router.post('/update/residency', certificate.updateResidency)
 /* ***********************DELETE CERTIFICATE ROUTES***************** */
 router.delete('/delete/clearance', certificate.deleteClearance)
 router.delete('/delete/indigency', certificate.deleteIndigency)
+router.delete('/delete/residency', certificate.deleteResidency)
 /* ***********************DELETE CERTIFICATE ROUTES***************** */
 
 module.exports = router

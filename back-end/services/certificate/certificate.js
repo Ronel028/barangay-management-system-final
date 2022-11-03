@@ -244,6 +244,7 @@ class Certificate extends DbConfig{
             console.log(error)
         }
     }
+
     // deleteIndigency
     deleteIndigency = async(request, response) =>{
         try {
@@ -257,6 +258,25 @@ class Certificate extends DbConfig{
             // execute code if no error
             await this.queryData(deleteQuery, data)
             response.redirect(303, '/certificate/indigency')
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    // deleteResidency
+    deleteResidency = async(request, response) =>{
+        try {
+            
+            const residencyID = request.query.id
+
+            // delete query
+            const deleteQuery = 'DELETE FROM tbl_certificate WHERE id=?'
+            const data = [residencyID]
+
+            // execute code if no error
+            await this.queryData(deleteQuery, data)
+            response.redirect(303, '/certificate/residency')
 
         } catch (error) {
             console.log(error)

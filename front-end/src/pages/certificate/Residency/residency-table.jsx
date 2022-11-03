@@ -8,7 +8,8 @@ function ResidencyTable(props){
         residencyData, // this object array hold the residency cert, data
         loading, // loading function to display while fetching residency data from database
         filterResidency, // filter residency data using search input
-        openResidencyModal //open residency update modal
+        openResidencyModal, //open residency update modal
+        deleteResidency
     } = props
 
     return (
@@ -50,6 +51,7 @@ function ResidencyTable(props){
                                                 </button>
                                                 <button
                                                     className="dropdown-item fw-semibold d-flex align-items-center fs-7"
+                                                    onClick={() => deleteResidency(residency.id)}
                                                 >
                                                     <FontAwesomeIcon className='me-1' icon={faTrash}/>
                                                     Remove
