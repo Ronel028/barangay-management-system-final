@@ -76,16 +76,17 @@ class Certificate extends DbConfig{
         }
     }
 
-    //insert new certificate
+
+    /* **************************INSERT CERTIFICATE DATA*************************** */
     insertCertificate = async (request, response) =>{
         try {
             
             // data from front-end
-            const { name, age, gender, types, orNumber, amount } = request.body
+            const { name, age, gender, types, orNumber, amount, dateIssued } = request.body
 
             //************************QUERY*****************************
-            const insertQuery = `INSERT INTO tbl_certificate VALUES(null,?,?,?,?,?,?)`
-            const insertData = [name, age, gender, types, orNumber, amount]
+            const insertQuery = `INSERT INTO tbl_certificate VALUES(null,?,?,?,?,?,?,?)`
+            const insertData = [name, age, gender, types, orNumber, amount, dateIssued]
             const getClearanceById = 'SELECT * FROM tbl_certificate WHERE name=? AND types=?'
             const nameData = [name, types]
             //************************END QUERY******************************
@@ -95,8 +96,8 @@ class Certificate extends DbConfig{
                 response.json({ message: 'This certificate is already exist!' })
             }else{
                 // add some condition for orNumber and amount if empty
-                if(!orNumber || !amount){
-                    return response.json({ message: 'Please add OR Number and Amount!' })
+                if(!orNumber || !amount || !dateIssued){
+                    return response.json({ message: 'Please add OR Number, Amount! and Date Issued' })
                 }
 
                 // execute this code when no error found
@@ -108,6 +109,7 @@ class Certificate extends DbConfig{
             console.log(error)
         }
     }
+    /* **************************END FUNCTION*************************** */
 
 
 
@@ -123,15 +125,16 @@ class Certificate extends DbConfig{
                 age,
                 gender,
                 orNumber,
-                amount
+                amount,
+                dateIssued
             } = request.body
 
             // query
             const updateQuery = `UPDATE tbl_certificate
                                             SET name=?, age=?, gender=?,
-                                                or_number=?, amount=?
+                                                or_number=?, amount=?, dateIssued=?
                                             WHERE id=?`
-            const data = [name, age, gender, orNumber, amount, clearanceID]
+            const data = [name, age, gender, orNumber, amount, dateIssued, clearanceID]
 
             // add some condition for orNumber and amount if empty
             if(!orNumber || !amount){
@@ -157,15 +160,16 @@ class Certificate extends DbConfig{
                 age,
                 gender,
                 orNumber,
-                amount
+                amount,
+                dateIssued
             } = request.body
 
             // query
             const updateQuery = `UPDATE tbl_certificate
                                             SET name=?, age=?, gender=?,
-                                                or_number=?, amount=?
+                                                or_number=?, amount=?, dateIssued=?
                                             WHERE id=?`
-            const data = [name, age, gender, orNumber, amount, indigencyID]
+            const data = [name, age, gender, orNumber, amount, dateIssued, indigencyID]
 
             // add some condition for orNumber and amount if empty
             if(!orNumber || !amount){

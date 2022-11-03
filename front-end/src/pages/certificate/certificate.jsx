@@ -11,10 +11,12 @@ import PermitModal from './certificateModal/permit-modal'
 
 function Certificate(){
 
-    // get all resident data
+    /* *********CUSTOM HOOKS FOR GETTING ALL RESIDENT DATA FROM DATABASE********* */
     const [residentData, loading] = useAxios('/resident')
+    /* *********************END CUSTOM HOOKS************************************ */
 
-    // modal show----------------------------------
+
+     /* **************HANDLE STATE FOR MODAL**************** */
     const [show, setShow] = useState({
         clearance: false,
         indigency: false,
@@ -27,9 +29,12 @@ function Certificate(){
         permit: false,
         residency: false,
     })
-    // -----------------------------------------------
+    /* **************END STATE**************** */
 
-    // save certificate data to database ------------------------
+
+
+
+    /* **************STATE FOR HANDLE INPUT DATA**************** */
 
     // state for clearance, indigency and residency
     const [certificateData, setCertificateData] = useState({
@@ -38,7 +43,8 @@ function Certificate(){
         gender: '',
         types: '',
         orNumber: 0,
-        amount: 0
+        amount: 0,
+        dateIssued: ''
     })
 
     // state for business permit
@@ -51,6 +57,12 @@ function Certificate(){
         orNumber: 0,
         amount: 0
     })
+     /* *********************END STATE************************** */
+
+
+    
+
+    /* **************HANDLE INPUT EVENT FOR CERTIFICATE INPUT FIELD**************** */
 
     // handle input for clearance, indigeny and resident certificate
     const handleInput = (event) =>{
@@ -68,13 +80,15 @@ function Certificate(){
             [name] : value
         })
     }
-
     // ---------------------------------------------------------------
 
+     /* **************END FUNCTION**************** */
 
-    //event to open modal ---------------------------
 
-    // click event to open certificate modal
+
+    /* **********************EVENT TO OPEN MODAL********************************* */
+
+    /* ********************CLICK EVENT TO OPEN CLEARANCE MODAL****************** */
     const openClearanceModal = async(id) =>{
         const resident = await axios.get(`/resident/id?id=${id}`)
         setCertificateData({
@@ -89,8 +103,9 @@ function Certificate(){
             clearance: true
         })
     }
+    /* **********************END FUNCTION********************************* */
 
-    // click event to open indigency modal
+    /* ********************CLICK EVENT TO OPEN INDIGENCY MODAL****************** */
     const openIndigencyModal = async (id) =>{
         const resident = await axios.get(`/resident/id?id=${id}`)
         setCertificateData({
@@ -105,16 +120,18 @@ function Certificate(){
             indigency: true
         })
     }
+    /* **********************END FUNCTION********************************* */
 
-    // click event to open permit modal
+    /* ********************CLICK EVENT TO OPEN PERMIT MODAL****************** */
     const openPermitModal = (id) =>{
         setShow({
             ...show,
             permit: true
         })
     }
+    /* **********************END FUNCTION********************************* */
 
-    // click event to open residency modal
+    /* ********************CLICK EVENT TO OPEN RESIDENCY MODAL****************** */
     const openResidencyModal = async (id) =>{
         const resident = await axios.get(`/resident/id?id=${id}`)
         setCertificateData({
@@ -129,11 +146,14 @@ function Certificate(){
             residency: true
         })
     }
-    //-------------------------------------------
+    /* **********************END FUNCTION********************************* */
+
+    /* **********************END FUNCTION********************************* */
 
 
 
-    // search resident-------------------------------------------
+
+    /* **********************SEARCH RESIDENT********************************* */
     const [searchResident, setRearchResident] = useState('')
     const filterResident = (event) =>{
         setRearchResident(event.target.value)
@@ -141,7 +161,7 @@ function Certificate(){
     const residentFilter = residentData.filter(resident =>{
         return resident.fname.toLowerCase().includes(searchResident) || resident.lname.toLowerCase().includes(searchResident)
     })
-    //-----------------------------------------------------------
+    /* **********************END FUNCTION********************************* */
 
 
     return (

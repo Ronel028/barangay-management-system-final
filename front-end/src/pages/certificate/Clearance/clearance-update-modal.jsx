@@ -16,8 +16,8 @@ function ClearanceUpdateModal(props){
         clearanceID // get clearance id from the database
     } = props
 
-
     const [clearanceUpdate, loader, error] = useUpdateCertificate()
+
 
     // *********************UPDATE CLEARANCE**********************************************
     const updateClearance = async(event) =>{
@@ -32,6 +32,7 @@ function ClearanceUpdateModal(props){
     }
     // *********************END FUNCTION**********************************************
 
+    
     return (
         <Modal show={show} onHide={handleClose} backdrop='static'>
             <Modal.Header closeButton>
@@ -88,6 +89,17 @@ function ClearanceUpdateModal(props){
                                 id='clearance__gender' 
                                 name='gender'
                                 value={clearanceData.gender}
+                                onChange={handleChange} 
+                            />
+                        </div>
+                        <div className="mb-3">
+                            <label className='fs-7 fw-semibold' htmlFor="dateIssued">Date Issued</label>
+                            <input 
+                                type="date" 
+                                className='form-control-1' 
+                                id='dateIssued' 
+                                name='dateIssued'
+                                value={clearanceData.dateIssued}
                                 onChange={handleChange} 
                             />
                         </div>

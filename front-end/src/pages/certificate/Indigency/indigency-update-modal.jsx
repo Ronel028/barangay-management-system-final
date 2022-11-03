@@ -17,7 +17,7 @@ function IndigencyUpdateModal(props){
     } = props
 
 
-    // update indigency data
+    /* ******************UPDATE INDIGENCY DATA ****************************** */
     const [updateIndigency, loader, error] = useUpdateCertificate()
     const updateIndigencyData = async(event) =>{
         event.preventDefault()
@@ -28,6 +28,7 @@ function IndigencyUpdateModal(props){
             }
         }, handleClose, updateNew)
     }
+    /* ******************END FUNCTION****************************** */
 
     return (
         <Modal show={show} onHide={handleClose} backdrop="static">
@@ -85,6 +86,17 @@ function IndigencyUpdateModal(props){
                                 id='indigency__gender' 
                                 name='gender' 
                                 value={indigencyData.gender}
+                                onChange={handleChange}
+                            />
+                        </div>
+                        <div className="mb-3">
+                            <label className='fs-7 fw-semibold' htmlFor="dateIssued">Date Issued</label>
+                            <input 
+                                type="date" 
+                                className='form-control-1' 
+                                id='dateIssued' 
+                                name='dateIssued' 
+                                value={indigencyData.dateIssued}
                                 onChange={handleChange}
                             />
                         </div>

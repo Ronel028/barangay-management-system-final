@@ -5,10 +5,10 @@ import { numberToCurrency } from '../../../custom/function'
 
 function ClearanceTable(props){
 
-    // filter clearance data by search
-    const filterClearance = props.clearanceData.filter(clearance =>{
-        return clearance.name.toLowerCase().includes(props.filterClearance)
-    })
+    // // filter clearance data by search
+    // const filterClearance = props.clearanceData.filter(clearance =>{
+    //     return clearance.name.toLowerCase().includes(props.filterClearance)
+    // })
 
     return (
         <table className="table table-hover table-bordered">
@@ -25,8 +25,8 @@ function ClearanceTable(props){
             <tbody>
                 {
                     props.clearanceData.length > 0 ?
-                        filterClearance.length > 0 ?
-                            filterClearance.map(clearance =>(
+                        props.filterClearance.length > 0 ?
+                            props.filterClearance.map(clearance =>(
                                 <tr key={clearance.id} className='align-middle fs-7'>
                                     <td>{clearance.name}</td>
                                     <td>{clearance.age}</td>

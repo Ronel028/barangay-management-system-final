@@ -10,18 +10,19 @@ import ClearanceUpdateModal from "./clearance-update-modal";
 
 function ClearanceManage(){
 
-    const [clearanceID, setClearanceID] = useState()
-    const [clearanceData, loading, updateNew] = useAxios('/certificate/clearance')
-    const [search, handleSearch] = useSearch()
-    const [clearance, setClearance, setCertificate] = useGetDataById()
+    const [clearanceData, loading, updateNew] = useAxios('/certificate/clearance') // custom hooks for getting all data from database
+    
 
-    // open and close modal
+    /* *********STATE FOR MODAL********* */
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    /* *********END STATE********* */
 
 
     //**********update clearance data ***********************************
+    const [clearanceID, setClearanceID] = useState() // state for storing clearance id
+    const [clearance, setClearance, setCertificate] = useGetDataById() //custom hooks for get date of certificate by id
     const updateClearance = async(id) =>{
         setClearanceID(id)
         await setCertificate(`/certificate/id?id=${id}`)
@@ -31,16 +32,18 @@ function ClearanceManage(){
 
 
 
-    //**********delete clearance data ***********************************
+
+    //*****************DELETE CLEARANCE DATA ***********************************
     const [deleteClearanceData] = useDeleteCertificate()
     const deleteClearance = async(id) =>{
         await deleteClearanceData(`/certificate/delete/clearance?id=${id}`, updateNew)
     }
-    //**********END FUNCTION ***************************************
+    //******************END FUNCTION ***************************************
 
 
 
-    // ******************Change event for Input******************************
+
+    // ******************CHANGE EVENT FOR INPUT******************************
     const handleChange = (event) =>{
         const { name, value } = event.target
         setClearance({
@@ -48,7 +51,14 @@ function ClearanceManage(){
             [name]: value
         })
     }
-    //**********END FUNCTION ***************************************
+    //******************END FUNCTION ***************************************
+
+
+    // filter clearance data by search
+    const [search, handleSearch] = useSearch() //custom hooks for getting the value of input search
+    const filterClearance = clearanceData.filter(clearance =>{
+        return clearance.name.toLowerCase().includes(search)
+    })
 
     return (
         <>
@@ -71,7 +81,7 @@ function ClearanceManage(){
                     <ClearanceTable 
                         loading={loading}
                         clearanceData={clearanceData}
-                        filterClearance={search}
+                        filterClearance={filterClearance}
                         updateClearance={updateClearance}
                         deleteClearance={deleteClearance}
                     />

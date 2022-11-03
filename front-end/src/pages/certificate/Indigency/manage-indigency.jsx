@@ -2,6 +2,7 @@ import { useState } from 'react';
 import useAxios from '../../../hooks/useAxios'
 import useGetDataById from '../../../hooks/getDataById';
 import useDeleteCertificate from '../../../hooks/useDeleteCertificate';
+import useSearch from '../../../hooks/useSearch'
 import Search from "../../../components/search";
 import TitleCard from "../../../components/title";
 import IndigencyTable from "./indigency-table";
@@ -12,13 +13,15 @@ function IndigencyManage(){
     const [indigencyData, loading, updateNew] = useAxios('/certificate/indigency')
 
 
-    // open and close modal
+    /* ****************STATE FOR MODAL************************** */
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    /* ****************END STATE************************** */
 
 
-    // get indigency data by id
+
+    /* ****************FUNCTION TO GET DATA BY ID************************** */
     const [indigencyId, setIndigencyId] = useState()
     const [indigency, setIndigency, getIndigency] = useGetDataById()
     const handleShowModal = async(id) =>{
@@ -26,9 +29,11 @@ function IndigencyManage(){
         await getIndigency(`/certificate/id?id=${id}`)
         handleShow()
     }
+    /* ****************END FUNCTION************************** */
 
 
-    // get input value
+
+     /* ************ FUNCTION TO GET INPUT VALUE ********************* */
     const handleChange = (event) =>{
         const { name, value } = event.target
         setIndigency({
@@ -36,23 +41,25 @@ function IndigencyManage(){
             [name] : value
         })
     }
+     /* *************END FUNCTION***************************** */
 
 
-    // delete indigency data
+    
+    /* **************** DELETE INDIGENCY DATE ***************************** */
     const [removeIndigency] = useDeleteCertificate()
-    const deleteIndigency = (id) =>{
-        removeIndigency(`/certificate/delete/indigency?id=${id}`, updateNew)
+    const deleteIndigency = async(id) =>{
+        await removeIndigency(`/certificate/delete/indigency?id=${id}`, updateNew)
     }
+    /* *************END FUNCTION***************************** */
 
 
-    // event for search indigency
-    const [searchValue, setSearchValue] = useState('')
-    const handleSearch = (event) =>{
-        setSearchValue(event.target.value)
-    }
+
+    /* *************EVENT FOR SEARCH DATA ***************************** */
+    const [searchValue, setSearchValue] = useSearch()
     const filterIndigency = indigencyData.filter(indigency =>{
         return indigency.name.toLowerCase().includes(searchValue)
     })
+    /* *************END FUNCTION***************************** */
 
     return (
         <>
@@ -66,7 +73,7 @@ function IndigencyManage(){
                 <main className="p-2 mt-3">
                     <div className="d-flex justify-content-end align-items-center mb-4"> 
                         <Search 
-                            filterSearch={handleSearch}
+                            filterSearch={setSearchValue}
                         />
                     </div>
 

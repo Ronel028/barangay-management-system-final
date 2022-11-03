@@ -9,16 +9,25 @@ function IndigencyModal(props){
 
     const [insertCertificate, loader, error] = useInsert()
 
+    const {
+        show, //function is to show modal
+        handleClose, // function is to close modal
+        residentData, //array object that carry the resident data
+        resetData, // function is to reset the data of input value
+        handleInput // event for handle the input
+    } = props
+
     // reset data from input
-    const resetData = () =>{
-        props.resetData({
-            ...props.residentData,
+    const resetIndigencyData = () =>{
+        resetData({
+            ...residentData,
             name: '',
             age: 0,
             gender: '',
             types: '',
             orNumber: '',
-            amount: ''
+            amount: '',
+            dateIssued: ''
         })
     }
 
@@ -26,16 +35,16 @@ function IndigencyModal(props){
     const saveIndigency = async (event) =>{ 
         event.preventDefault()
 
-        await insertCertificate('/certificate/insert', props.residentData, {
+        await insertCertificate('/certificate/insert', residentData, {
             headers: {
                 "Content-Type": "application/json"
             }
-        }, props.handleClose, resetData)
+        }, handleClose, resetIndigencyData)
     }
     //********************END FUNCTION*******************************
 
     return (
-        <Modal show={props.show} onHide={props.handleClose} backdrop="static">
+        <Modal show={show} onHide={handleClose} backdrop="static">
             <Modal.Header closeButton>
                 <Modal.Title>
                     <h1 className="modal-title fs-6 d-flex align-items-center" id="exampleModalLabel">
@@ -68,8 +77,8 @@ function IndigencyModal(props){
                                 className='form-control-1' 
                                 id='indigency__name' 
                                 name='name' 
-                                value={props.residentData.name}
-                                onChange={props.handleInput}
+                                value={residentData.name}
+                                onChange={handleInput}
                             />
                         </div>
                         <div className="mb-3">
@@ -78,8 +87,8 @@ function IndigencyModal(props){
                                 type="number" 
                                 className='form-control-1' 
                                 name='age'
-                                value={props.residentData.age}
-                                onChange={props.handleInput}
+                                value={residentData.age}
+                                onChange={handleInput}
                             />
                         </div>
                         <div className="mb-3">
@@ -89,8 +98,19 @@ function IndigencyModal(props){
                                 className='form-control-1' 
                                 id='indigency__gender' 
                                 name='gender' 
-                                value={props.residentData.gender}
-                                onChange={props.handleInput}
+                                value={residentData.gender}
+                                onChange={handleInput}
+                            />
+                        </div>
+                        <div className="mb-3">
+                            <label className='fs-7 fw-semibold' htmlFor="dateIssued">Date Issued</label>
+                            <input 
+                                type="date" 
+                                className='form-control-1' 
+                                id='dateIssued' 
+                                name='dateIssued' 
+                                value={residentData.dateIssued}
+                                onChange={handleInput}
                             />
                         </div>
                         <div className='row'>
@@ -101,7 +121,7 @@ function IndigencyModal(props){
                                     className='form-control-1' 
                                     id='indigency__ornumber' 
                                     name='orNumber'
-                                    onChange={props.handleInput}
+                                    onChange={handleInput}
                                 />
                             </div>
                             <div className='col'>
@@ -111,7 +131,7 @@ function IndigencyModal(props){
                                     className='form-control-1' 
                                     id='indigency__amount' 
                                     name='amount'
-                                    onChange={props.handleInput}
+                                    onChange={handleInput}
                                 />
                             </div>
                         </div>

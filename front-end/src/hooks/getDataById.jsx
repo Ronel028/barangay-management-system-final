@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import axios from 'axios'
+import { convertDateToIsoString } from '../custom/function'
 
 function useGetDataById(){
     const [data, setData] = useState({
@@ -7,7 +8,8 @@ function useGetDataById(){
         age: 0,
         gender: '',
         orNumber: 0,
-        amount: 0
+        amount: 0,
+        dateIssued: ''
     })
 
     const getData = async(url) =>{
@@ -18,7 +20,8 @@ function useGetDataById(){
             age: certificate.data[0].age,
             gender: certificate.data[0].gender,
             orNumber: certificate.data[0].or_number,
-            amount: certificate.data[0].amount
+            amount: certificate.data[0].amount,
+            dateIssued: convertDateToIsoString(certificate.data[0].dateIssued)
         })
     }
 
