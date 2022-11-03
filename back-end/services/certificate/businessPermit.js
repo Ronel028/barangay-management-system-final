@@ -18,6 +18,29 @@ class Permit extends DbConfig{
         }
     }
 
+
+
+    // get permit data by ID
+    getPermitDataById = async(request, response) =>{
+        try {
+            
+            const permitID = request.query.id
+
+            // query
+            const query = 'SELECT * FROM tbl_businessPermit WHERE id=?'
+            const data = [permitID]
+
+            // execute this code
+            const permit = await this.queryData(query, data)
+            response.json(permit)
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+
+
     // insert business permit data
     insertPermitData = async(request, response) =>{
         try {

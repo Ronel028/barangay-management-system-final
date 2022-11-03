@@ -2,7 +2,16 @@ import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit, faTrash, faPrint } from '@fortawesome/free-solid-svg-icons'
 
-function PermitTable(){
+function PermitTable(props){
+
+    const {
+        permitData, // aray object of business permit data from database
+        loading, //loading animation for fetching permit data in database
+        filterPermitData, // filter permit data base on search input
+        showPermitModal
+    } = props
+
+
     return (
         <table className="table table-hover table-bordered">
             <thead>
@@ -18,45 +27,68 @@ function PermitTable(){
                 </tr>
             </thead>
             <tbody>
-                <tr className='align-middle fs-7'>
-                    <td>Ronel Florida</td>
-                    <td>Sari sari Store</td>
-                    <td>Purok 2</td>
-                    <td>03-12-2022</td>
-                    <td>03-12-2024</td>
-                    <td>24353543</td>
-                    <td>20000 pesos</td>
-                    <td>
-                        <div className="dropdown">
-                            <button className="border-0 py-1 px-2 rounded text-bg-warning fs-7 fw-bold dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Select Action
-                            </button>
-                            <ul className="dropdown-menu">
-                                <button 
-                                    className="dropdown-item fw-semibold d-flex align-items-center fs-7"
-                                    data-bs-toggle="modal" 
-                                    data-bs-target="#update-permit"
-                                >
-                                    <FontAwesomeIcon className='me-1' icon={faEdit}/>
-                                    Edit
-                                </button>
-                                <button
-                                    className="dropdown-item fw-semibold d-flex align-items-center fs-7"
-                                >
-                                    <FontAwesomeIcon className='me-1' icon={faTrash}/>
-                                    Remove
-                                </button>
-                                <Link 
-                                    to='/certificate/permit/print' 
-                                    className='dropdown-item fw-semibold d-flex align-items-center fs-7'
-                                >
-                                    <FontAwesomeIcon className='me-1' icon={faPrint}/>
-                                    Print
-                                </Link>
-                            </ul>
-                        </div>
-                    </td>
-                </tr>
+                {
+                    permitData.length > 0 ?
+                        filterPermitData.length > 0 ?
+                            filterPermitData.map(permit =>(
+                                <tr key={permit.id} className='align-middle fs-7'>
+                                    <td>{permit.owner}</td>
+                                    <td>{permit.natureOfBusiness}</td>
+                                    <td>{permit.businessAddress}</td>
+                                    <td>{new Date(permit.start_date).toLocaleDateString()}</td>
+                                    <td>{new Date(permit.end_date).toLocaleDateString()}</td>
+                                    <td>{permit.orNumber}</td>
+                                    <td>{'\u20B1' + permit.amount}</td>
+                                    <td>
+                                        <div className="dropdown">
+                                            <button className="border-0 py-1 px-2 rounded text-bg-warning fs-7 fw-bold dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                Select Action
+                                            </button>
+                                            <ul className="dropdown-menu">
+                                                <button 
+                                                    className="dropdown-item fw-semibold d-flex align-items-center fs-7"
+                                                    onClick={() => showPermitModal(permit.id)}
+                                                >
+                                                    <FontAwesomeIcon className='me-1' icon={faEdit}/>
+                                                    Edit
+                                                </button>
+                                                <button
+                                                    className="dropdown-item fw-semibold d-flex align-items-center fs-7"
+                                                >
+                                                    <FontAwesomeIcon className='me-1' icon={faTrash}/>
+                                                    Remove
+                                                </button>
+                                                <Link 
+                                                    to='/certificate/permit/print' 
+                                                    className='dropdown-item fw-semibold d-flex align-items-center fs-7'
+                                                >
+                                                    <FontAwesomeIcon className='me-1' icon={faPrint}/>
+                                                    Print
+                                                </Link>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))
+                        :   <tr>
+                                <td colSpan='7' className="text-center">
+                                    No data found
+                                </td>
+                            </tr>
+                    : loading ?   <tr>
+                                    <td colSpan='7' className="text-center">
+                                        <div className="w-100 d-flex align-items-center justify-content-center">
+                                            <div className="spinner me-2"></div>
+                                            loading...
+                                        </div>
+                                    </td>
+                                </tr>
+                            :   <tr>
+                                    <td colSpan='7' className="text-center">
+                                        No data found
+                                    </td>
+                                </tr>   
+                }
             </tbody>
         </table>
     )

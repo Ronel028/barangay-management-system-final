@@ -6,6 +6,7 @@ const router = express.Router()
 const permit = new Permit()
 
 router.get('/', permit.getPermitData)
+router.get('/id', permit.getPermitDataById)
 router.post('/insert', permit.insertPermitData)
 
 module.exports = router
