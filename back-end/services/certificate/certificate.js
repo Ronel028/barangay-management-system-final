@@ -184,6 +184,43 @@ class Certificate extends DbConfig{
             console.log(error)
         }
     }
+
+    // update residency data
+    updateResidency = async(request, response) =>{
+        try {
+            
+            // data from client
+            const residencyID = request.query.id
+            const {
+                name,
+                age,
+                gender,
+                orNumber,
+                amount,
+                dateIssued
+            } = request.body
+
+            // query
+            const updateQuery = `UPDATE tbl_certificate
+                                            SET name=?, age=?, gender=?,
+                                                or_number=?, amount=?, dateIssued=?
+                                            WHERE id=?`
+            const data = [name, age, gender, orNumber, amount, dateIssued, residencyID]
+
+            // add some condition for orNumber and amount if empty
+            if(!orNumber || !amount){
+                return response.json({ message: 'Please add OR Number, Amount! and Date Issued' })
+            }
+
+            // execute this code when no error found
+            await this.queryData(updateQuery, data)
+            response.redirect(303, '/certificate/residency')
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     /* **************************END FUNCTION*************************** */
 
 

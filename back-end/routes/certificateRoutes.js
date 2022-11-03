@@ -16,6 +16,7 @@ router.post('/insert', certificate.insertCertificate)
 /* ***********************UPDATE CERTIFICATE ROUTES***************** */
 router.post('/update/clearance', certificate.updateClearance)
 router.post('/update/indigency', certificate.updateIndigency)
+router.post('/update/residency', certificate.updateResidency)
 /* ***********************END FUNCTION***************** */
 
 

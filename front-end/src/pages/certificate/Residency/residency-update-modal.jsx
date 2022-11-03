@@ -1,81 +1,142 @@
+import { Modal } from 'react-bootstrap'
+import useUpdateCertificate from '../../../hooks/useUpdateCertificate'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit } from '@fortawesome/free-solid-svg-icons'
+import Loader from '../../../components/loader'
+import ErrorCard from '../../../components/errorCard'
 
-function ResidencyUpdateModal(){
+function ResidencyUpdateModal(props){
+
+    const [updateIndigency, loader, error] = useUpdateCertificate()
+
+    const {
+        show, //show residency cert. Modal
+        handleClose, // close resident cert. modal
+        dataResidency, //data object for residency cert.
+        handleChange, // change event for handle input
+        residencyID, // residency cert. data id from database
+        updateNew // use to update current data of residency to avoid reload page
+    } = props
+
+
+    /* **************** UPDATE RESIDENCY DATA FROM DATABASE ************************************* */
+    const updateResidency = async(event) =>{
+        event.preventDefault()
+        await updateIndigency(`/certificate/update/residency?id=${residencyID}`, dataResidency, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }, handleClose, updateNew)
+    }
+    /* **************************** END FUNCTION ************************************* */
+
     return (
-        <div className="modal fade" id="update-residency" data-bs-backdrop="static" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div className="modal-dialog">
-            <div className="modal-content">
-                <div className="modal-header">
+        <Modal show={show} onHide={handleClose} backdrop="static">
+            <Modal.Header closeButton>
+                <Modal.Title>
                     <h1 className="modal-title fs-6 d-flex align-items-center" id="exampleModalLabel">
                         <FontAwesomeIcon className='me-2' icon={faEdit}/>
                         Update Residency
                     </h1>
-                    <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form>
-                    <div className="modal-body">
-                        <div>
-                            <div className='mb-3'>
-                                <label className='fs-7 fw-semibold' htmlFor="residency__name">Name</label>
-                                <input 
-                                    type="text" 
-                                    className='form-control-1' 
-                                    id='residency__name' 
-                                    name='residency__name' 
-                                />
-                            </div>
-                            <div className="mb-3">
-                                <label className='fs-7 fw-semibold' htmlFor="residency__age">Age</label>
+                </Modal.Title>
+            </Modal.Header>
+
+            {/* error message */}
+            <ErrorCard 
+                errorDisplay={error.errorDisplay}
+                error={error.error}
+            />
+
+            <form>
+                <div className="modal-body">
+
+                    {/* loader */}
+                    <Loader 
+                        loader={loader}
+                        title="Updating..."
+                    />
+
+                    <div>
+                        <div className='mb-3'>
+                            <label className='fs-7 fw-semibold' htmlFor="residency__name">Name</label>
+                            <input 
+                                type="text" 
+                                className='form-control-1' 
+                                id='residency__name' 
+                                name='name' 
+                                value={dataResidency.name}
+                                onChange={handleChange}
+                            />
+                        </div>
+                        <div className="mb-3">
+                            <label className='fs-7 fw-semibold' htmlFor="residency__age">Age</label>
+                            <input 
+                                type="number" 
+                                className='form-control-1' 
+                                name='age'
+                                value={dataResidency.age}
+                                onChange={handleChange}
+                            />
+                        </div>
+                        <div className="mb-3">
+                            <label className='fs-7 fw-semibold' htmlFor="residency__gender">Gender</label>
+                            <input 
+                                type="text" 
+                                className='form-control-1' 
+                                id='residency__gender' 
+                                name='gender' 
+                                value={dataResidency.gender}
+                                onChange={handleChange}
+                            />
+                        </div>
+                        <div className="mb-3">
+                            <label className='fs-7 fw-semibold' htmlFor="dateIssued">Date Issued</label>
+                            <input 
+                                type="date" 
+                                className='form-control-1' 
+                                id='dateIssued' 
+                                name='dateIssued' 
+                                value={dataResidency.dateIssued}
+                                onChange={handleChange}
+                            />
+                        </div>
+                        <div className='row'>
+                            <div className='col'>
+                                <label className='fs-7 fw-semibold' htmlFor="residency__ornumber">OR-Number</label>
                                 <input 
                                     type="number" 
                                     className='form-control-1' 
-                                    name='residency__age'
+                                    id='residency__ornumber' 
+                                    name='orNumber'
+                                    value={dataResidency.orNumber}
+                                    onChange={handleChange}
                                 />
                             </div>
-                            <div className="mb-3">
-                                <label className='fs-7 fw-semibold' htmlFor="residency__gender">Gender</label>
+                            <div className='col'>
+                                <label className='fs-7 fw-semibold' htmlFor="residency__amount">Amount</label>
                                 <input 
-                                    type="text" 
+                                    type="number" 
                                     className='form-control-1' 
-                                    id='residency__gender' 
-                                    name='residency__gender' 
+                                    id='residency__amount' 
+                                    name='amount'
+                                    value={dataResidency.amount}
+                                    onChange={handleChange}
                                 />
-                            </div>
-                            <div className='row'>
-                                <div className='col'>
-                                    <label className='fs-7 fw-semibold' htmlFor="residency__ornumber">OR-Number</label>
-                                    <input 
-                                        type="number" 
-                                        className='form-control-1' 
-                                        id='residency__ornumber' 
-                                        name='residency__ornumber'
-                                    />
-                                </div>
-                                <div className='col'>
-                                    <label className='fs-7 fw-semibold' htmlFor="residency__amount">Amount</label>
-                                    <input 
-                                        type="number" 
-                                        className='form-control-1' 
-                                        id='residency__amount' 
-                                        name='residency__amount'
-                                    />
-                                </div>
                             </div>
                         </div>
                     </div>
-                    <div className="d-flex align-items-center justify-content-end p-3">
-                        <button 
-                            type="button" 
-                            className="btn text-bg-primary fs-7 fw-semibold"
-                        >
-                            Update Residency
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-        </div>
+                </div>
+                <div className="d-flex align-items-center justify-content-end p-3">
+                    <button 
+                        type="button" 
+                        className="btn text-bg-primary fs-7 fw-semibold"
+                        onClick={updateResidency}
+                    >
+                        Update Residency
+                    </button>
+                </div>
+            </form>
+        </Modal>
     )
 }
 
