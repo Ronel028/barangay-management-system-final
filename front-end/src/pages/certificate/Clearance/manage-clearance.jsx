@@ -10,7 +10,7 @@ import ClearanceUpdateModal from "./clearance-update-modal";
 
 function ClearanceManage(){
 
-    const [clearanceData, loading, updateNew] = useAxios('/certificate/clearance') // custom hooks for getting all data from database
+    const [clearanceData, loading, refreshData] = useAxios('/certificate/clearance') // custom hooks for getting all data from database
     
 
     /* *********STATE FOR MODAL********* */
@@ -36,7 +36,7 @@ function ClearanceManage(){
     //*****************DELETE CLEARANCE DATA ***********************************
     const [deleteClearanceData] = useDeleteCertificate()
     const deleteClearance = async(id) =>{
-        await deleteClearanceData(`/certificate/delete/clearance?id=${id}`, updateNew)
+        await deleteClearanceData(`/certificate/delete/clearance?id=${id}`, refreshData)
     }
     //******************END FUNCTION ***************************************
 
@@ -93,7 +93,7 @@ function ClearanceManage(){
                     show={show}
                     handleClose={handleClose}
                     clearanceData={clearance}
-                    updateNew={updateNew}
+                    refreshData={refreshData}
                     handleChange={handleChange}
                     clearanceID={clearanceID}
                 />

@@ -146,7 +146,7 @@ class Certificate extends DbConfig{
             response.redirect(303, '/certificate/clearance')
 
         } catch (error) {
-            console.log(error)
+            return response.json({ message: "Something's wrong... Please try again" })
         }
     }
     // update indigency data
@@ -181,7 +181,7 @@ class Certificate extends DbConfig{
             response.redirect(303, '/certificate/indigency')
 
         } catch (error) {
-            console.log(error)
+            return response.json({ message: "Something's wrong... Please try again" })
         }
     }
 
@@ -217,7 +217,7 @@ class Certificate extends DbConfig{
             response.redirect(303, '/certificate/residency')
 
         } catch (error) {
-            console.log(error)
+            return response.json({ message: "Something's wrong... Please try again" })
         }
     }
 
@@ -241,7 +241,7 @@ class Certificate extends DbConfig{
             response.redirect(303, '/certificate/clearance')
 
         } catch (error) {
-            console.log(error)
+            return response.json({ message: "Something's wrong... Please try again" })
         }
     }
 
@@ -260,7 +260,7 @@ class Certificate extends DbConfig{
             response.redirect(303, '/certificate/indigency')
 
         } catch (error) {
-            console.log(error)
+            return response.json({ message: "Something's wrong... Please try again" })
         }
     }
 
@@ -279,7 +279,7 @@ class Certificate extends DbConfig{
             response.redirect(303, '/certificate/residency')
 
         } catch (error) {
-            console.log(error)
+            return response.json({ message: "Something's wrong... Please try again" })
         }
     }
     /* **************************END FUNCTION*************************** */

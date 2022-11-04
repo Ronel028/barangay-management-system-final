@@ -15,7 +15,7 @@ function ResidencyUpdateModal(props){
         dataResidency, //data object for residency cert.
         handleChange, // change event for handle input
         residencyID, // residency cert. data id from database
-        updateNew // use to update current data of residency to avoid reload page
+        refreshData // use to update current data of residency to avoid reload page
     } = props
 
 
@@ -26,7 +26,7 @@ function ResidencyUpdateModal(props){
             headers: {
                 'Content-Type': 'application/json'
             }
-        }, handleClose, updateNew)
+        }, handleClose, refreshData)
     }
     /* **************************** END FUNCTION ************************************* */
 

@@ -11,7 +11,7 @@ import ResidencyUpdateModal from "./residency-update-modal";
 function ResidencyManage(){
 
     /* ********** GET RESIDENCY DATA ********************************* */
-    const [residencyData, loading, updateNew] = useAxios('/certificate/residency')
+    const [residencyData, loading, refreshData] = useAxios('/certificate/residency')
     /* ********** END FUNCTION ********************************* */
 
 
@@ -49,7 +49,7 @@ function ResidencyManage(){
     /* ********** DELETE RESIDENCY CERT. DATA ********************************* */
     const [deleteResidencyData] = useDeleteCertificate()
     const deleteResidency = async(id) =>{
-        await deleteResidencyData(`/certificate/delete/residency?id=${id}`, updateNew)
+        await deleteResidencyData(`/certificate/delete/residency?id=${id}`, refreshData)
     }
     /* ********** END FUNCTION ********************************* */
 
@@ -96,7 +96,7 @@ function ResidencyManage(){
                     dataResidency={dataResidency}
                     handleChange={handleChange}
                     residencyID={residencyID}
-                    updateNew={updateNew}
+                    refreshData={refreshData}
                 />
             </section>
         </>

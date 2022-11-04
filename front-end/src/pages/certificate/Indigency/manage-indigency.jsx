@@ -10,7 +10,7 @@ import IndigencyUpdateModal from "./indigency-update-modal";
 
 function IndigencyManage(){
 
-    const [indigencyData, loading, updateNew] = useAxios('/certificate/indigency')
+    const [indigencyData, loading, refreshData] = useAxios('/certificate/indigency')
 
 
     /* ****************STATE FOR MODAL************************** */
@@ -48,7 +48,7 @@ function IndigencyManage(){
     /* **************** DELETE INDIGENCY DATE ***************************** */
     const [removeIndigency] = useDeleteCertificate()
     const deleteIndigency = async(id) =>{
-        await removeIndigency(`/certificate/delete/indigency?id=${id}`, updateNew)
+        await removeIndigency(`/certificate/delete/indigency?id=${id}`, refreshData)
     }
     /* *************END FUNCTION***************************** */
 
@@ -95,7 +95,7 @@ function IndigencyManage(){
                     indigencyData={indigency}
                     handleChange={handleChange}
                     indigencyId={indigencyId}
-                    updateNew={updateNew}
+                    refreshData={refreshData}
                 />
 
             </section>

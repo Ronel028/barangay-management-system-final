@@ -11,8 +11,13 @@ import PermitUpdateModal from "./permit-update-modal";
 function PermitManage(){
 
     /* ***************** GET DATA OF BUSINESS PERMIT IN DATABASE ************* */
-    const [permitData, loading, updateNew] = useAxios('/permit')
+    const [permitData, loading, refreshData] = useAxios('/permit')
     /* ************************** END FUNCTION *********************** */
+
+
+    /* ***************** GET DATA OF BUSINESS PERMIT IN DATABASE ************* */
+    const [permitID, setPermitID] = useState();
+    /* ************************** END STATE *********************** */
 
 
 
@@ -39,6 +44,7 @@ function PermitManage(){
 
     /* ****************SHOW PERMIT MODAL FUNCTION************************** */
     const showPermitModal = async(id) =>{
+        setPermitID(id)
         const getPermitData = await axios.get(`/permit/id?id=${id}`)
         setBusinessPermitData({
             ...businessPermitData,
@@ -65,6 +71,21 @@ function PermitManage(){
         })
     }
     /* ****************END FUNCTION************************** */
+
+
+
+    /* **************** DELETE FUNCTION FOR DELETING PERMIT DATA ************************** */
+    const deletePermit = async(id) =>{
+        const permitDelete = await axios.delete(`/permit/delete?id=${id}`)
+
+        if(permitDelete.data.message){
+            console.log(permitDelete.data.message)
+            window.location.href = '/certificate/manage-permit'
+        }else{
+            refreshData(permitDelete.data)
+        }
+    }
+    /* **************** END FUNCTION ************************** */
 
 
 
@@ -99,6 +120,7 @@ function PermitManage(){
                         loading={loading}
                         filterPermitData={filterPermitData}
                         showPermitModal={showPermitModal}
+                        deletePermit={deletePermit}
                     />
 
                 </main>
@@ -109,6 +131,8 @@ function PermitManage(){
                     handleClose={handleClose}
                     businessPermitData={businessPermitData}
                     handleChange={handleChange}
+                    permitID={permitID}
+                    refreshData={refreshData}
                 />
 
             </section>

@@ -13,7 +13,7 @@ function IndigencyUpdateModal(props){
         indigencyData, //
         handleChange, // get the value of input
         indigencyId, // indigency id
-        updateNew
+        refreshData
     } = props
 
 
@@ -26,7 +26,7 @@ function IndigencyUpdateModal(props){
             headers: {
                 'Content-Type': 'application/json'
             }
-        }, handleClose, updateNew)
+        }, handleClose, refreshData)
     }
     /* ******************END FUNCTION****************************** */
 

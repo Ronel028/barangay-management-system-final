@@ -4,7 +4,12 @@ function useDeleteCertificate(){
 
     const deleteCertificate = async(url, updateData) =>{
         const deleteCertificateData = await axios.delete(url)
-        updateData(deleteCertificateData.data)
+        
+        if(deleteCertificateData.data.message){
+            window.location.href = '/certificate'
+        }else{
+            updateData(deleteCertificateData.data)
+        }
     }
 
     return [deleteCertificate]

@@ -11,7 +11,7 @@ function ClearanceUpdateModal(props){
         show, // show the modal
         handleClose, //close the modal
         clearanceData, // clearance data object from database
-        updateNew, // update the state of clearance data to avoid page reload
+        refreshData, // update the state of clearance data to avoid page reload
         handleChange, // change event for handle the user input
         clearanceID // get clearance id from the database
     } = props
@@ -27,7 +27,7 @@ function ClearanceUpdateModal(props){
             headers: {
                 'Content-Type': 'application/json'
             }
-        }, handleClose, updateNew)
+        }, handleClose, refreshData)
 
     }
     // *********************END FUNCTION**********************************************

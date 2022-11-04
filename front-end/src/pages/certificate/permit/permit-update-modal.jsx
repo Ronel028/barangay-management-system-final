@@ -1,21 +1,63 @@
+import { useState } from 'react'
+import axios from 'axios'
 import { Modal } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit } from '@fortawesome/free-solid-svg-icons'
+import Loader from '../../../components/loader'
+import ErrorCard from '../../../components/errorCard'
 
 function PermitUpdateModal(props){
 
+    /* ***************** LOADER AND ERROR STATE *************************** */
+    const [loader, setLoader] = useState(false)
+    const [error, setError] = useState({
+        errorDisplay: false,
+        error: ''
+    })
+    /* *********************** END STATE *************************** */
+
     const {
-        show, 
-        handleClose,
-        businessPermitData,
-        handleChange
+        show, // show update modal
+        handleClose, //close update modal
+        businessPermitData, //array object of permit data
+        handleChange, // onChange event function for input
+        permitID, // permit id from database
+        refreshData // function to refresh data of permit data to avoid reload page
     } = props
 
 
-    const updateBusinessPermit = (event) =>{
+    /* ***************** UPDATE BUSINESS PERMIT DATA IN DATABASE ******************* */
+    const updateBusinessPermit = async(event) =>{
         event.preventDefault()
-        console.log(businessPermitData)
+        
+        setLoader(true)
+        const updatePermit = await axios.post(`/permit/update?id=${permitID}`, businessPermitData, {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        setLoader(false)
+
+        if(updatePermit.data.message){
+            setError({
+                ...error,
+                errorDisplay: true,
+                error: updatePermit.data.message
+            })
+            setTimeout(()=>{
+                setError({
+                    ...error,
+                    errorDisplay: false,
+                    error: ''
+                })
+            }, 2000)
+        }else{
+            refreshData(updatePermit.data)
+            handleClose()
+        }
     }
+    /* ***************** END FUNCTION ******************* */
+
 
     return (
         <Modal show={show} onHide={handleClose} backdrop="static">
@@ -27,8 +69,22 @@ function PermitUpdateModal(props){
                     </h1>
                 </Modal.Title>
             </Modal.Header>
+
+            {/* display error if have */}
+            <ErrorCard 
+                errorDisplay={error.errorDisplay}
+                error={error.error}
+            />
+
             <form>
                 <div className="modal-body">
+
+                    {/* loader */}
+                    <Loader 
+                        loader={loader}
+                        title="Updating..."
+                    />
+
                     <div className='mb-3'>
                         <label className='fs-7 fw-bold' htmlFor="permit__name">Owner/Resident</label>
                         <input 

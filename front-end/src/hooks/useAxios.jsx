@@ -15,12 +15,12 @@ function useAxios(url){
         getData()
     }, [])
 
-    // add new data
-    const addNew = (newResident) =>{
+    // refresh Data
+    const refreshData = (newResident) =>{
         setData(newResident)
     }
 
-    return [data, loading, addNew]
+    return [data, loading, refreshData]
 }
 
 export default useAxios
