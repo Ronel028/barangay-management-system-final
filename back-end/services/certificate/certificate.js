@@ -106,7 +106,7 @@ class Certificate extends DbConfig{
             }
 
         } catch (error) {
-            console.log(error)
+            return response.json({ message: "Something's wrong... Please try again" })
         }
     }
     /* **************************END FUNCTION*************************** */
