@@ -62,7 +62,7 @@ function PermitTable(props){
                                                     Remove
                                                 </button>
                                                 <Link 
-                                                    to='/certificate/permit/print' 
+                                                    to={`/certificate/permit/print/${permit.id}`}  
                                                     className='dropdown-item fw-semibold d-flex align-items-center fs-7'
                                                 >
                                                     <FontAwesomeIcon className='me-1' icon={faPrint}/>

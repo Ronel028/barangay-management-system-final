@@ -1,10 +1,43 @@
-import { useRef } from 'react'
-import { Link } from 'react-router-dom'
+import { useRef, useEffect } from 'react'
+import { Link, useParams } from 'react-router-dom'
+import Moment from 'react-moment'
+import usePrintData from '../../../hooks/usePrintData'
+import { dateSuperscript, convertMonths } from '../../../custom/function'
 import { useReactToPrint } from 'react-to-print'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPrint, faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 
 function PrintIndigency(){
+
+
+     /* ******************** CUSTOM HOOK FOR GETTING CERTIFICATE ID *****************************/
+    const [indigencyData, getIndigencyData] = usePrintData()
+     /* ******************** END FUNCTION *****************************/
+
+
+    /* ******************** GET ID FROM URL *****************************/
+    const indigencyID = useParams()
+    /* ******************** END FUNCTION *****************************/
+
+
+    useEffect(()=>{
+        const getIndigency = async() =>{
+            await getIndigencyData(`/certificate/id?id=${indigencyID.id}`)
+        }
+        getIndigency()
+    }, [indigencyID])
+
+
+    /* ******************** DESTRUCTURING DATA *****************************/
+    const {
+        name,
+        age, 
+        gender,
+        dateIssued,
+        orNumber
+    } = indigencyData
+    /* ******************** END FUNCTION *****************************/
+
 
     const printDocument = useRef()
     const handlePrint = useReactToPrint({
@@ -39,14 +72,14 @@ function PrintIndigency(){
                 <div className="mb-6">
                     <h3 className="text-uppercase fs-6 fw-bold mb-3">to whom in may concern</h3>
                     <p className="mb-2 fs-6">
-                        <span className="ms-5">This</span> is to certify that <span>Ronel Florida</span>, <span>22</span> years old, <span>Male</span> is a 
+                        <span className="ms-5">This</span> is to certify that <span>{name}</span>, <span>{age}</span> years old, <span>{gender}</span> is a 
                         resident of Barangay Sto nino, Rizal Occidental Mindoro is one the indigents in this barangay.
                     </p>
                     <p className="mb-2">
                         <span className='ms-5'>To</span> certify further, that he/she has no derogatory or criminal records filed in this barangay.
                     </p>
                     <p>
-                        <span className="ms-5 fw-bold">Issued</span> this <span>18<sup>th</sup></span> day of <span>September</span>, 2022 at barangay
+                        <span className="ms-5 fw-bold">Issued</span> this <span>{new Date(dateIssued).getDate()}<sup>{dateSuperscript(new Date(dateIssued).getDate())}</sup></span> day of <span>{convertMonths(new Date(dateIssued).getMonth())}</span>, {new Date(dateIssued).getFullYear()} at barangay
                         Sto Nino, Rizal Occidental Mindoro upon request of the interested party for whatever legal
                         purpose it may serve.
                     </p>
@@ -65,11 +98,11 @@ function PrintIndigency(){
                 <div>
                     <div className="row mb-1">
                         <p className="col-2 fw-semibold">OR Number:</p>
-                        <p className="col">34343434</p>
+                        <p className="col">{orNumber}</p>
                     </div>
                     <div className="row mb-1">
                         <p className="col-2 fw-semibold">Date Issue:</p>
-                        <p className="col">September 18, 2022</p>
+                        <p className="col"><Moment format='LL'>{dateIssued}</Moment></p>
                     </div>
                     <div className="row">
                         <p className="col-2 fw-semibold">Doc. Stamp:</p>

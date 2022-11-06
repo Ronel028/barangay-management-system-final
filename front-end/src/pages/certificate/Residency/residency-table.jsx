@@ -57,7 +57,7 @@ function ResidencyTable(props){
                                                     Remove
                                                 </button>
                                                 <Link 
-                                                    to='/certificate/residency/print' 
+                                                    to={`/certificate/residency/print/${residency.id}`}
                                                     className='dropdown-item fw-semibold d-flex align-items-center fs-7'
                                                 >
                                                     <FontAwesomeIcon className='me-1' icon={faPrint}/>

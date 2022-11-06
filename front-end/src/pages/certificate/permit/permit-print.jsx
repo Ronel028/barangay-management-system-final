@@ -1,10 +1,61 @@
-import { useRef } from 'react'
-import { Link } from 'react-router-dom'
+import { useRef, useState, useEffect } from 'react'
+import axios from 'axios'
+import { Link, useParams } from 'react-router-dom'
+import Moment from 'react-moment'
 import { useReactToPrint } from 'react-to-print'
+import { dateSuperscript, convertMonths, numberToCurrency } from '../../../custom/function'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPrint, faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 
 function PrintPermit(){
+
+    /* ************* PERMIT DATA STATE ******************************* */
+    const [permitData, setPermitData] = useState({
+        owner: '',
+        natureOfBusiness: '',
+        businessAddress: '',
+        startDate: '',
+        endDate: '',
+        orNumber: 0,
+        amount: 0
+    })
+    /* ************* END STATE ******************************* */
+
+
+
+    /* ************* PERMIT DATA ID ******************************* */
+    const permitID = useParams()
+    /* ************* END STATE ******************************* */
+
+
+    useEffect(() =>{
+        const getPermit = async () =>{
+            const getPermitData = await axios.get(`/permit/id?id=${permitID.id}`)
+            setPermitData({
+                ...permitData,
+                owner: getPermitData.data[0].owner,
+                natureOfBusiness: getPermitData.data[0].natureOfBusiness,
+                businessAddress: getPermitData.data[0].businessAddress,
+                startDate: getPermitData.data[0].start_date,
+                endDate: getPermitData.data[0].end_date,
+                orNumber: getPermitData.data[0].orNumber,
+                amount: getPermitData.data[0].amount
+            })
+        }
+
+        getPermit()
+    }, [permitID])
+
+    
+    const {
+        owner,
+        natureOfBusiness,
+        businessAddress,
+        startDate,
+        endDate,
+        orNumber,
+        amount
+    } = permitData
 
     const printDocument = useRef()
     const handlePrint = useReactToPrint({
@@ -38,19 +89,19 @@ function PrintPermit(){
                 <div className='mb-5'>
                     <div className="row mb-1">
                         <p className="col-3 fw-semibold">Nature of Business:</p>
-                        <p className="col">Sari-sari Store</p>
+                        <p className="col">{natureOfBusiness}</p>
                     </div>
                     <div className="row mb-1">
                         <p className="col-3 fw-semibold">Owner:</p>
-                        <p className="col">Ronel Florida</p>
+                        <p className="col">{owner}</p>
                     </div>
                     <div className="row mb-1">
                         <p className="col-3 fw-semibold">Business Location:</p>
-                        <p className="col">Purok 2</p>
+                        <p className="col">{businessAddress}</p>
                     </div>
                     <div className="row mb-1">
                         <p className="col-3 fw-semibold">Amount Paid:</p>
-                        <p className="col">20000</p>
+                        <p className="col">{numberToCurrency(amount)}</p>
                     </div>
                 </div>
 
@@ -66,8 +117,8 @@ function PrintPermit(){
                         Unit of Rizal
                     </p>
                     <p>
-                        <span className="ms-5 fw-bold">Issued</span> this <span>18<sup>th</sup></span> day of 
-                        <span> September</span>, 2022 at barangay Sto Nino, Rizal Occidental Mindoro 
+                        <span className="ms-5 fw-bold">Issued</span> this <span>{new Date(startDate).getDate()}<sup>{dateSuperscript(new Date(startDate).getDate())}</sup></span> day of 
+                        <span> {convertMonths(new Date(startDate).getMonth())}</span>, {new Date(startDate).getFullYear()} at barangay Sto Nino, Rizal Occidental Mindoro 
                     </p>
                 </div>
 
@@ -84,15 +135,15 @@ function PrintPermit(){
                 <div>
                     <div className="row mb-1">
                         <p className="col-2 fw-semibold">OR Number:</p>
-                        <p className="col">34343434</p>
+                        <p className="col">{orNumber}</p>
                     </div>
                     <div className="row mb-1">
                         <p className="col-2 fw-semibold">Date Issue:</p>
-                        <p className="col">September 18, 2022</p>
+                        <p className="col"><Moment format='LL'>{startDate}</Moment></p>
                     </div>
                     <div className="row mb-1">
                         <p className="col-2 fw-semibold">Valid Until:</p>
-                        <p className="col">September 18, 2024</p>
+                        <p className="col"><Moment format='LL'>{endDate}</Moment></p>
                     </div>
                     <div className="row">
                         <p className="col-2 fw-semibold">Doc. Stamp:</p>

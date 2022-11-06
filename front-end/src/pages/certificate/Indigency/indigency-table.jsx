@@ -56,7 +56,7 @@ function IndigencyTable(props){
                                                     Remove
                                                 </button>
                                                 <Link 
-                                                    to='/certificate/indigency/print' 
+                                                    to={`/certificate/indigency/print/${indigency.id}`} 
                                                     className='dropdown-item fw-semibold d-flex align-items-center fs-7'
                                                 >
                                                     <FontAwesomeIcon className='me-1' icon={faPrint}/>

@@ -1,4 +1,4 @@
-import axios from 'axios'
+import { useEffect } from 'react'
 import { useRef } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useReactToPrint } from 'react-to-print'
@@ -7,14 +7,19 @@ import usePrintData from '../../../hooks/usePrintData'
 import { dateSuperscript, convertMonths } from '../../../custom/function'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPrint, faArrowLeft } from '@fortawesome/free-solid-svg-icons'
-import { useState, useEffect } from 'react'
 
 function PrintClearance(){
 
+    /* ******************** CUSTOM HOOK FOR GETTING CERTIFICATE ID *****************************/
     const [clearanceData, getClearanceData] = usePrintData()
+    /* ******************** END FUNCTION *****************************/
+
+
+    /* ******************** GET ID FROM URL *****************************/
+    const clearanceID = useParams()
+    /* ******************** END FUNCTION *****************************/
 
     
-    const clearanceID = useParams()
     
     useEffect(()=>{
         const getClearance = async() =>{
