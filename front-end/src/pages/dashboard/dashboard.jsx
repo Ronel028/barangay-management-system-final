@@ -8,6 +8,10 @@ function Dashboard(){
 
     const [official] = useAxios('/officials') // get all official data
     const [resident] = useAxios('/resident') // get all resident data
+    const [blotter] = useAxios('/blotter') // get all blotter data
+    const [certificate] = useAxios('/certificate')
+    const [businessPermit] = useAxios('/permit')
+
 
     return (
         <>
@@ -37,7 +41,7 @@ function Dashboard(){
                         </div>
                         <div className="dashboard__title p-2">
                             <h4 className="fs-7 fw-semibold text-nowrap">TOTAL BLOTTER</h4>
-                            <p className="fs-4 text-secondary">10</p>
+                            <p className="fs-4 text-secondary">{blotter.length}</p>
                         </div>  
                     </div>
 
@@ -49,7 +53,7 @@ function Dashboard(){
                         </div>
                         <div className="dashboard__title p-2">
                             <h4 className="fs-7 fw-semibold text-nowrap">TOTAL CERTIFICATE</h4>
-                            <p className="fs-4 text-secondary">20</p>
+                            <p className="fs-4 text-secondary">{certificate.length + businessPermit.length}</p>
                         </div>  
                     </div>
 
