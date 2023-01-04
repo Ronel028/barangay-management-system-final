@@ -19,7 +19,7 @@ function Navigation(props){
                     <div className="me-5 text-dark d-flex align-items-center">
                         <FontAwesomeIcon className='me-2' icon={faCalendarDays}/>
                         <p className='mb-0 fw-bold'>
-                            {currentDate.getUTCMonth() + 1 + "/" + currentDate.getDate() + "/" + currentDate.getFullYear()}
+                            {currentDate.getMonth() + 1 + "/" + currentDate.getDate() + "/" + currentDate.getFullYear()}
                         </p>
                     </div>
                     <button 
